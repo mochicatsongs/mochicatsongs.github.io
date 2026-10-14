@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --font-heading: 'Lilita One', 'Fredoka', system-ui, sans-serif;
-  --font-body: 'Fredoka', 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Lilita One', 'Jua', 'Fredoka', system-ui, sans-serif;
+  --font-body: 'Fredoka', 'Jua', 'Helvetica Neue', Arial, sans-serif;
 }
 html { background: #0b0718; }
 body { font-family: var(--font-body); background: #0b0718; color: #fff; -webkit-font-smoothing: antialiased; }

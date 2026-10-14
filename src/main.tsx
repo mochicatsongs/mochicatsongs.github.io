@@ -4,11 +4,12 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { PlayerProvider } from './player/PlayerContext'
 import './index.css'
+import { LangProvider } from './i18n'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <PlayerProvider><App /></PlayerProvider>
+      <LangProvider><PlayerProvider><App /></PlayerProvider></LangProvider>
     </BrowserRouter>
   </StrictMode>,
 )

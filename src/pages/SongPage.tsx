@@ -1,3 +1,4 @@
+import { useT } from '../i18n'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ARTIST, SONGS, cover, fmtDate, isLive, songBySlug, asset } from '../data/songs'
@@ -13,6 +14,7 @@ export default function SongPage() {
   const { slug } = useParams()
   const song = songBySlug(slug)
   const p = usePlayer()
+  const t = useT()
   const [lines, setLines] = useState<Line[] | null>(null)
   const [synced, setSynced] = useState(false)
   const box = useRef<HTMLDivElement>(null)
@@ -51,7 +53,7 @@ export default function SongPage() {
           <h1 className="t3d mt-7 text-[clamp(36px,6vw,58px)]">{song.title}</h1>
           <div className="mt-2 text-white/55">Mochi Cat · {song.genre}</div>
           <p className="mt-4 text-[17px] leading-relaxed text-white/85">{song.blurb}</p>
-          <div className="mt-7"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? 'Pause' : 'Play'} size="text-[22px]" /></div>
+          <div className="mt-7"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? t('Pause') : t('Play')} size="text-[22px]" /></div>
           <div className="mt-5 flex flex-wrap gap-2">
             <Pill href={ARTIST.spotify}>Spotify</Pill>
             <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>
@@ -69,13 +71,13 @@ export default function SongPage() {
                 </div>
               ) : (
                 <a href={`https://youtu.be/${song.youtube}`} target="_blank" rel="noopener" className="block rounded-2xl border border-white/15 p-5 hover:bg-white/5">
-                  <div className="text-sm text-white/55">Music video premiere</div>
-                  <div className="text-xl">{fmtDate(song.premiere!)} · 00:00 KST — set a reminder 🔔</div>
+                  <div className="text-sm text-white/55">{t('Music video premiere')}</div>
+                  <div className="text-xl">{fmtDate(song.premiere!)} · 00:00 KST — {t('set a reminder 🔔')}</div>
                 </a>
               )}
             </div>
           )}
-          <h2 className="mb-4 text-2xl font-medium">Lyrics {synced && <span className="ml-2 align-middle text-xs font-normal text-white/45">♪ follows the music</span>}</h2>
+          <h2 className="mb-4 text-2xl font-medium">{t('Lyrics')} {synced && <span className="ml-2 align-middle text-xs font-normal text-white/45">{t('♪ follows the music')}</span>}</h2>
           {lines ? (
             <div ref={box} className="max-h-[60vh] overflow-y-auto rounded-2xl bg-white/[0.04] p-6 [scrollbar-width:thin]">
               {lines.map((l, k) => l.gap ? <div key={k} className="h-4" /> : l.tag ? (
@@ -92,11 +94,11 @@ export default function SongPage() {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl bg-white/[0.04] p-6 text-white/55">Lyrics are coming soon. Meanwhile — press play and dance! 💃</div>
+            <div className="rounded-2xl bg-white/[0.04] p-6 text-white/55">{t('Lyrics are coming soon. Meanwhile — press play and dance! 💃')}</div>
           )}
           <Link to={`/music/${next.slug}`} className="mt-10 flex items-center gap-4 rounded-2xl border border-white/10 p-3 hover:bg-white/5">
             <img src={cover(next)} alt="" className="h-14 w-14 rounded-lg" />
-            <div><div className="text-xs text-white/50">Next song</div><div className="text-lg">{next.title}</div></div>
+            <div><div className="text-xs text-white/50">{t('Next song')}</div><div className="text-lg">{next.title}</div></div>
           </Link>
         </div>
       </div>

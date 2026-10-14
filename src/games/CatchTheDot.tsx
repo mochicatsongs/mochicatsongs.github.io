@@ -1,3 +1,4 @@
+import { useT } from '../i18n'
 import { track } from '../analytics'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -23,6 +24,7 @@ export default function CatchTheDot() {
   const paws = useRef<{ x: number; y: number; t: number; hit: boolean }[]>([])
   const img = useRef<HTMLImageElement>()
   const p = usePlayer()
+  const t = useT()
 
   useEffect(() => { const i = new Image(); i.src = asset('media/avatar.jpg'); img.current = i }, [])
 
@@ -114,7 +116,7 @@ export default function CatchTheDot() {
     <main className="relative z-10 mx-auto max-w-3xl px-4 pb-36 pt-24">
       <div className="mb-3 flex items-end justify-between">
         <div><BackButton className="!mb-3" /><h1 className="t3d t3d-cyan text-4xl sm:text-5xl">Catch the Dot</h1></div>
-        <div className="text-right text-sm text-white/70"><div>Score <b className="text-2xl text-white">{score}</b></div><div>Best {best} · ⏱ {left}s</div></div>
+        <div className="text-right text-sm text-white/70"><div>{t('Score')} <b className="text-2xl text-white">{score}</b></div><div>{t('Best')} {best} · ⏱ {left}s</div></div>
       </div>
       <div className="relative overflow-hidden rounded-3xl border border-white/10">
         <canvas ref={cv} onPointerDown={tap} className="block h-[62vh] w-full touch-none select-none" />
@@ -124,18 +126,18 @@ export default function CatchTheDot() {
               <div className="t3d text-7xl">{score}</div>
               <div className="text-lg">{msg}</div>
               <div className="flex flex-wrap justify-center gap-2">
-                <span className="pulse-wrap"><button onClick={start} className="btn3d btn-yellow text-[18px]">🔁 Play again</button></span>
-                <button onClick={share} className="btn3d btn-cyan text-[18px]">📤 Share score</button>
+                <span className="pulse-wrap"><button onClick={start} className="btn3d btn-yellow text-[18px]">{t('🔁 Play again')}</button></span>
+                <button onClick={share} className="btn3d btn-cyan text-[18px]">{t('📤 Share score')}</button>
               </div>
               <div className="flex flex-wrap justify-center gap-2 text-sm">
-                <Link to="/music/catch-the-dot" className="underline">Lyrics & song</Link>·
+                <Link to="/music/catch-the-dot" className="underline">{t('Lyrics & song')}</Link>·
                 <a href={ARTIST.spotify} target="_blank" rel="noopener" className="underline">Spotify</a>·
                 <a href={ARTIST.subscribe} target="_blank" rel="noopener" className="underline">Subscribe</a>
               </div>
             </>) : (<>
-              <div className="max-w-sm text-lg">Agent Mochi needs your help! Tap the red dot as many times as you can in 30 seconds. It gets faster and smaller…</div>
-              <span className="pulse-wrap"><button onClick={start} className="btn3d btn-pink text-[24px]">▶ Start 🔴</button></span>
-              <div className="text-sm text-white/55">🎵 with the song “Catch the Dot”</div>
+              <div className="max-w-sm text-lg">{t('Agent Mochi needs your help! Tap the red dot as many times as you can in 30 seconds. It gets faster and smaller…')}</div>
+              <span className="pulse-wrap"><button onClick={start} className="btn3d btn-pink text-[24px]">{t('▶ Start 🔴')}</button></span>
+              <div className="text-sm text-white/55">{t('🎵 with the song “Catch the Dot”')}</div>
             </>)}
           </div>
         )}

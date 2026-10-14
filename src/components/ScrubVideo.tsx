@@ -28,29 +28,44 @@ export default function ScrubVideo() {
       target = Math.min(v.duration - 0.05, Math.max(0, target + (delta / window.innerWidth) * SENSITIVITY * v.duration))
     }
     const mm = (e: MouseEvent) => move(e.clientX)
-    const tm = (e: TouchEvent) => move(e.touches[0].clientX)
-    const ts = (e: TouchEvent) => { prevX = e.touches[0].clientX; if (!v.paused) { v.pause(); target = shown = v.currentTime } }
+    // Phones: only an actual drag takes over the clip; a tap (e.g. language switch) never stops it.
+    // After the finger lifts, the loop resumes on its own.
+    let resume = 0
+    const ts = (e: TouchEvent) => { prevX = e.touches[0].clientX; clearTimeout(resume) }
+    const tm = (e: TouchEvent) => {
+      if (!v.paused) { v.pause(); target = shown = v.currentTime }
+      move(e.touches[0].clientX)
+    }
+    const te = () => { clearTimeout(resume); if (isPhone) resume = window.setTimeout(() => { v.play().catch(() => {}) }, 1500) }
+    const isPhone = !matchMedia('(hover: hover)').matches
     v.addEventListener('seeked', onSeeked)
     window.addEventListener('mousemove', mm)
     window.addEventListener('touchmove', tm, { passive: true })
     window.addEventListener('touchstart', ts, { passive: true })
+    window.addEventListener('touchend', te, { passive: true })
+    // Portrait screens get a tall, sharp crop; picked here (not at render) so the prerendered HTML can't pin the wrong file.
+    const portrait = window.innerHeight > window.innerWidth
+    v.poster = asset(portrait ? 'media/mochi_hero_poster_m.jpg' : 'media/mochi_hero_poster.jpg')
+    v.src = asset(portrait ? 'media/mochi_hero_m.mp4' : 'media/mochi_hero.mp4')
+    if (portrait) v.classList.add('hero-portrait')
+    v.load()
     raf = requestAnimationFrame(tick)
     // Phones have no hover: play slowly on a loop until the user touches.
-    if (!matchMedia('(hover: hover)').matches) { v.loop = true; v.playbackRate = 1; v.play().catch(() => {}) }
+    if (isPhone) { v.loop = true; v.playbackRate = 1; v.play().catch(() => {}) }
     return () => {
       cancelAnimationFrame(raf)
       v.removeEventListener('seeked', onSeeked)
       window.removeEventListener('mousemove', mm)
       window.removeEventListener('touchmove', tm)
       window.removeEventListener('touchstart', ts)
+      window.removeEventListener('touchend', te)
+      clearTimeout(resume)
     }
   }, [])
   return (
     <>
-      <video ref={ref} muted playsInline preload="auto" poster={asset('media/mochi_hero_poster.jpg')}
-        className="fixed inset-0 z-0 h-full w-full object-cover object-[44%_center] md:object-[70%_center]">
-        <source src={asset(typeof window !== 'undefined' && window.innerWidth < 900 ? 'media/mochi_hero_m.mp4' : 'media/mochi_hero.mp4')} type="video/mp4" />
-      </video>
+      <video ref={ref} muted playsInline preload="auto"
+        className="fixed inset-0 z-0 h-full w-full object-cover object-[44%_center] md:object-[70%_center] [&.hero-portrait]:object-center" />
       <div className="pointer-events-none fixed inset-0 z-0 bg-gradient-to-t from-ink/85 via-ink/25 to-transparent md:bg-gradient-to-r md:from-ink/80 md:via-ink/35 md:to-transparent" />
     </>
   )

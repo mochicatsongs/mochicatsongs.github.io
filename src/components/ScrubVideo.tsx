@@ -6,8 +6,8 @@ export default function ScrubVideo() {
   const ref = useRef<HTMLVideoElement>(null)
   useEffect(() => {
     const v = ref.current!
-    const SENSITIVITY = 0.35 // whole width of the screen = 35% of the clip
-    const EASE = 0.07 // lower = smoother / slower follow
+    const SENSITIVITY = 0.6 // whole width of the screen = 60% of the clip
+    const EASE = 0.16 // lower = smoother / slower follow
     let prevX: number | null = null, target = 0, shown = 0, seeking = false, raf = 0
     const tick = () => {
       if (v.duration && !seeking && v.paused) {
@@ -36,7 +36,7 @@ export default function ScrubVideo() {
     window.addEventListener('touchstart', ts, { passive: true })
     raf = requestAnimationFrame(tick)
     // Phones have no hover: play slowly on a loop until the user touches.
-    if (!matchMedia('(hover: hover)').matches) { v.loop = true; v.playbackRate = 0.75; v.play().catch(() => {}) }
+    if (!matchMedia('(hover: hover)').matches) { v.loop = true; v.playbackRate = 1; v.play().catch(() => {}) }
     return () => {
       cancelAnimationFrame(raf)
       v.removeEventListener('seeked', onSeeked)

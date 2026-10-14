@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { usePlayer } from '../player/PlayerContext'
 import { cover } from '../data/songs'
-import { NextIcon, PauseIcon, PlayIcon, PrevIcon } from './Icons'
+import { NextIcon, PrevIcon } from './Icons'
+import PlayButton, { Eq } from './PlayButton'
 
 const mmss = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`
 
@@ -18,14 +19,12 @@ export default function MiniPlayer() {
         <Link to={`/music/${p.current.slug}`} className="flex min-w-0 flex-1 items-center gap-3">
           <img src={cover(p.current)} alt="" className={`h-11 w-11 rounded-lg ${p.playing ? 'animate-[spin_12s_linear_infinite] rounded-full' : ''}`} />
           <div className="min-w-0">
-            <div className="truncate text-[15px] font-medium">{p.current.title}</div>
+            <div className="flex items-center gap-2 truncate font-heading text-[16px] tracking-wide">{p.playing && <span className="text-cyan-300"><Eq /></span>}{p.current.title}</div>
             <div className="text-xs text-white/55">Mochi Cat · {mmss(p.time)} / {mmss(p.duration)}</div>
           </div>
         </Link>
         <button aria-label="Previous" onClick={p.prev} className="p-2 opacity-80 hover:opacity-100"><PrevIcon /></button>
-        <button aria-label={p.playing ? 'Pause' : 'Play'} onClick={p.toggle} className="grid h-10 w-10 place-items-center rounded-full bg-white text-black">
-          {p.playing ? <PauseIcon /> : <PlayIcon className="ml-0.5 h-5 w-5" />}
-        </button>
+        <PlayButton round playing={p.playing} onClick={p.toggle} color={p.playing ? 'btn-cyan' : 'btn-pink'} />
         <button aria-label="Next" onClick={p.next} className="p-2 opacity-80 hover:opacity-100"><NextIcon /></button>
       </div>
     </div>

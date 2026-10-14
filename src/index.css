@@ -126,3 +126,21 @@ body { font-family: var(--font-body); background: #0b0718; color: #fff; -webkit-
 @keyframes floaty { 0%,100% { translate: 0 0; } 50% { translate: 0 -6px; } }
 .anim-float { animation: floaty 3s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .anim-float { animation: none; } }
+
+/* living play button */
+.pulse-wrap { position: relative; display: inline-flex; border-radius: 999px; }
+.pulse-wrap::before, .pulse-wrap::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  border: 3px solid rgba(255, 110, 160, .7); opacity: 0; animation: ring 2.4s ease-out infinite;
+}
+.pulse-wrap::after { animation-delay: 1.2s; }
+.pulse-wrap.is-playing::before, .pulse-wrap.is-playing::after { border-color: rgba(120, 230, 255, .7); animation-duration: 1.2s; }
+@keyframes ring { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.35, 1.6); opacity: 0; } }
+.pulse-wrap .btn3d { animation: breathe 2.4s ease-in-out infinite; }
+.pulse-wrap.is-playing .btn3d { animation: none; }
+@keyframes breathe { 0%,100% { scale: 1; } 50% { scale: 1.05; } }
+.eq { display: inline-flex; align-items: flex-end; gap: 3px; height: 1em; }
+.eq i { width: 4px; border-radius: 2px; background: currentColor; animation: eq .9s ease-in-out infinite; }
+.eq i:nth-child(2) { animation-delay: -.3s; } .eq i:nth-child(3) { animation-delay: -.6s; } .eq i:nth-child(4) { animation-delay: -.15s; }
+@keyframes eq { 0%,100% { height: 25%; } 50% { height: 100%; } }
+@media (prefers-reduced-motion: reduce) { .pulse-wrap::before, .pulse-wrap::after, .pulse-wrap .btn3d, .eq i { animation: none; } }

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ARTIST, asset, songBySlug } from '../data/songs'
 import { usePlayer } from '../player/PlayerContext'
+import BackButton from '../components/BackButton'
 
 const ROUND = 30 // seconds
 const load = () => { try { return Number(localStorage.getItem('ctd-best') || 0) } catch { return 0 } }
@@ -110,7 +111,7 @@ export default function CatchTheDot() {
   return (
     <main className="relative z-10 mx-auto max-w-3xl px-4 pb-36 pt-24">
       <div className="mb-3 flex items-end justify-between">
-        <div><Link to="/games" className="text-white/60 hover:text-white">← Games</Link><h1 className="text-3xl font-medium tracking-tight sm:text-4xl">Catch the Dot</h1></div>
+        <div><BackButton className="!mb-3" /><h1 className="t3d t3d-cyan text-4xl sm:text-5xl">Catch the Dot</h1></div>
         <div className="text-right text-sm text-white/70"><div>Score <b className="text-2xl text-white">{score}</b></div><div>Best {best} · ⏱ {left}s</div></div>
       </div>
       <div className="relative overflow-hidden rounded-3xl border border-white/10">
@@ -118,11 +119,11 @@ export default function CatchTheDot() {
         {state !== 'play' && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/45 p-6 text-center backdrop-blur-sm">
             {state === 'over' ? (<>
-              <div className="text-5xl font-medium">{score}</div>
+              <div className="t3d text-7xl">{score}</div>
               <div className="text-lg">{msg}</div>
               <div className="flex flex-wrap justify-center gap-2">
-                <button onClick={start} className="rounded-full bg-white px-6 py-2.5 font-medium text-black">Play again</button>
-                <button onClick={share} className="rounded-full border border-white px-6 py-2.5">Share score</button>
+                <span className="pulse-wrap"><button onClick={start} className="btn3d btn-yellow text-[18px]">🔁 Play again</button></span>
+                <button onClick={share} className="btn3d btn-cyan text-[18px]">📤 Share score</button>
               </div>
               <div className="flex flex-wrap justify-center gap-2 text-sm">
                 <Link to="/music/catch-the-dot" className="underline">Lyrics & song</Link>·
@@ -131,7 +132,7 @@ export default function CatchTheDot() {
               </div>
             </>) : (<>
               <div className="max-w-sm text-lg">Agent Mochi needs your help! Tap the red dot as many times as you can in 30 seconds. It gets faster and smaller…</div>
-              <button onClick={start} className="rounded-full bg-mochired px-8 py-3 text-lg font-medium">Start 🔴</button>
+              <span className="pulse-wrap"><button onClick={start} className="btn3d btn-pink text-[24px]">▶ Start 🔴</button></span>
               <div className="text-sm text-white/55">🎵 with the song “Catch the Dot”</div>
             </>)}
           </div>

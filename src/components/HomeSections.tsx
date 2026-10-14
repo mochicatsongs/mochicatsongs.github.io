@@ -6,7 +6,8 @@ import { usePlayer } from '../player/PlayerContext'
 import LoopVideo from './LoopVideo'
 import VideoModal from './VideoModal'
 import Reveal from './Reveal'
-import { PauseIcon, PlayIcon } from './Icons'
+import { PlayIcon } from './Icons'
+import { Eq } from './PlayButton'
 
 const clamp = (x: number) => Math.min(1, Math.max(0, x))
 const seg = (p: number, a: number, b: number) => clamp((p - a) / (b - a))
@@ -106,7 +107,7 @@ export function SongsRail() {
                 <div className="card3d relative overflow-hidden">
                   <Link to={`/music/${s.slug}`}><img src={cover(s)} alt={s.title} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-110" /></Link>
                   <button aria-label={`Play ${s.title}`} onClick={() => (active ? pl.toggle() : pl.play(s))} className={`btn3d ${BTN[i % BTN.length]} absolute bottom-3 right-3 h-14 w-14 !p-0`}>
-                    {active && pl.playing ? <PauseIcon /> : <PlayIcon className="ml-0.5 h-6 w-6" />}
+                    {active && pl.playing ? <Eq /> : <PlayIcon className="ml-0.5 h-6 w-6" />}
                   </button>
                 </div>
               </TiltCard>

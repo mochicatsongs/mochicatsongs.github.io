@@ -2,7 +2,7 @@ import SongCard from '../components/SongCard'
 import { H1, Page, Pill } from '../components/Section'
 import { ARTIST, SONGS } from '../data/songs'
 import { usePlayer } from '../player/PlayerContext'
-import { PlayIcon } from '../components/Icons'
+import PlayButton from '../components/PlayButton'
 
 export default function Music() {
   const p = usePlayer()
@@ -10,9 +10,7 @@ export default function Music() {
     <Page>
       <H1>Music</H1>
       <div className="mb-10 flex flex-wrap items-center gap-3">
-        <button onClick={() => p.play(SONGS[0])} className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 font-medium text-black hover:bg-white/85">
-          <PlayIcon /> Play all
-        </button>
+        <PlayButton playing={p.playing} onClick={() => (p.current ? p.toggle() : p.play(SONGS[0]))} label={p.playing ? 'Playing' : 'Play all'} size="text-[20px]" />
         <Pill href={ARTIST.spotify}>Spotify</Pill>
         <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>
       </div>

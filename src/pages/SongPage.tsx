@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ARTIST, SONGS, cover, fmtDate, isLive, songBySlug, asset } from '../data/songs'
 import { usePlayer } from '../player/PlayerContext'
-import { PauseIcon, PlayIcon } from '../components/Icons'
+import PlayButton from '../components/PlayButton'
 import { Page, Pill } from '../components/Section'
 import NotFound from './NotFound'
 
@@ -45,17 +45,13 @@ export default function SongPage() {
 
   return (
     <Page>
-      <Link to="/music" className="mb-6 inline-block text-white/60 hover:text-white">← All songs</Link>
       <div className="grid gap-10 md:grid-cols-[minmax(0,380px)_1fr]">
         <div>
-          <img src={cover(song)} alt={song.title} className="w-full rounded-3xl shadow-2xl shadow-black/50" />
-          <h1 className="mt-6 text-[clamp(30px,5vw,48px)] font-medium leading-none tracking-tight">{song.title}</h1>
+          <img src={cover(song)} alt={song.title} className="card3d w-full" />
+          <h1 className="t3d mt-7 text-[clamp(36px,6vw,58px)]">{song.title}</h1>
           <div className="mt-2 text-white/55">Mochi Cat · {song.genre}</div>
           <p className="mt-4 text-[17px] leading-relaxed text-white/85">{song.blurb}</p>
-          <button onClick={() => (active ? p.toggle() : p.play(song))}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[17px] font-medium text-black hover:bg-white/85">
-            {active && p.playing ? <><PauseIcon /> Pause</> : <><PlayIcon /> Play</>}
-          </button>
+          <div className="mt-7"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? 'Pause' : 'Play'} size="text-[22px]" /></div>
           <div className="mt-5 flex flex-wrap gap-2">
             <Pill href={ARTIST.spotify}>Spotify</Pill>
             <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>

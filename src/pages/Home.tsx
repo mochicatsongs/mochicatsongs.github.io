@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import ScrubVideo from '../components/ScrubVideo'
-import ScrollStory from '../components/ScrollStory'
 import { Everywhere, GameBanner, LatestVideo, Premieres, SongsRail, StickerParade } from '../components/HomeSections'
 import { CopyIcon } from '../components/Icons'
 import { ARTIST } from '../data/songs'
@@ -21,10 +20,10 @@ export default function Home() {
     <>
       <ScrubVideo />
       <section className="relative z-10 flex h-[100svh] flex-col justify-end overflow-hidden px-5 pb-28 sm:px-8 md:justify-center md:px-10 md:pb-0">
-        <div className="relative z-10 max-w-xl" style={{ opacity: 1 - hp * 1.2, transform: `translateY(${-hp * 120}px) scale(${1 - hp * 0.12})`, filter: `blur(${hp * 6}px)` }}>
+        <div className="relative z-10 max-w-xl" style={{ opacity: 1 - hp * 1.2, transform: `translateY(${-hp * 120}px) scale(${1 - hp * 0.12})` }}>
           <div className="mb-1 text-[clamp(16px,3.2vw,22px)] font-semibold text-white/85">Hey there, meet</div>
           <h1 className="anim-popin mb-2 select-none"><span className="wordmark anim-wobble text-[clamp(84px,19vw,190px)]">MOCHI</span></h1>
-          <div className="t3d-sm t3d-cyan mb-5 text-[clamp(20px,4.2vw,32px)] leading-tight sm:mb-6">the chubbiest pop star on the internet</div>
+          <div className="mb-5 font-heading text-[clamp(20px,4.2vw,32px)] leading-tight tracking-wide text-cyan-200 [text-shadow:0_2px_0_#0e7490,0_3px_10px_rgba(0,0,0,.55)] sm:mb-6">the chubbiest pop star on the internet</div>
           <p className="mb-6 min-h-[54px] text-[clamp(17px,3.6vw,22px)] font-medium leading-[1.4] text-white/90 sm:mb-7">
             {displayed}{!done && <span className="ml-[2px] inline-block h-[1.1em] w-[2px] animate-blink bg-white align-middle" />}
           </p>
@@ -40,7 +39,6 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollStory />
       <div className="bg-party relative z-10">
         <LatestVideo />
         <Premieres />

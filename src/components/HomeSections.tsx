@@ -82,35 +82,42 @@ export function Premieres() {
   )
 }
 
-/* 3 ─ Songs: pinned rail that slides sideways as you scroll down */
+/* 3 ─ Songs: swipeable carousel (doesn't hijack vertical scroll) */
 export function SongsRail() {
-  const ref = useRef<HTMLElement>(null)
-  const p = useScrollProgress(ref)
   const pl = usePlayer()
+  const rail = useRef<HTMLDivElement>(null)
+  const go = (d: number) => rail.current?.scrollBy({ left: d * rail.current.clientWidth * 0.8, behavior: 'smooth' })
   return (
-    <section ref={ref} className="relative z-10 h-[300vh]">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden">
-        <div className="mb-8 flex items-end justify-between px-5 sm:px-10">
-          <h2 className="t3d text-[clamp(44px,8vw,100px)]">Songs</h2>
-          <Link to="/music" className="btn3d btn-purple mb-3 text-[16px]">All songs →</Link>
+    <section className="relative z-10 py-20">
+      <div className="mb-8 flex items-end justify-between gap-4 px-5 sm:px-10">
+        <Reveal><h2 className="t3d text-[clamp(44px,8vw,100px)]">Songs</h2></Reveal>
+        <div className="mb-3 flex items-center gap-3">
+          <button aria-label="Previous" onClick={() => go(-1)} className="btn3d btn-white hidden h-12 w-12 !p-0 text-xl md:inline-flex">‹</button>
+          <button aria-label="Next" onClick={() => go(1)} className="btn3d btn-white hidden h-12 w-12 !p-0 text-xl md:inline-flex">›</button>
+          <Link to="/music" className="btn3d btn-purple text-[16px]">All songs →</Link>
         </div>
-        <div className="flex w-max gap-5 pl-5 sm:gap-8 sm:pl-10" style={{ transform: `translateX(calc(${-p} * (100% - 100vw + 80px)))` }}>
-          {SONGS.map((s, i) => {
-            const active = pl.current?.slug === s.slug
-            return (
-              <div key={s.slug} className="group w-[62vw] shrink-0 sm:w-[300px]" style={{ transform: `translateY(${Math.sin(p * 8 + i * 0.9) * 18}px) rotate(${Math.sin(p * 6 + i) * 2.5}deg)` }}>
+      </div>
+      <div ref={rail} className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-5 pb-10 pt-4 sm:gap-7 sm:px-10">
+        {SONGS.map((s, i) => {
+          const active = pl.current?.slug === s.slug
+          return (
+            <div key={s.slug} className="group w-[62vw] shrink-0 snap-start sm:w-[260px]">
+              <TiltCard>
                 <div className="card3d relative overflow-hidden">
                   <Link to={`/music/${s.slug}`}><img src={cover(s)} alt={s.title} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-110" /></Link>
                   <button aria-label={`Play ${s.title}`} onClick={() => (active ? pl.toggle() : pl.play(s))} className={`btn3d ${BTN[i % BTN.length]} absolute bottom-3 right-3 h-14 w-14 !p-0`}>
                     {active && pl.playing ? <PauseIcon /> : <PlayIcon className="ml-0.5 h-6 w-6" />}
                   </button>
                 </div>
-                <Link to={`/music/${s.slug}`} className="t3d-sm mt-4 block text-[22px] leading-tight">{s.title}</Link>
-                <div className="mt-1 text-sm font-medium text-white/55">{s.genre}</div>
-              </div>
-            )
-          })}
-        </div>
+              </TiltCard>
+              <Link to={`/music/${s.slug}`} className="t3d-sm mt-4 block text-[20px] leading-tight">{s.title}</Link>
+              <div className="mt-1 text-sm font-medium text-white/55">{s.genre}</div>
+            </div>
+          )
+        })}
+        <Link to="/music" className="card3d grid w-[62vw] shrink-0 snap-start place-items-center bg-gradient-to-br from-violet-600 to-fuchsia-600 sm:w-[260px]" style={{ aspectRatio: '1' }}>
+          <span className="t3d-sm text-center text-[28px]">All {SONGS.length} songs →</span>
+        </Link>
       </div>
     </section>
   )
@@ -167,22 +174,19 @@ export function StickerParade() {
   )
 }
 
-/* 6 ─ Socials: two marquees of candy buttons moving opposite ways */
+/* 6 ─ Socials: candy buttons pop in one by one and gently float */
 export function Everywhere() {
-  const ref = useRef<HTMLElement>(null)
-  const p = useScrollProgress(ref)
-  const row = (dir: number) => (
-    <div className="flex w-max gap-4 whitespace-nowrap py-4" style={{ transform: `translateX(calc(${dir < 0 ? -15 : -45}% + ${dir * (p - 0.5) * 30}%))` }}>
-      {[...SOCIALS, ...SOCIALS, ...SOCIALS].map(([t, u], i) => (
-        <a key={i} href={u} target="_blank" rel="noopener" className={`btn3d ${BTN[i % BTN.length]} shrink-0 text-[clamp(18px,2.4vw,26px)]`}>{t}</a>
-      ))}
-    </div>
-  )
   return (
-    <section ref={ref} className="relative z-10 overflow-hidden py-28">
-      <Reveal><h2 className="t3d t3d-yellow mb-12 px-5 text-center text-[clamp(40px,7vw,90px)]">Find Mochi everywhere</h2></Reveal>
-      <div className="-rotate-3">{row(-1)}{row(1)}</div>
-      <div className="mt-14 flex justify-center"><a href={ARTIST.subscribe} target="_blank" rel="noopener" className="btn3d btn-pink text-[clamp(20px,2.6vw,28px)]">▶ Subscribe on YouTube</a></div>
+    <section className="relative z-10 px-5 py-28">
+      <Reveal><h2 className="t3d t3d-yellow mb-12 text-center text-[clamp(40px,7vw,90px)]">Find Mochi everywhere</h2></Reveal>
+      <div className="mx-auto flex max-w-4xl flex-wrap justify-center gap-x-4 gap-y-6">
+        {SOCIALS.map(([t, u], i) => (
+          <Reveal key={t} delay={i * 70}>
+            <a href={u} target="_blank" rel="noopener" className={`btn3d ${BTN[i % BTN.length]} anim-float text-[clamp(18px,2.4vw,24px)]`} style={{ animationDelay: `${i * 0.3}s` }}>{t}</a>
+          </Reveal>
+        ))}
+      </div>
+      <div className="mt-16 flex justify-center"><a href={ARTIST.subscribe} target="_blank" rel="noopener" className="btn3d btn-pink text-[clamp(20px,2.6vw,28px)]">▶ Subscribe on YouTube</a></div>
     </section>
   )
 }

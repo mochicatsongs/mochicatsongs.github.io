@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { asset } from '../data/songs'
 
-/** Full-screen background video that scrubs with horizontal mouse / finger movement. */
+/** Full-screen background video that scrubs with horizontal mouse movement (desktop) and simply loops on phones. */
 export default function ScrubVideo() {
   const ref = useRef<HTMLVideoElement>(null)
   useEffect(() => {
@@ -28,21 +28,10 @@ export default function ScrubVideo() {
       target = Math.min(v.duration - 0.05, Math.max(0, target + (delta / window.innerWidth) * SENSITIVITY * v.duration))
     }
     const mm = (e: MouseEvent) => move(e.clientX)
-    // Phones: only an actual drag takes over the clip; a tap (e.g. language switch) never stops it.
-    // After the finger lifts, the loop resumes on its own.
-    let resume = 0
-    const ts = (e: TouchEvent) => { prevX = e.touches[0].clientX; clearTimeout(resume) }
-    const tm = (e: TouchEvent) => {
-      if (!v.paused) { v.pause(); target = shown = v.currentTime }
-      move(e.touches[0].clientX)
-    }
-    const te = () => { clearTimeout(resume); if (isPhone) resume = window.setTimeout(() => { v.play().catch(() => {}) }, 1500) }
+    // Phones: the clip just loops, touches never pause or scrub it.
     const isPhone = !matchMedia('(hover: hover)').matches
     v.addEventListener('seeked', onSeeked)
     window.addEventListener('mousemove', mm)
-    window.addEventListener('touchmove', tm, { passive: true })
-    window.addEventListener('touchstart', ts, { passive: true })
-    window.addEventListener('touchend', te, { passive: true })
     // Portrait screens get a tall, sharp crop; picked here (not at render) so the prerendered HTML can't pin the wrong file.
     const portrait = window.innerHeight > window.innerWidth
     v.poster = asset(portrait ? 'media/mochi_hero_poster_m.jpg' : 'media/mochi_hero_poster.jpg')
@@ -50,16 +39,18 @@ export default function ScrubVideo() {
     if (portrait) v.classList.add('hero-portrait')
     v.load()
     raf = requestAnimationFrame(tick)
-    // Phones have no hover: play slowly on a loop until the user touches.
-    if (isPhone) { v.loop = true; v.playbackRate = 1; v.play().catch(() => {}) }
+    const keep = () => { if (v.isConnected && v.paused && !document.hidden) v.play().catch(() => {}) }
+    // Phones have no hover: loop forever.
+    if (isPhone) {
+      v.loop = true; v.autoplay = true; v.playbackRate = 1; v.play().catch(() => {})
+      // iOS may pause it (tab hidden, low power): always resume.
+      v.addEventListener('pause', keep); document.addEventListener('visibilitychange', keep); document.addEventListener('touchend', keep, { passive: true })
+    }
     return () => {
       cancelAnimationFrame(raf)
       v.removeEventListener('seeked', onSeeked)
       window.removeEventListener('mousemove', mm)
-      window.removeEventListener('touchmove', tm)
-      window.removeEventListener('touchstart', ts)
-      window.removeEventListener('touchend', te)
-      clearTimeout(resume)
+      v.removeEventListener('pause', keep); document.removeEventListener('visibilitychange', keep); document.removeEventListener('touchend', keep)
     }
   }, [])
   return (

@@ -1,3 +1,4 @@
+import { track } from '../analytics'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ARTIST, asset, songBySlug } from '../data/songs'
@@ -32,6 +33,7 @@ export default function CatchTheDot() {
   }, [])
 
   const start = () => {
+    track('game_start', { game: 'catch-the-dot' })
     sc.current = 0; setScore(0); setLeft(ROUND); setMsg(''); respawn(); setState('play')
     const song = songBySlug('catch-the-dot')
     if (song && p.current?.slug !== song.slug) p.play(song); else if (!p.playing) p.toggle()

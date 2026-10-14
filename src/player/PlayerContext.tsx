@@ -1,3 +1,4 @@
+import { track } from '../analytics'
 import { createContext, useCallback, useContext, useEffect, useRef, useState, ReactNode } from 'react'
 import { SONGS, Song, audio } from '../data/songs'
 
@@ -30,6 +31,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   if (!el.current && typeof Audio !== 'undefined') el.current = new Audio()
 
   const play = useCallback((s: Song) => {
+    track('play_song', { song: s.slug })
     const a = el.current!
     if (current?.slug !== s.slug) {
       a.src = audio(s)

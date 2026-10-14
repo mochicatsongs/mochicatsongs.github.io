@@ -49,7 +49,7 @@ export default function ScrubVideo() {
     <>
       <video ref={ref} muted playsInline preload="auto" poster={asset('media/mochi_hero_poster.jpg')}
         className="fixed inset-0 z-0 h-full w-full object-cover object-[44%_center] md:object-[70%_center]">
-        <source src={asset('media/mochi_hero.mp4')} type="video/mp4" />
+        <source src={asset(typeof window !== 'undefined' && window.innerWidth < 900 ? 'media/mochi_hero_m.mp4' : 'media/mochi_hero.mp4')} type="video/mp4" />
       </video>
       <div className="pointer-events-none fixed inset-0 z-0 bg-gradient-to-t from-ink/85 via-ink/25 to-transparent md:bg-gradient-to-r md:from-ink/80 md:via-ink/35 md:to-transparent" />
     </>

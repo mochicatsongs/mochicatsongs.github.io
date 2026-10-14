@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import { ARTIST, SONGS, cover, fmtDate, isLive, songBySlug, asset } from '../data/songs'
 import { usePlayer } from '../player/PlayerContext'
 import PlayButton from '../components/PlayButton'
+import { GAME_INFO } from '../data/games'
 import { Page, Pill } from '../components/Section'
 import NotFound from './NotFound'
 
@@ -53,7 +54,8 @@ export default function SongPage() {
           <h1 className="t3d mt-7 text-[clamp(36px,6vw,58px)]">{song.title}</h1>
           <div className="mt-2 text-white/55">Mochi Cat · {song.genre}</div>
           <p className="mt-4 text-[17px] leading-relaxed text-white/85">{song.blurb}</p>
-          <div className="mt-7"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? t('Pause') : t('Play')} size="text-[22px]" /></div>
+          <div className="mt-7 flex flex-wrap items-center gap-3"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? t('Pause') : t('Play')} size="text-[22px]" />
+            {GAME_INFO[song.slug] && <Link to={`/games/${song.slug}`} className="btn3d btn-yellow text-[18px]">🎮 {t('Play the game')}: {GAME_INFO[song.slug].name}</Link>}</div>
           <div className="mt-5 flex flex-wrap gap-2">
             <Pill href={ARTIST.spotify}>Spotify</Pill>
             <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>

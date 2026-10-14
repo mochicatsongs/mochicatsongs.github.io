@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef } from 'react'
 import { Route, Routes, useLocation, useNavigationType } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import MiniPlayer from './components/MiniPlayer'
@@ -11,6 +11,7 @@ import Stickers from './pages/Stickers'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
 import CatchTheDot from './games/CatchTheDot'
+const Arcade = lazy(() => import('./games/arcade/ArcadeGame'))
 
 /** Remembers where you were on every page: Back returns to the same spot, new pages start at the top. */
 const KEY = (k: string) => `mochi-scroll:${k}`
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="/videos" element={<Videos />} />
         <Route path="/games" element={<Games />} />
         <Route path="/games/catch-the-dot" element={<CatchTheDot />} />
+        <Route path="/games/:slug" element={<Suspense fallback={<div className="min-h-screen" />}><Arcade /></Suspense>} />
         <Route path="/stickers" element={<Stickers />} />
         <Route path="/about" element={<About />} />
         <Route path="*" element={<NotFound />} />

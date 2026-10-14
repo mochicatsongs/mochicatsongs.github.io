@@ -20,7 +20,12 @@ const base = ['Mochi Cat 🐾', 'Feel-good dance-pop songs by a chubby grey cat.
 for (const [r, t] of [['/music', 'Music'], ['/videos', 'Music videos'], ['/games', 'Games'], ['/games/catch-the-dot', 'Catch the Dot — game'], ['/stickers', 'Stickers'], ['/about', 'About Mochi']])
   page(r, `${t} — ${base[0]}`, base[1], base[2])
 for (const s of songs) page(`/music/${s.slug}`, `${s.title} — Mochi Cat (lyrics & song)`, s.blurb, `/covers/${s.slug}.jpg`)
-const urls = ['/', '/music', '/videos', '/games', '/games/catch-the-dot', '/stickers', '/about', ...songs.map(s => `/music/${s.slug}`)]
+const games = [...fs.readFileSync('src/data/games.ts', 'utf8').matchAll(/'([a-z-]+)': \{ name: '([^']+)', emoji: '[^']*', desc: '([^']+)' \}/g)].map(m => ({ slug: m[1], name: m[2], desc: m[3] }))
+for (const g of games) if (g.slug !== 'catch-the-dot') {
+  const song = songs.find(s => s.slug === g.slug)
+  page(`/games/${g.slug}`, `${g.name} — free Mochi Cat game${song ? ` with “${song.title}”` : ''}`, `${g.desc} Play free in your browser — on phone or computer.`, `/covers/${g.slug}.jpg`)
+}
+const urls = ['/', '/music', '/videos', '/games', '/stickers', '/about', ...songs.map(s => `/music/${s.slug}`), ...games.map(g => `/games/${g.slug}`)]
 fs.writeFileSync('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${SITE}${u}</loc></url>`).join('\n')}\n</urlset>\n`)
 fs.writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`)
 console.log(`prerendered ${urls.length} routes`)

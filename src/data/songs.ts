@@ -18,7 +18,7 @@ export const ARTIST = {
   ytMusic: 'https://music.youtube.com/channel/UCQWPYexXj_XBMUsZaw7I-Pg',
   tiktok: 'https://www.tiktok.com/@mochicatsongs',
   instagram: 'https://www.instagram.com/mochicatsongs',
-  facebook: 'https://www.facebook.com/profile.php?id=61595011654416',
+  facebook: 'https://www.facebook.com/mochicatsongs',
   threads: 'https://www.threads.net/@mochicatsongs',
   giphy: 'https://giphy.com/channel/mochicatsongs',
   giphyEn: 'https://giphy.com/channel/mochicatsongs/mochi-3d-stickers-english',

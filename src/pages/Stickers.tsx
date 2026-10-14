@@ -32,7 +32,7 @@ export default function Stickers() {
       <H1 color="t3d-yellow">{t('Stickers')}</H1>
       <p className="-mt-4 mb-3 text-[clamp(20px,3vw,28px)] font-heading tracking-wide text-yellow-200">{t('Animated 3D Mochi stickers')}</p>
       <p className="mb-8 max-w-2xl text-lg text-white/75">{t('Tap a sticker to save it, or find them on GIPHY — search')} <b>“Mochi Cat”</b> / <b>@mochicatsongs</b> {t('in Instagram Stories, TikTok and messengers.')}</p>
-      <div className="mb-12"><Pill href={ARTIST.giphy} i={3}>{t('Open Mochi on GIPHY')}</Pill></div>
+      <div className="mb-12"><Pill href={lang==='ko'?ARTIST.giphyKo:ARTIST.giphyEn} i={3}>{t('Open Mochi on GIPHY')}</Pill></div>
       <h2 className="t3d-sm t3d-cyan mb-6 text-[clamp(28px,4vw,40px)]">{t('Everyday')}</h2>
       <Grid items={list.filter(s => s.group === 'everyday')} lang={lang} />
       <h2 className="t3d-sm t3d-lime mb-6 mt-14 text-[clamp(28px,4vw,40px)]">{t('Holidays')}</h2>

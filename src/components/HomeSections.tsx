@@ -174,7 +174,7 @@ export function StickerParade() {
           <div className="t3d t3d-lime text-[clamp(48px,10vw,140px)]">{t('Mochi for')}<br />{t('every mood')}</div>
           <p className="mt-6 max-w-md text-[clamp(16px,2.4vw,22px)] font-medium text-white/85">{t('Hi, love, wow, snack time — send a chubby Mochi in any chat.')}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a href={ARTIST.giphy} target="_blank" rel="noopener" className="btn3d btn-lime text-[clamp(18px,2.4vw,24px)]">{t('✨ Get the stickers')}</a>
+            <a href={lang==='ko'?ARTIST.giphyKo:ARTIST.giphyEn} target="_blank" rel="noopener" className="btn3d btn-lime text-[clamp(18px,2.4vw,24px)]">{t('✨ Get the stickers')}</a>
           </div>
         </div>
       </div>

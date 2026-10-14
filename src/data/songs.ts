@@ -21,6 +21,8 @@ export const ARTIST = {
   facebook: 'https://www.facebook.com/profile.php?id=61595011654416',
   threads: 'https://www.threads.net/@mochicatsongs',
   giphy: 'https://giphy.com/channel/mochicatsongs',
+  giphyEn: 'https://giphy.com/channel/mochicatsongs/mochi-3d-stickers-english',
+  giphyKo: 'https://giphy.com/channel/mochicatsongs/3d',
   naverBlog: 'https://blog.naver.com/mochicatsongs',
 }
 

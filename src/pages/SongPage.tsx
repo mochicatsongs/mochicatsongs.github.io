@@ -1,0 +1,106 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import { ARTIST, SONGS, cover, fmtDate, isLive, songBySlug, asset } from '../data/songs'
+import { usePlayer } from '../player/PlayerContext'
+import { PauseIcon, PlayIcon } from '../components/Icons'
+import { Page, Pill } from '../components/Section'
+import NotFound from './NotFound'
+
+type Line = { t?: number; text: string; tag?: boolean; gap?: boolean }
+
+export default function SongPage() {
+  const { slug } = useParams()
+  const song = songBySlug(slug)
+  const p = usePlayer()
+  const [lines, setLines] = useState<Line[] | null>(null)
+  const [synced, setSynced] = useState(false)
+  const box = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setLines(null)
+    if (!song?.lyrics) return
+    fetch(asset(`lyrics/${song.slug}.json`)).then(r => r.json()).then(d => { setLines(d.lines); setSynced(d.synced) }).catch(() => {})
+    document.title = `${song.title} — Mochi Cat`
+    return () => { document.title = 'Mochi Cat 🐾 — the chubbiest pop star' }
+  }, [song])
+
+  const active = p.current?.slug === song?.slug
+  const idx = useMemo(() => {
+    if (!active || !synced || !lines) return -1
+    let i = -1
+    lines.forEach((l, k) => { if (l.t !== undefined && l.t <= p.time + 0.15) i = k })
+    return i
+  }, [active, synced, lines, p.time])
+
+  useEffect(() => {
+    if (idx < 0 || !box.current) return
+    const el = box.current.querySelector<HTMLElement>(`[data-i="${idx}"]`)
+    el?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }, [idx])
+
+  if (!song) return <NotFound />
+  const i = SONGS.findIndex(s => s.slug === song.slug)
+  const next = SONGS[(i + 1) % SONGS.length]
+
+  return (
+    <Page>
+      <Link to="/music" className="mb-6 inline-block text-white/60 hover:text-white">← All songs</Link>
+      <div className="grid gap-10 md:grid-cols-[minmax(0,380px)_1fr]">
+        <div>
+          <img src={cover(song)} alt={song.title} className="w-full rounded-3xl shadow-2xl shadow-black/50" />
+          <h1 className="mt-6 text-[clamp(30px,5vw,48px)] font-medium leading-none tracking-tight">{song.title}</h1>
+          <div className="mt-2 text-white/55">Mochi Cat · {song.genre}</div>
+          <p className="mt-4 text-[17px] leading-relaxed text-white/85">{song.blurb}</p>
+          <button onClick={() => (active ? p.toggle() : p.play(song))}
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-2.5 text-[17px] font-medium text-black hover:bg-white/85">
+            {active && p.playing ? <><PauseIcon /> Pause</> : <><PlayIcon /> Play</>}
+          </button>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Pill href={ARTIST.spotify}>Spotify</Pill>
+            <Pill href={ARTIST.ytMusic}>YouTube Music</Pill>
+            <Pill href={`https://music.apple.com/search?term=${encodeURIComponent('Mochi Cat ' + song.title)}`}>Apple Music</Pill>
+          </div>
+        </div>
+
+        <div className="min-w-0">
+          {song.youtube && (
+            <div className="mb-8">
+              {isLive(song.premiere) ? (
+                <div className="relative overflow-hidden rounded-2xl bg-black pt-[56.25%]">
+                  <iframe className="absolute inset-0 h-full w-full" src={`https://www.youtube-nocookie.com/embed/${song.youtube}`} title={song.title} loading="lazy"
+                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                </div>
+              ) : (
+                <a href={`https://youtu.be/${song.youtube}`} target="_blank" rel="noopener" className="block rounded-2xl border border-white/15 p-5 hover:bg-white/5">
+                  <div className="text-sm text-white/55">Music video premiere</div>
+                  <div className="text-xl">{fmtDate(song.premiere!)} · 00:00 KST — set a reminder 🔔</div>
+                </a>
+              )}
+            </div>
+          )}
+          <h2 className="mb-4 text-2xl font-medium">Lyrics {synced && <span className="ml-2 align-middle text-xs font-normal text-white/45">♪ follows the music</span>}</h2>
+          {lines ? (
+            <div ref={box} className="max-h-[60vh] overflow-y-auto rounded-2xl bg-white/[0.04] p-6 [scrollbar-width:thin]">
+              {lines.map((l, k) => l.gap ? <div key={k} className="h-4" /> : l.tag ? (
+                <div key={k} data-i={k} className="mt-4 text-xs uppercase tracking-widest text-white/35">{l.text}</div>
+              ) : (
+                <p key={k} data-i={k}
+                  onClick={() => { if (synced && l.t !== undefined) { if (!active) p.play(song); setTimeout(() => p.seek(l.t!), active ? 0 : 300) } }}
+                  className={`py-1 text-[clamp(18px,2.4vw,24px)] leading-snug transition-all duration-300 ${synced ? 'cursor-pointer' : ''} ${
+                    idx === -1 ? 'text-white/85' : k === idx ? 'scale-[1.02] text-white' : k < idx ? 'text-white/35' : 'text-white/55'}`}>
+                  {l.text}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl bg-white/[0.04] p-6 text-white/55">Lyrics are coming soon. Meanwhile — press play and dance! 💃</div>
+          )}
+          <Link to={`/music/${next.slug}`} className="mt-10 flex items-center gap-4 rounded-2xl border border-white/10 p-3 hover:bg-white/5">
+            <img src={cover(next)} alt="" className="h-14 w-14 rounded-lg" />
+            <div><div className="text-xs text-white/50">Next song</div><div className="text-lg">{next.title}</div></div>
+          </Link>
+        </div>
+      </div>
+    </Page>
+  )
+}

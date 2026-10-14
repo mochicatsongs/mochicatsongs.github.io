@@ -6,27 +6,39 @@ export default function ScrubVideo() {
   const ref = useRef<HTMLVideoElement>(null)
   useEffect(() => {
     const v = ref.current!
-    const SENSITIVITY = 0.8
-    let prevX: number | null = null, target = 0, seeking = false
-    const seek = () => { if (!v.duration) return; seeking = true; v.currentTime = target }
-    const onSeeked = () => { seeking = false; if (Math.abs(v.currentTime - target) > 0.01) seek() }
+    const SENSITIVITY = 0.35 // whole width of the screen = 35% of the clip
+    const EASE = 0.07 // lower = smoother / slower follow
+    let prevX: number | null = null, target = 0, shown = 0, seeking = false, raf = 0
+    const tick = () => {
+      if (v.duration && !seeking && v.paused) {
+        const diff = target - shown
+        if (Math.abs(diff) > 0.004) {
+          shown += diff * EASE
+          seeking = true
+          v.currentTime = shown
+        }
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    const onSeeked = () => { seeking = false }
     const move = (x: number) => {
       if (prevX === null) { prevX = x; return }
       const delta = x - prevX; prevX = x
       if (!v.duration) return
-      target = Math.min(v.duration, Math.max(0, target + (delta / window.innerWidth) * SENSITIVITY * v.duration))
-      if (!seeking) seek()
+      target = Math.min(v.duration - 0.05, Math.max(0, target + (delta / window.innerWidth) * SENSITIVITY * v.duration))
     }
     const mm = (e: MouseEvent) => move(e.clientX)
     const tm = (e: TouchEvent) => move(e.touches[0].clientX)
-    const ts = (e: TouchEvent) => { prevX = e.touches[0].clientX; if (!v.paused) { v.pause(); target = v.currentTime } }
+    const ts = (e: TouchEvent) => { prevX = e.touches[0].clientX; if (!v.paused) { v.pause(); target = shown = v.currentTime } }
     v.addEventListener('seeked', onSeeked)
     window.addEventListener('mousemove', mm)
     window.addEventListener('touchmove', tm, { passive: true })
     window.addEventListener('touchstart', ts, { passive: true })
-    // Phones have no hover: gently autoplay until the user touches.
-    if (!matchMedia('(hover: hover)').matches) { v.loop = true; v.play().catch(() => {}) }
+    raf = requestAnimationFrame(tick)
+    // Phones have no hover: play slowly on a loop until the user touches.
+    if (!matchMedia('(hover: hover)').matches) { v.loop = true; v.playbackRate = 0.75; v.play().catch(() => {}) }
     return () => {
+      cancelAnimationFrame(raf)
       v.removeEventListener('seeked', onSeeked)
       window.removeEventListener('mousemove', mm)
       window.removeEventListener('touchmove', tm)

@@ -11,16 +11,16 @@ export const GAMES = [
 export default function Games() {
   return (
     <Page>
-      <H1>Games</H1>
+      <H1 color="t3d-lime">Games</H1>
       <div className="grid gap-4 sm:grid-cols-2">
         {GAMES.map(g => g.ready ? (
-          <Link key={g.slug} to={`/games/${g.slug}`} className="rounded-3xl bg-gradient-to-br from-mochired to-fuchsia-600 p-7 transition-transform hover:-translate-y-1">
-            <div className="text-2xl font-medium">{g.title}</div><div className="mt-1 text-white/80">{g.desc}</div>
-            <div className="mt-5 inline-block rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black">Play now →</div>
+          <Link key={g.slug} to={`/games/${g.slug}`} className="card3d bg-gradient-to-br from-pink-500 via-fuchsia-500 to-violet-600 p-7">
+            <div className="t3d-sm text-[32px]">{g.title}</div><div className="mt-1 text-white/80">{g.desc}</div>
+            <div className="btn3d btn-yellow mt-5 text-[17px]">▶ Play now</div>
           </Link>
         ) : (
-          <div key={g.slug} className="rounded-3xl border border-dashed border-white/25 p-7">
-            <div className="text-2xl font-medium">{g.title}</div><div className="mt-1 text-white/55">{g.desc}</div>
+          <div key={g.slug} className="card3d bg-white/[.06] p-7">
+            <div className="t3d-sm text-[30px] text-white/80">{g.title}</div><div className="mt-1 text-white/55">{g.desc}</div>
             <div className="mt-5 text-sm text-white/40">Coming soon</div>
           </div>
         ))}

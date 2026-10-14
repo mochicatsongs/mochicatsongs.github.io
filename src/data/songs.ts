@@ -63,6 +63,7 @@ export const SONGS: Song[] = [
   { slug: 'mochi-fiesta', title: 'Mochi Fiesta', genre: 'Latin · Pop', released: '2026-10-10', blurb: 'Maracas, sunshine and a very happy fiesta cat.' },
 ]
 
+export const hasLyrics = (_s: Song) => true
 export const songBySlug = (slug?: string) => SONGS.find(s => s.slug === slug)
 export const cover = (s: Song) => `${import.meta.env.BASE_URL}covers/${s.slug}.jpg`
 export const audio = (s: Song) => `${import.meta.env.BASE_URL}audio/${s.slug}.mp3`

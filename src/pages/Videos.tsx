@@ -8,7 +8,7 @@ export default function Videos() {
   const soon = vids.filter(s => !isLive(s.premiere)).sort((a, b) => a.premiere!.localeCompare(b.premiere!))
   return (
     <Page>
-      <H1>Music videos</H1>
+      <H1 color="t3d-cyan">Music videos</H1>
       <p className="-mt-4 mb-8 text-lg text-white/70">A new Mochi music video every Friday at 00:00 KST.</p>
       <div className="grid gap-6 md:grid-cols-2">
         {live.map(s => (
@@ -32,7 +32,7 @@ export default function Videos() {
           ))}
         </div>
       </>)}
-      <div className="mt-12"><Pill href={ARTIST.subscribe} solid>Subscribe on YouTube</Pill></div>
+      <div className="mt-12"><Pill href={ARTIST.subscribe} i={0}>Subscribe on YouTube</Pill></div>
     </Page>
   )
 }

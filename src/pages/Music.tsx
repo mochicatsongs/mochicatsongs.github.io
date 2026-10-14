@@ -14,7 +14,7 @@ export default function Music() {
           <PlayIcon /> Play all
         </button>
         <Pill href={ARTIST.spotify}>Spotify</Pill>
-        <Pill href={ARTIST.ytMusic}>YouTube Music</Pill>
+        <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>
       </div>
       <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">{SONGS.map(s => <SongCard key={s.slug} song={s} />)}</div>
     </Page>

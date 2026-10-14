@@ -6,7 +6,8 @@ import { PauseIcon, PlayIcon } from '../components/Icons'
 import { Page, Pill } from '../components/Section'
 import NotFound from './NotFound'
 
-type Line = { t?: number; text: string; tag?: boolean; gap?: boolean }
+type Word = { w: string; t: number }
+type Line = { t?: number; text: string; tag?: boolean; gap?: boolean; words?: Word[] }
 
 export default function SongPage() {
   const { slug } = useParams()
@@ -18,7 +19,7 @@ export default function SongPage() {
 
   useEffect(() => {
     setLines(null)
-    if (!song?.lyrics) return
+    if (!song) return
     fetch(asset(`lyrics/${song.slug}.json`)).then(r => r.json()).then(d => { setLines(d.lines); setSynced(d.synced) }).catch(() => {})
     document.title = `${song.title} — Mochi Cat`
     return () => { document.title = 'Mochi Cat 🐾 — the chubbiest pop star' }
@@ -57,8 +58,8 @@ export default function SongPage() {
           </button>
           <div className="mt-5 flex flex-wrap gap-2">
             <Pill href={ARTIST.spotify}>Spotify</Pill>
-            <Pill href={ARTIST.ytMusic}>YouTube Music</Pill>
-            <Pill href={`https://music.apple.com/search?term=${encodeURIComponent('Mochi Cat ' + song.title)}`}>Apple Music</Pill>
+            <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>
+            <Pill href={`https://music.apple.com/search?term=${encodeURIComponent('Mochi Cat ' + song.title)}`} i={2}>Apple Music</Pill>
           </div>
         </div>
 
@@ -87,8 +88,10 @@ export default function SongPage() {
                 <p key={k} data-i={k}
                   onClick={() => { if (synced && l.t !== undefined) { if (!active) p.play(song); setTimeout(() => p.seek(l.t!), active ? 0 : 300) } }}
                   className={`py-1 text-[clamp(18px,2.4vw,24px)] leading-snug transition-all duration-300 ${synced ? 'cursor-pointer' : ''} ${
-                    idx === -1 ? 'text-white/85' : k === idx ? 'scale-[1.02] text-white' : k < idx ? 'text-white/35' : 'text-white/55'}`}>
-                  {l.text}
+                    idx === -1 ? 'text-white/85' : k === idx ? 'scale-[1.03] font-medium' : k < idx ? 'text-white/35' : 'text-white/55'}`}>
+                  {k === idx && l.words?.length ? l.words.map((w, j) => (
+                    <span key={j} className={`transition-colors duration-150 ${w.t <= p.time + 0.05 ? 'text-white [text-shadow:0_0_18px_rgba(255,80,110,.55)]' : 'text-white/40'}`}>{w.w}{j < l.words!.length - 1 ? ' ' : ''}</span>
+                  )) : l.text}
                 </p>
               ))}
             </div>

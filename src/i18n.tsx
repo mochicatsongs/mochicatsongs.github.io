@@ -50,6 +50,7 @@ const KO: Record<string, string> = {
   'Slide your finger left and right': '손가락을 좌우로 움직여요', 'Tap anywhere on the screen': '화면 아무 곳이나 탭해요',
   'Tap the left or right side': '왼쪽 또는 오른쪽을 탭해요', 'Tap the right things': '알맞은 것을 탭해요',
   'Mouse or ← → keys': '마우스 또는 ← → 키', 'Click or Space': '클릭 또는 스페이스', 'Click or ← → keys': '클릭 또는 ← → 키', 'Click with the mouse': '마우스로 클릭',
+  'Halloween special': '할로윈 스페셜', 'Neon Halloween Party': '네온 할로윈 파티', 'Glowing pumpkins, lasers and a very chubby dancer. Learn the Neon Jump moves now and freeze on “FREEZE!”': '빛나는 호박, 레이저, 그리고 아주 통통한 댄서! 네온 점프 춤을 미리 배우고 “얼음!”에서 멈춰요', 'The music video is out now!': '뮤직비디오 공개!', 'Video premiere in': '뮤직비디오 공개까지', 'd': '일', 'h': '시', 'm': '분', 's': '초', 'Song & lyrics': '노래 & 가사', 'Play Neon Jump': '네온 점프 게임',
   '▶ Start': '▶ 시작', 'with the song': '노래와 함께', 'Next game': '다음 게임', 'Play the game': '게임 하기', '▶ Play': '▶ 플레이',
   'One game for every Mochi song — with the song playing. Beat your best score!': '모치의 노래마다 게임이 하나씩! 노래를 들으며 최고 기록에 도전하세요!',
   'New record! 🏆': '신기록! 🏆', 'Oops! Try again 🐾': '앗! 다시 해봐요 🐾', 'Nice! One more try?': '좋아요! 한 번 더?', 'Great paws! 🐾': '최고의 발놀림! 🐾',

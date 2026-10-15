@@ -2,6 +2,7 @@ import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import ScrubVideo from '../components/ScrubVideo'
+import HalloweenBanner from '../components/HalloweenBanner'
 import { Everywhere, GameBanner, LatestVideo, Premieres, SongsRail, StickerParade } from '../components/HomeSections'
 import { CopyIcon } from '../components/Icons'
 import { ARTIST } from '../data/songs'
@@ -42,6 +43,7 @@ export default function Home() {
       </section>
 
       <div className="bg-party relative z-10">
+        <HalloweenBanner />
         <LatestVideo />
         <Premieres />
         <SongsRail />

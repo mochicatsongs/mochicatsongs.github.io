@@ -12,6 +12,8 @@ type Player = {
   next: () => void
   prev: () => void
   seek: (t: number) => void
+  /** Exact playback position, read straight from the audio element (for per-frame karaoke). */
+  getTime: () => number
   repeat: Repeat
   shuffle: boolean
   cycleRepeat: () => void
@@ -107,6 +109,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     next: () => step(1),
     prev: () => step(-1),
     seek: (t: number) => { el.current!.currentTime = t; setTime(t) },
+    getTime: () => el.current?.currentTime ?? 0,
     repeat, shuffle, setGameLoop,
     cycleRepeat: () => setRepeat(r => (r === 'all' ? 'one' : r === 'one' ? 'off' : 'all')),
     toggleShuffle: () => setShuffle(v => !v),

@@ -1,5 +1,5 @@
 import { useT } from '../i18n'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ARTIST, SONGS, cover, fmtDate, isLive, songBySlug, asset } from '../data/songs'
 import { usePlayer } from '../player/PlayerContext'
@@ -8,8 +8,36 @@ import { GAME_INFO } from '../data/games'
 import { Page, Pill } from '../components/Section'
 import NotFound from './NotFound'
 
-type Word = { w: string; t: number }
+type Word = { w: string; t: number; e?: number }
 type Line = { t?: number; text: string; tag?: boolean; gap?: boolean; words?: Word[] }
+
+/** One karaoke line: every word fills left-to-right exactly while it is sung (per-frame, no React re-render). */
+function KaraokeLine({ words, end, getTime }: { words: Word[]; end: number; getTime: () => number }) {
+  const refs = useRef<(HTMLSpanElement | null)[]>([])
+  const clock = useRef(getTime)
+  clock.current = getTime
+  useEffect(() => {
+    let raf = 0
+    const tick = () => {
+      const now = clock.current()
+      words.forEach((w, j) => {
+        const el = refs.current[j]
+        if (!el) return
+        const next = words[j + 1]?.t ?? end
+        const e = Math.max(w.t + 0.12, Math.min(w.e ?? next, next, w.t + 1.6))
+        const pr = Math.min(1, Math.max(0, (now - w.t) / (e - w.t)))
+        el.style.setProperty('--p', `${(pr * 100).toFixed(1)}%`)
+        el.dataset.on = pr > 0 && pr < 1 ? '1' : pr >= 1 ? '2' : ''
+      })
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [words, end])
+  return <>{words.map((w, j) => (
+    <Fragment key={j}><span ref={el => { refs.current[j] = el }} className="kw">{w.w}</span>{j < words.length - 1 ? ' ' : ''}</Fragment>
+  ))}</>
+}
 
 export default function SongPage() {
   const { slug } = useParams()
@@ -32,7 +60,7 @@ export default function SongPage() {
   const idx = useMemo(() => {
     if (!active || !synced || !lines) return -1
     let i = -1
-    lines.forEach((l, k) => { if (l.t !== undefined && l.t <= p.time + 0.15) i = k })
+    lines.forEach((l, k) => { if (!l.tag && l.t !== undefined && l.t <= p.time + 0.3) i = k })
     return i
   }, [active, synced, lines, p.time])
 
@@ -88,10 +116,8 @@ export default function SongPage() {
                 <p key={k} data-i={k}
                   onClick={() => { if (synced && l.t !== undefined) { if (!active) p.play(song); setTimeout(() => p.seek(l.t!), active ? 0 : 300) } }}
                   className={`py-1 text-[clamp(18px,2.4vw,24px)] leading-snug transition-all duration-300 ${synced ? 'cursor-pointer' : ''} ${
-                    idx === -1 ? 'text-white/85' : k === idx ? 'scale-[1.03] font-medium' : k < idx ? 'text-white/35' : 'text-white/55'}`}>
-                  {k === idx && l.words?.length ? l.words.map((w, j) => (
-                    <span key={j} className={`transition-colors duration-150 ${w.t <= p.time + 0.05 ? 'text-white [text-shadow:0_0_18px_rgba(255,80,110,.55)]' : 'text-white/40'}`}>{w.w}{j < l.words!.length - 1 ? ' ' : ''}</span>
-                  )) : l.text}
+                    idx === -1 ? 'text-white/85' : k === idx ? 'scale-[1.04] origin-left font-semibold' : k < idx ? 'text-white/35' : 'text-white/55'}`}>
+                  {k === idx && l.words?.length ? <KaraokeLine words={l.words} end={lines.slice(k + 1).find(n => n.t !== undefined)?.t ?? l.words[l.words.length - 1].t + 2} getTime={p.getTime} /> : l.text}
                 </p>
               ))}
             </div>

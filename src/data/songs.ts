@@ -71,6 +71,8 @@ export const cover = (s: Song) => `${import.meta.env.BASE_URL}covers/${s.slug}.j
 export const audio = (s: Song) => `${import.meta.env.BASE_URL}audio/${s.slug}.mp3`
 export const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`
 
-export const isLive = (iso?: string) => !iso || new Date(iso + 'T00:00:00+09:00').getTime() <= Date.now()
+/** Premieres go live at 09:00 KST (the first two clips premiered at 00:00 KST). */
+export const premiereTime = (iso: string) => (iso < '2026-10-20' ? '00:00' : '09:00')
+export const isLive = (iso?: string) => !iso || new Date(`${iso}T${premiereTime(iso)}:00+09:00`).getTime() <= Date.now()
 export const fmtDate = (iso: string) =>
   new Date(iso + 'T12:00:00+09:00').toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })

@@ -64,7 +64,7 @@ export function Premieres() {
   return (
     <section className="relative z-10 mx-auto max-w-6xl px-5 py-24 sm:px-8">
       <Reveal><h2 className="t3d t3d-yellow mb-3 text-center text-[clamp(40px,7vw,84px)]">{t('Coming soon')}</h2>
-        <p className="mb-12 text-center text-[clamp(16px,2.2vw,20px)] font-medium text-white/75">{t('A new Mochi video every Friday · 21:00 KST')}</p></Reveal>
+        <p className="mb-12 text-center text-[clamp(16px,2.2vw,20px)] font-medium text-white/75">{t('A new Mochi video every Friday · 09:00 KST')}</p></Reveal>
       <div className="grid gap-6 sm:grid-cols-2">
         {up.map((s, i) => (
           <Reveal key={s.slug} delay={i * 100}>

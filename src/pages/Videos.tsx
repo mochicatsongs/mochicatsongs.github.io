@@ -11,7 +11,7 @@ export default function Videos() {
   return (
     <Page>
       <H1 color="t3d-cyan">{t('Music videos')}</H1>
-      <p className="-mt-4 mb-8 text-lg text-white/70">{t('A new Mochi music video every Friday at 00:00 KST.')}</p>
+      <p className="-mt-4 mb-8 text-lg text-white/70">{t('A new Mochi music video every Friday at 09:00 KST.')}</p>
       <div className="grid gap-6 md:grid-cols-2">
         {live.map(s => (
           <div key={s.slug}>
@@ -29,7 +29,7 @@ export default function Videos() {
           {soon.map(s => (
             <a key={s.slug} href={`https://youtu.be/${s.youtube}`} target="_blank" rel="noopener" className="rounded-2xl border border-white/15 p-5 hover:bg-white/5">
               <div className="text-xl">{s.title}</div>
-              <div className="text-white/55">{t('Premiere')} · {fmtDate(s.premiere!)} · 00:00 KST · {t('set a reminder 🔔')}</div>
+              <div className="text-white/55">{t('Premiere')} · {fmtDate(s.premiere!)} · 09:00 KST · {t('set a reminder 🔔')}</div>
             </a>
           ))}
         </div>

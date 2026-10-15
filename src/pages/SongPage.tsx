@@ -102,7 +102,7 @@ export default function SongPage() {
               ) : (
                 <a href={`https://youtu.be/${song.youtube}`} target="_blank" rel="noopener" className="block rounded-2xl border border-white/15 p-5 hover:bg-white/5">
                   <div className="text-sm text-white/55">{t('Music video premiere')}</div>
-                  <div className="text-xl">{fmtDate(song.premiere!)} · 00:00 KST — {t('set a reminder 🔔')}</div>
+                  <div className="text-xl">{fmtDate(song.premiere!)} · 09:00 KST — {t('set a reminder 🔔')}</div>
                 </a>
               )}
             </div>

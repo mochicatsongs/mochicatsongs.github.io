@@ -4,7 +4,7 @@ import LoopVideo from './LoopVideo'
 import { Link } from 'react-router-dom'
 import { useT } from '../i18n'
 
-const PREMIERE = new Date('2026-10-30T00:00:00+09:00').getTime()
+const PREMIERE = new Date('2026-10-30T09:00:00+09:00').getTime()
 const seg = (p: number, a: number, b: number) => Math.min(1, Math.max(0, (p - a) / (b - a)))
 const END = new Date('2026-11-03T00:00:00+09:00').getTime()
 

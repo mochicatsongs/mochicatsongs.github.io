@@ -8,7 +8,7 @@ const seg = (p: number, a: number, b: number) => clamp((p - a) / (b - a))
 
 const LINES: [string, string, string][] = [
   [`${SONGS.length} songs.`, 't3d', 'Dance-pop, K-pop and pure snack energy.'],
-  ['New video every Friday.', 't3d t3d-cyan', 'Premieres on YouTube at 21:00 KST.'],
+  ['New video every Friday.', 't3d t3d-cyan', 'Premieres on YouTube at 09:00 KST.'],
   ['One very chubby cat.', 't3d t3d-yellow', 'Grey, fluffy, red bandana. Always chooses the dance floor.'],
 ]
 

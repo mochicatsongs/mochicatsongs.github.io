@@ -58,6 +58,8 @@ function ArcadeGame({ def }: { def: GameDef }) {
   const [left, setLeft] = useState(def.seconds ?? 0)
   const [best, setBest] = useState(() => loadBest(def.slug))
   const [msg, setMsg] = useState('')
+  // Long sessions: the game's song keeps looping while the game is open.
+  useEffect(() => { p.setGameLoop(true); return () => p.setGameLoop(false) }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const next = useMemo(() => nextGame(def.slug), [def.slug])
 
   const audio = useRef<AudioContext>()

@@ -26,6 +26,8 @@ export default function CatchTheDot() {
   const p = usePlayer()
   const t = useT()
 
+  // Long sessions: the game's song keeps looping while the game is open.
+  useEffect(() => { p.setGameLoop(true); return () => p.setGameLoop(false) }, []) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { const i = new Image(); i.src = asset('media/avatar.jpg'); img.current = i }, [])
 
   const respawn = useCallback(() => {

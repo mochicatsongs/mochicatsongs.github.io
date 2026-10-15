@@ -44,6 +44,8 @@ const KO: Record<string, string> = {
   'Lyrics & song': '가사 & 노래',
   'Agent Mochi needs your help! Tap the red dot as many times as you can in 30 seconds. It gets faster and smaller…': '요원 모치에게 도움이 필요해요! 30초 동안 빨간 점을 최대한 많이 터치하세요. 점점 빨라지고 작아져요…',
   '🎵 with the song “Catch the Dot”': '🎵 노래 “Catch the Dot”과 함께',
+  // player
+  'Shuffle': '셔플', 'Repeat one song': '한 곡 반복', 'Repeat all songs': '전체 반복', 'Repeat off': '반복 끔',
   // arcade games
   'Slide your finger left and right': '손가락을 좌우로 움직여요', 'Tap anywhere on the screen': '화면 아무 곳이나 탭해요',
   'Tap the left or right side': '왼쪽 또는 오른쪽을 탭해요', 'Tap the right things': '알맞은 것을 탭해요',

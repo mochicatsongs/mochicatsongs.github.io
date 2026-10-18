@@ -96,6 +96,20 @@ const drumRect = (a: { W: number; H: number; U: number }, p: number) => {
   return { x: a.W * pos[0], y: a.H * pos[1], w, h }
 }
 
+/** Opaque vector star (emoji stars can render semi-transparent on some devices). */
+function solidStar(g: CanvasRenderingContext2D, x: number, y: number, R: number, rot = 0, pulse = 1) {
+  g.save(); g.translate(x, y); g.rotate(rot); g.scale(pulse, pulse); g.globalAlpha = 1
+  g.beginPath()
+  for (let i = 0; i < 10; i++) { const rr = i % 2 ? R * 0.45 : R, ang = -Math.PI / 2 + i * Math.PI / 5; g.lineTo(Math.cos(ang) * rr, Math.sin(ang) * rr) }
+  g.closePath()
+  g.shadowColor = 'rgba(255,255,255,.95)'; g.shadowBlur = R * 0.9
+  const gr = g.createRadialGradient(-R * 0.2, -R * 0.3, R * 0.1, 0, 0, R)
+  gr.addColorStop(0, '#fff7ae'); gr.addColorStop(0.55, '#facc15'); gr.addColorStop(1, '#f59e0b')
+  g.fillStyle = gr; g.fill()
+  g.shadowBlur = 0; g.lineJoin = 'round'; g.lineWidth = R * 0.16; g.strokeStyle = '#92400e'; g.stroke()
+  g.restore()
+}
+
 /* 12 ─ Belly Bounce: keep Mochi bouncing on the trampoline */
 const bounce: GameDef<{ px: number; x: number; y: number; vx: number; vy: number; rot: number; stars: { x: number; y: number }[]; wait: number }> = {
   slug: 'belly-bounce', name: 'Belly Bounce', emoji: '🤸', mode: 'lives', lives: 3, bg: ['#a7f3d0', '#34d399'],
@@ -118,7 +132,7 @@ const bounce: GameDef<{ px: number; x: number; y: number; vx: number; vy: number
     if (s.y > a.H + r) { a.miss(s.px, a.H - a.U * 20, 'OOPS'); s.x = a.W / 2; s.y = a.H * 0.2; s.vy = 0; s.vx = a.U * rnd(-20, 20); s.wait = 0.8 }
   },
   draw(s, g, a) {
-    for (const st of s.stars) emo(g, '⭐', st.x, st.y, a.U * 9, Math.sin(a.t * 3) * 0.3)
+    for (const st of s.stars) solidStar(g, st.x, st.y, a.U * 6.8, Math.sin(a.t * 3) * 0.3, 1 + Math.sin(a.t * 6) * 0.06)
     const ty = a.H - a.U * 12
     g.strokeStyle = '#1f2937'; g.lineWidth = a.U * 1.5
     for (const sx of [-1, 1]) { g.beginPath(); g.moveTo(s.px + sx * a.U * 14, ty); g.lineTo(s.px + sx * a.U * 16, a.H); g.stroke() }

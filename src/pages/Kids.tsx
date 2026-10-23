@@ -41,6 +41,7 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
   const [t, setT] = useState(0); const [d, setD] = useState(0)
   // shuffle is on by default: start from a random song (after mount, so prerendered HTML stays stable)
   useEffect(() => { setCur(Math.floor(Math.random() * songs.length)) }, [songs.length])
+  useEffect(() => { const a = ref.current; return () => { a?.pause() } }, [])
   const rnd = () => {
     if (songs.length < 2) return cur
     let left = songs.map((_, i) => i).filter(i => i !== cur && !played.current.has(i))
@@ -108,6 +109,7 @@ function Video({ slug }: { slug: string }) {
   const ref = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(false)
   const [p, setP] = useState(0)
+  useEffect(() => { const v = ref.current; return () => { v?.pause() } }, [])
   const toggle = () => { const v = ref.current; if (!v) return; if (v.paused) { if (v.ended) v.currentTime = 0; void v.play() } else v.pause() }
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
     const v = ref.current; if (!v || !v.duration) return
@@ -226,10 +228,10 @@ export function KidsSection() {
       </div>
       {VIDEOS[s.slug] && (<>
         <h2 className="mt-8 text-2xl font-bold">🎬 Watch Mochi get colored!</h2>
-        <div className="mt-4"><Video slug={VIDEOS[s.slug]} /></div>
+        <div className="mt-4"><Video key={s.slug} slug={VIDEOS[s.slug]} /></div>
       </>)}
       <h2 className="mt-8 text-2xl font-bold">🎵 Press play and color!</h2>
-      <div className="mt-4"><Playlist songs={s.songs} color={s.color} /></div>
+      <div className="mt-4"><Playlist key={s.slug} songs={s.songs} color={s.color} /></div>
       <p className="mt-4 text-center text-lg">★ Don’t forget your Mochi move on the page! ★</p>
       <h2 className="mt-10 text-xl font-bold">More from the book</h2>
       <div className="mt-3 flex flex-wrap gap-2">

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { ARTIST } from '../data/songs'
 
-const LINKS: [string, string][] = [['Music', '/music'], ['Videos', '/videos'], ['Games', '/games'], ['Stickers', '/stickers']]
+const LINKS: [string, string][] = [['Music', '/music'], ['Videos', '/videos'], ['Games', '/games'], ['Stickers', '/stickers'], ['Books', '/books']]
 
 export default function Navbar() {
   const t = useT()

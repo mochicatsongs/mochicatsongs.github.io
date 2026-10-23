@@ -9,6 +9,23 @@ const KO: Record<string, string> = {
   '▶ Subscribe': '▶ 구독하기', '▶ Subscribe on YouTube': '▶ 유튜브 구독하기', 'Subscribe on YouTube': '유튜브 구독하기',
   'Coming soon': '곧 공개', 'All songs →': '전체 노래 →', 'All games →': '전체 게임 →', 'Play': '재생', 'Pause': '일시정지',
   'Play all': '전체 재생', 'Playing': '재생 중', 'Copied! 💖': '복사됨! 💖',
+  // books
+  'Books': '컬러링북', '🎨 Coloring': '🎨 컬러링북', 'Coloring Books': '컬러링북',
+  'Color with Mochi! Instant printable PDFs — download right after checkout and print your favorite pages as many times as you like.': '모치랑 색칠해요! 결제 후 바로 받는 인쇄용 PDF — 마음에 드는 페이지를 몇 번이든 다시 인쇄할 수 있어요.',
+  'A cozy coloring book for grown-ups': '어른을 위한 힐링 컬러링북',
+  '40 calm scenes of everyday Korea — street food, rainy bus stops, hanok villages, Jeju': '편의점 라면, 비 오는 버스 정류장, 한옥마을, 제주까지 한국의 일상 40장면',
+  'One scene per page, easy to print on A4 or Letter': '한 장에 한 그림, A4로 쉽게 인쇄',
+  'A Korean word and a tiny cultural fact on every page': '페이지마다 감성 한 줄과 오늘의 영어',
+  'Color along to Mochi’s music with the QR codes': 'QR 코드로 모치 음악을 들으며 색칠',
+  'Bold, easy pages for ages 4–8': '4~8세를 위한 굵고 쉬운 그림',
+  '44 big, simple pictures with thick lines': '굵은 선으로 그린 쉬운 그림 44장',
+  'A fun move to do on every page': '페이지마다 따라 하는 신나는 동작',
+  'Mazes, dot-to-dot, spot the difference and a bingo': '미로 찾기, 점 잇기, 다른 곳 찾기, 빙고',
+  'Print your favorite pages again and again': '좋아하는 페이지를 몇 번이든 다시 인쇄',
+  '🖨️ PDF in Korean · Naver': '🖨️ 한국어 PDF · 스마트스토어', 'English PDF': '영어판 PDF',
+  '🖨️ Printable PDF · $4.99': '🖨️ 인쇄용 PDF · $4.99', 'Korean edition': '한국어판',
+  '📖 Paperback: coming soon': '📖 종이책: 곧 출간',
+  'Pictures were made with AI tools and edited for coloring. For personal and home use.': '그림은 AI 도구로 만든 뒤 색칠하기 좋게 다듬었습니다. 개인·가정용으로 사용해 주세요.',
   // hero
   'Hey there, meet': '안녕! 나는', 'the chubbiest pop star on the internet': '인터넷에서 제일 통통한 팝스타',
   'Glad you stopped by. I love snacks, but I always choose the dance floor. So — what are we doing today?':

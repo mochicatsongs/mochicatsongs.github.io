@@ -6,7 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 const B = import.meta.env.BASE_URL
 type Sec = { slug: string; emoji: string; title: string; ko: string; color: string; songs: [string, string][] }
 export const KID_SECTIONS: Sec[] = [
-  { slug: 'food', emoji: '🍕', title: 'Food & Sport', ko: '음식과 운동', color: '#ff8a5c', songs: [['the-chubby-super-cat', 'The Chubby Super Cat'], ['nom-nom-nom', 'Nom Nom Nom'], ['chonky-gym-cat', 'Chonky Gym Cat'], ['belly-bounce', 'Belly Bounce']] },
+  { slug: 'food', emoji: '🍕', title: 'Food & Sport', ko: '음식과 운동', color: '#ff8a5c', songs: [['the-chubby-super-cat', 'The Chubby Super Cat'], ['nom-nom-nom', 'Nom Nom Nom'], ['belly-bounce', 'Belly Bounce']] },
   { slug: 'music', emoji: '🎤', title: 'Music Star', ko: '뮤직 스타', color: '#ff5fa2', songs: [['shine-like-mochi', 'Shine Like Mochi'], ['mochi-dance', 'Mochi Dance'], ['meow-meow-mochi-cat', 'Meow Meow (Mochi Cat)'], ['super-paw-rock', 'Super Paw Rock']] },
   { slug: 'home', emoji: '🏠', title: 'Cozy Home', ko: '아늑한 집', color: '#7c6cff', songs: [['mochi-heart', 'Mochi Heart'], ['mochi-mode', 'Mochi Mode'], ['milkshake-shake', 'Milkshake Shake'], ['mochi-mochi-challenge', 'Mochi Mochi Challenge']] },
   { slug: 'travel', emoji: '✈️', title: 'Travel', ko: '여행', color: '#25b4e8', songs: [['meow-in-every-language', 'Meow in Every Language'], ['mochi-fiesta', 'Mochi Fiesta'], ['mochi-farm', 'Mochi Farm'], ['mochi-dance', 'Mochi Dance']] },

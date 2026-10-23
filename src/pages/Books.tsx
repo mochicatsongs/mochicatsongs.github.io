@@ -5,6 +5,7 @@ import { asset } from '../data/songs'
 import { useLang, useT } from '../i18n'
 
 /** Coloring books: printable PDFs (Gumroad worldwide, Naver Smart Store in Korea); paperbacks coming soon. */
+const NAVER_LIVE = false // Naver links hidden until the public (channel) product numbers are confirmed
 type Book = { id: 'adult' | 'kids'; title: string; titleKo: string; sub: string; points: string[]; gumroad: string; naver: string }
 const BOOKS: Book[] = [
   {
@@ -35,20 +36,20 @@ export default function Books() {
         {BOOKS.map((b, i) => (
           <Reveal key={b.id} delay={i * 90}>
             <article className="card3d flex h-full flex-col bg-white/[.07] p-5">
-              <img src={asset(`books/${b.id}-${lang === 'ko' ? 'ko' : 'en'}.jpg`)} alt={lang === 'ko' ? b.titleKo : b.title} loading="lazy" className="mb-5 aspect-square w-full rounded-2xl object-cover" />
+              <img src={asset(`books/${b.id}-${lang === 'ko' && NAVER_LIVE ? 'ko' : 'en'}.jpg`)} alt={lang === 'ko' ? b.titleKo : b.title} loading="lazy" className="mb-5 aspect-square w-full rounded-2xl object-cover" />
               <h2 className="font-heading text-[clamp(24px,3vw,32px)] leading-tight tracking-wide text-yellow-200">{lang === 'ko' ? b.titleKo : b.title}</h2>
               <div className="mb-3 mt-1 font-semibold text-cyan-200">{t(b.sub)}</div>
               <ul className="mb-6 space-y-1.5 text-white/85">{b.points.map(p => <li key={p}>✓ {t(p)}</li>)}</ul>
               <div className="mt-auto flex flex-wrap gap-3">
-                {lang === 'ko' ? <>
-                  <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-lime text-[17px]">{t('🖨️ PDF in Korean · Naver')}</a>
-                  <a href={b.gumroad} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('English PDF')}</a>
-                </> : <>
-                  <a href={b.gumroad} target="_blank" rel="noopener" className="btn3d btn-pink text-[17px]">{t('🖨️ Printable PDF · $4.99')}</a>
-                  <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('Korean edition')}</a>
-                </>}
+                {lang === 'ko' && NAVER_LIVE
+                  ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-lime text-[17px]">{t('🖨️ PDF in Korean · Naver')}</a>
+                  : null}
+                <a href={b.gumroad} target="_blank" rel="noopener" className={`btn3d ${lang === 'ko' && NAVER_LIVE ? 'btn-white text-[15px]' : 'btn-pink text-[17px]'}`}>{lang === 'ko' ? t('English PDF') + ' · $4.99' : t('🖨️ Printable PDF · $4.99')}</a>
+                {lang !== 'ko' && NAVER_LIVE
+                  ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('Korean edition')}</a>
+                  : null}
               </div>
-              <div className="mt-4 text-sm text-white/55">{t('📖 Paperback: coming soon')}</div>
+              <div className="mt-4 text-sm text-white/55">{!NAVER_LIVE && lang === 'ko' ? t('📖 Korean PDF & paperback: coming soon') : t('📖 Paperback: coming soon')}</div>
             </article>
           </Reveal>
         ))}

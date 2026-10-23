@@ -14,7 +14,7 @@ export const KID_SECTIONS: Sec[] = [
 ]
 const VIDEOS: Record<string, string> = { food: 'food', music: 'music', home: 'home', travel: 'travel', dreams: 'dreams' }
 const ALL_SONGS: [string, string][] = [...new Map(KID_SECTIONS.flatMap(x => x.songs).map(x => [x[0], x] as const)).values()]
-const BOOK_URL = { en: 'https://mochicatsongs.gumroad.com/l/ggaofw', ko: 'https://smartstore.naver.com/mochicatsongs/products/13829264388' } // printable PDF; paperback link later
+const BOOK_URL: Record<'en' | 'ko', string> = { en: 'https://mochicatsongs.gumroad.com/l/ggaofw', ko: '' /* Naver link hidden until the public product number is confirmed */ } // printable PDF; paperback link later
 
 /* ---- Language: Korean or English, picked from the phone/computer language, switchable, remembered ---- */
 type Lang = 'en' | 'ko'
@@ -269,7 +269,7 @@ function Book() {
       <div>
         <div className="text-2xl font-bold">{t.bookTitle}</div>
         <p className="mt-1">{t.bookDesc}</p>
-        <a href={BOOK_URL[lang]} target="_blank" rel="noopener" className="mt-3 inline-block rounded-full bg-[#ff6b8b] px-6 py-2 font-semibold text-white">{t.buy}</a>
+        {BOOK_URL[lang] && <a href={BOOK_URL[lang]} target="_blank" rel="noopener" className="mt-3 inline-block rounded-full bg-[#ff6b8b] px-6 py-2 font-semibold text-white">{t.buy}</a>}
         <div className="mt-2 text-sm opacity-70">{t.soon}</div>
       </div>
     </div>

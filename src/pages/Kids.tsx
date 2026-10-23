@@ -16,6 +16,65 @@ const VIDEOS: Record<string, string> = { food: 'food', music: 'music', home: 'ho
 const ALL_SONGS: [string, string][] = [...new Map(KID_SECTIONS.flatMap(x => x.songs).map(x => [x[0], x] as const)).values()]
 const BOOK_URL = '' // Amazon link goes here when the book is live
 
+/* ---- Language: Korean or English, picked from the phone/computer language, switchable, remembered ---- */
+type Lang = 'en' | 'ko'
+const T = {
+  en: {
+    docHome: 'Color with Mochi! 🐾 Kids zone', heroTitle: 'Color with Mochi!',
+    heroHi: 'Hi! I’m Mochi 🐾 Pick your page, play my song and color with me!',
+    whichPart: '🎵 Which part of the book are you coloring?', radioAll: '📻 Mochi Radio — all songs',
+    watch: '🎬 Watch Mochi get colored!', watchSub: 'Press play, sing along — then color your own page!',
+    free: '🖨️ Free pages to print', print: 'Print ⬇',
+    tapStart: '🎵 Tap to start the music!', radio: 'Mochi Radio 📻',
+    repAll: '🔁 Repeat all', repOne: '🔂 Repeat one', repOff: '➡️ No repeat', shufOn: '🔀 Shuffle on', shufOff: 'Shuffle off',
+    keepPlaying: 'Songs keep playing while you color 🎨',
+    back: '← All pages', pressPlay: '🎵 Press play and color!', move: '★ Don’t forget your Mochi move on the page! ★', more: 'More from the book',
+    bookTitle: 'Mochi Cat Coloring Book', bookDesc: '44 bold & easy pages, fun moves, Korean words and activities · ages 4–8',
+    buy: 'For grown-ups: get the book on Amazon', soon: 'Coming soon on Amazon',
+    gTitle: 'For grown-ups:', gText: 'this kids page has no ads, no sign-up and no tracking. Songs play right here — no YouTube needed.',
+    gAdult: 'There is also a cozy coloring book for adults, Cozy Cat, on the main site.',
+    switchTo: '한국어',
+  },
+  ko: {
+    docHome: '모치랑 색칠해요! 🐾 키즈 존', heroTitle: '모치랑 색칠해요!',
+    heroHi: '안녕! 나는 모치야 🐾 페이지를 고르고, 노래를 틀고, 나랑 같이 색칠하자!',
+    whichPart: '🎵 책의 어느 부분을 색칠하고 있어?', radioAll: '📻 모치 라디오 — 모든 노래',
+    watch: '🎬 모치가 색칠되는 걸 봐요!', watchSub: '재생을 누르고 같이 노래해요 — 그다음 내 그림도 색칠해요!',
+    free: '🖨️ 무료 색칠 도안', print: '프린트 ⬇',
+    tapStart: '🎵 눌러서 노래 듣기!', radio: '모치 라디오 📻',
+    repAll: '🔁 전체 반복', repOne: '🔂 한 곡 반복', repOff: '➡️ 반복 안 함', shufOn: '🔀 랜덤 재생', shufOff: '순서대로 재생',
+    keepPlaying: '색칠하는 동안 노래가 계속 나와요 🎨',
+    back: '← 전체 페이지', pressPlay: '🎵 노래 틀고 색칠해요!', move: '★ 페이지에 있는 모치 동작도 꼭 따라 해요! ★', more: '책 속 다른 페이지',
+    bookTitle: '모치 캣 색칠공부 책', bookDesc: '굵은 선의 쉬운 그림 44장, 신나는 동작과 놀이, 영어·한국어 단어 · 4–8세',
+    buy: '보호자용: 아마존에서 책 보기', soon: '아마존 출시 예정',
+    gTitle: '보호자분께:', gText: '이 어린이 페이지에는 광고, 회원가입, 추적이 없어요. 노래는 여기서 바로 재생돼요 — 유튜브가 필요 없어요.',
+    gAdult: '어른을 위한 컬러링북 Cozy Cat도 메인 사이트에 있어요.',
+    switchTo: 'English',
+  },
+} as const
+const LANG_KEY = 'mochi-kids-lang'
+const detectLang = (): Lang => {
+  try { const v = localStorage.getItem(LANG_KEY); if (v === 'en' || v === 'ko') return v } catch { /* storage blocked */ }
+  const list = typeof navigator !== 'undefined' ? (navigator.languages?.length ? navigator.languages : [navigator.language]) : []
+  return list.some(l => l?.toLowerCase().startsWith('ko')) ? 'ko' : 'en'
+}
+let LANG: Lang = 'en'
+const langSubs = new Set<(l: Lang) => void>()
+const setLang = (l: Lang) => {
+  LANG = l; try { localStorage.setItem(LANG_KEY, l) } catch { /* ignore */ }
+  document.documentElement.lang = l; langSubs.forEach(f => f(l))
+}
+function useLang() {
+  const [l, set] = useState<Lang>(LANG)
+  useEffect(() => {
+    langSubs.add(set)
+    const d = detectLang(); if (d !== LANG) setLang(d); else { set(d); document.documentElement.lang = d }
+    return () => { langSubs.delete(set) }
+  }, [])
+  return { lang: l, t: T[l] }
+}
+const secTitle = (s: Sec, l: Lang) => (l === 'ko' ? s.ko : s.title)
+
 function useKidsPage(title: string) {
   useEffect(() => {
     const prev = document.title
@@ -45,6 +104,7 @@ const sharedAudio = () => {
 let RESUME = false
 const resumeMusic = () => { if (RESUME && SHARED && SHARED.paused && SHARED.src) void SHARED.play().catch(() => {}); RESUME = false }
 function Playlist({ songs, color }: { songs: [string, string][]; color: string }) {
+  const { t: tx } = useLang()
   const ref = useRef<HTMLAudioElement | null>(null)
   const [cur, setCur] = useState(0)
   const [playing, setPlaying] = useState(false)
@@ -99,18 +159,18 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
     return () => { Object.entries(on).forEach(([k, f]) => a.removeEventListener(k, f)); document.removeEventListener('pointerdown', kick); a.pause() }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  const repLabel = rep === 'all' ? '🔁 Repeat all' : rep === 'one' ? '🔂 Repeat one' : '➡️ No repeat'
+  const repLabel = rep === 'all' ? tx.repAll : rep === 'one' ? tx.repOne : tx.repOff
   const fmt = (x: number) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`
   return (
     <div data-player className="rounded-[2rem] p-4 shadow-xl" style={{ background: `linear-gradient(160deg, ${color}, ${color}cc 55%, #ffffff)` }}>
       <div className="rounded-[1.6rem] bg-white/95 p-4">
         {needTap && !playing && (
-          <button onClick={toggle} className="mb-3 w-full animate-pulse rounded-2xl py-3 text-lg font-bold text-white shadow" style={{ background: color }}>🎵 Tap to start the music! · 눌러서 노래 듣기</button>
+          <button onClick={toggle} className="mb-3 w-full animate-pulse rounded-2xl py-3 text-lg font-bold text-white shadow" style={{ background: color }}>{tx.tapStart}</button>
         )}
         <div className="flex flex-col items-center gap-3 sm:flex-row">
           <img src={`${B}covers/${songs[cur][0]}.jpg`} alt="" className={`h-44 w-44 rounded-[1.4rem] object-cover shadow-lg ${playing ? 'kid-bop' : ''}`} />
           <div className="w-full min-w-0 flex-1 text-center sm:text-left">
-            <div className="text-sm font-semibold uppercase tracking-wider opacity-60">Mochi Radio 📻</div>
+            <div className="text-sm font-semibold uppercase tracking-wider opacity-60">{tx.radio}</div>
             <div className="truncate text-2xl font-bold">{songs[cur][1]}</div>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-[#2b2f6b]/10"><div className="h-full rounded-full transition-[width]" style={{ width: d ? `${(t / d) * 100}%` : '0%', background: color }} /></div>
             <div className="mt-1 text-xs opacity-70">{fmt(t)} / {d ? fmt(d) : '–:––'}</div>
@@ -121,7 +181,7 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
               <button onClick={next} aria-label="Next song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏭</button>
               <button onClick={() => setShuffle(!shuffle)} aria-label={shuffle ? 'Shuffle on' : 'Shuffle off'} aria-pressed={shuffle} title={shuffle ? 'Shuffle on' : 'Shuffle off'} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: shuffle ? color : '#9aa0b8' }}>🔀</button>
             </div>
-            <div className="mt-1 text-center text-xs font-semibold opacity-70">{repLabel} · {shuffle ? '🔀 Shuffle on' : 'Shuffle off'}</div>
+            <div className="mt-1 text-center text-xs font-semibold opacity-70">{repLabel} · {shuffle ? tx.shufOn : tx.shufOff}</div>
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -132,7 +192,7 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
             </button>
           ))}
         </div>
-        <p className="mt-3 text-center text-sm opacity-70">Songs keep playing while you color 🎨 · 색칠하는 동안 노래가 계속 나와요</p>
+        <p className="mt-3 text-center text-sm opacity-70">{tx.keepPlaying}</p>
       </div>
     </div>
   )
@@ -174,73 +234,82 @@ function Video({ slug }: { slug: string }) {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
+  const { lang, t } = useLang()
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#7fd6ff] via-[#c9efff] to-[#fff6d6] pb-16 text-[#2b2f6b]">
-      <div className="mx-auto max-w-3xl px-4 pt-6">{children}</div>
+    <div className={`min-h-screen bg-gradient-to-b from-[#7fd6ff] via-[#c9efff] to-[#fff6d6] pb-16 text-[#2b2f6b] ${lang === 'ko' ? 'kids-ko' : ''}`}>
+      <div className="mx-auto max-w-3xl px-4 pt-4">
+        <div className="mb-3 flex justify-end">
+          <button onClick={() => setLang(lang === 'ko' ? 'en' : 'ko')} lang={lang === 'ko' ? 'en' : 'ko'}
+            className="rounded-full bg-white/90 px-4 py-2 text-sm font-bold shadow active:scale-95">🌐 {t.switchTo}</button>
+        </div>
+        {children}
+      </div>
     </div>
   )
 }
 
 function Book() {
+  const { t } = useLang()
   return (
     <div className="mt-10 flex flex-col items-center gap-5 rounded-3xl bg-white p-5 shadow-lg sm:flex-row">
       <img src={`${B}kids/book-cover.jpg`} alt="Mochi Cat Coloring Book cover" className="w-40 rounded-xl shadow" />
       <div>
-        <div className="text-2xl font-bold">Mochi Cat Coloring Book</div>
-        <p className="mt-1">44 bold &amp; easy pages, fun moves, Korean words and activities · ages 4–8</p>
+        <div className="text-2xl font-bold">{t.bookTitle}</div>
+        <p className="mt-1">{t.bookDesc}</p>
         {BOOK_URL
-          ? <a href={BOOK_URL} target="_blank" rel="noopener" className="mt-3 inline-block rounded-full bg-[#ff6b8b] px-6 py-2 font-semibold text-white">For grown-ups: get the book on Amazon</a>
-          : <span className="mt-3 inline-block rounded-full bg-[#ffd23f] px-6 py-2 font-semibold">Coming soon on Amazon</span>}
+          ? <a href={BOOK_URL} target="_blank" rel="noopener" className="mt-3 inline-block rounded-full bg-[#ff6b8b] px-6 py-2 font-semibold text-white">{t.buy}</a>
+          : <span className="mt-3 inline-block rounded-full bg-[#ffd23f] px-6 py-2 font-semibold">{t.soon}</span>}
       </div>
     </div>
   )
 }
 
 function Grownups() {
+  const { t } = useLang()
   return (
     <p className="mt-10 rounded-2xl bg-white/70 p-4 text-sm">
-      <b>For grown-ups:</b> this kids page has no ads, no sign-up and no tracking. Songs play right here — no YouTube needed.
-      <br />There is also a cozy coloring book for adults, <i>Cozy Cat</i>, on the main site.
+      <b>{t.gTitle}</b> {t.gText}
+      <br />{t.gAdult}
     </p>
   )
 }
 
 export function KidsHome() {
-  useKidsPage('Color with Mochi! 🐾 Kids zone')
+  const { lang, t } = useLang()
+  useKidsPage(t.docHome)
   return (
     <Shell>
       <div className="flex flex-col items-center gap-4 rounded-[2rem] bg-white/80 p-6 text-center shadow-xl sm:flex-row sm:text-left">
         <img src={`${B}kids/mochi.png`} alt="Mochi the cat" className="w-40 sm:w-48" />
         <div>
-          <h1 className="font-heading text-5xl text-[#ff6b8b] sm:text-6xl">Color with Mochi!</h1>
-          <p className="mt-2 text-lg">Hi! I’m Mochi 🐾 Pick your page, play my song and color with me!</p>
-          <p className="text-base opacity-80">안녕! 나는 모치야. 노래를 틀고 같이 색칠하자!</p>
+          <h1 className="font-heading text-5xl text-[#ff6b8b] sm:text-6xl">{t.heroTitle}</h1>
+          <p className="mt-2 text-lg">{t.heroHi}</p>
         </div>
       </div>
-      <h2 className="mt-8 text-2xl font-bold">🎵 Which part of the book are you coloring?</h2>
+      <h2 className="mt-8 text-2xl font-bold">{t.whichPart}</h2>
       <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
         {KID_SECTIONS.map(s => (
           <Link key={s.slug} to={`/k/${s.slug}`} className="overflow-hidden rounded-3xl bg-white shadow-lg transition hover:-translate-y-1">
             <img src={`${B}kids/${s.slug}.png`} alt="" className="aspect-square w-full object-cover" />
-            <div className="p-3 text-center text-lg font-bold text-white" style={{ background: s.color }}>{s.emoji} {s.title}</div>
+            <div className="p-3 text-center text-lg font-bold text-white" style={{ background: s.color }}>{s.emoji} {secTitle(s, lang)}</div>
           </Link>
         ))}
       </div>
-      <h2 className="mt-10 text-2xl font-bold">📻 Mochi Radio — all songs</h2>
+      <h2 className="mt-10 text-2xl font-bold">{t.radioAll}</h2>
       <div className="mt-4"><Playlist songs={ALL_SONGS} color="#ff6b8b" /></div>
-      <h2 className="mt-10 text-2xl font-bold">🎬 Watch Mochi get colored!</h2>
-      <p className="opacity-80">Press play, sing along — then color your own page!</p>
+      <h2 className="mt-10 text-2xl font-bold">{t.watch}</h2>
+      <p className="opacity-80">{t.watchSub}</p>
       <div className="mt-4 flex snap-x gap-4 overflow-x-auto pb-3">
         {KID_SECTIONS.filter(s => VIDEOS[s.slug]).map(s => (
-          <div key={s.slug} className="w-56 shrink-0 snap-start"><Video slug={VIDEOS[s.slug]} /><div className="mt-2 text-center font-semibold">{s.emoji} {s.title}</div></div>
+          <div key={s.slug} className="w-56 shrink-0 snap-start"><Video slug={VIDEOS[s.slug]} /><div className="mt-2 text-center font-semibold">{s.emoji} {secTitle(s, lang)}</div></div>
         ))}
       </div>
-      <h2 className="mt-10 text-2xl font-bold">🖨️ Free pages to print</h2>
+      <h2 className="mt-10 text-2xl font-bold">{t.free}</h2>
       <div className="mt-4 grid grid-cols-3 gap-3">
         {[1, 2, 3].map(i => (
           <a key={i} href={`${B}kids/free-page-${i}.pdf`} target="_blank" rel="noopener" className="rounded-2xl bg-white p-2 shadow">
             <img src={`${B}kids/free-page-${i}.png`} alt={`Free coloring page ${i}`} className="w-full rounded-lg" />
-            <div className="mt-1 text-center text-sm font-semibold">Print ⬇</div>
+            <div className="mt-1 text-center text-sm font-semibold">{t.print}</div>
           </a>
         ))}
       </div>
@@ -253,30 +322,30 @@ export function KidsHome() {
 export function KidsSection() {
   const { slug } = useParams()
   const s = KID_SECTIONS.find(x => x.slug === slug)
-  useKidsPage(s ? `${s.title} — Color with Mochi!` : 'Color with Mochi!')
+  const { lang, t } = useLang()
+  useKidsPage(s ? `${secTitle(s, lang)} — ${t.heroTitle}` : t.heroTitle)
   if (!s) return <KidsHome />
   return (
     <Shell>
-      <Link to="/k" className="inline-block rounded-full bg-white px-4 py-2 font-semibold shadow">← All pages</Link>
+      <Link to="/k" className="inline-block rounded-full bg-white px-4 py-2 font-semibold shadow">{t.back}</Link>
       <div className="mt-4 overflow-hidden rounded-[2rem] bg-white shadow-xl">
         <div className="p-5 text-center text-white" style={{ background: s.color }}>
           <div className="text-5xl">{s.emoji}</div>
-          <h1 className="font-heading text-4xl sm:text-5xl">{s.title}</h1>
-          <div className="opacity-90">{s.ko}</div>
+          <h1 className="font-heading text-4xl sm:text-5xl">{secTitle(s, lang)}</h1>
         </div>
         <img src={`${B}kids/${s.slug}.png`} alt="" className="mx-auto w-64" />
       </div>
       {VIDEOS[s.slug] && (<>
-        <h2 className="mt-8 text-2xl font-bold">🎬 Watch Mochi get colored!</h2>
+        <h2 className="mt-8 text-2xl font-bold">{t.watch}</h2>
         <div className="mt-4"><Video key={s.slug} slug={VIDEOS[s.slug]} /></div>
       </>)}
-      <h2 className="mt-8 text-2xl font-bold">🎵 Press play and color!</h2>
+      <h2 className="mt-8 text-2xl font-bold">{t.pressPlay}</h2>
       <div className="mt-4"><Playlist key={s.slug} songs={s.songs} color={s.color} /></div>
-      <p className="mt-4 text-center text-lg">★ Don’t forget your Mochi move on the page! ★</p>
-      <h2 className="mt-10 text-xl font-bold">More from the book</h2>
+      <p className="mt-4 text-center text-lg">{t.move}</p>
+      <h2 className="mt-10 text-xl font-bold">{t.more}</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         {KID_SECTIONS.filter(x => x.slug !== s.slug).map(x => (
-          <Link key={x.slug} to={`/k/${x.slug}`} className="rounded-full px-4 py-2 font-semibold text-white shadow" style={{ background: x.color }}>{x.emoji} {x.title}</Link>
+          <Link key={x.slug} to={`/k/${x.slug}`} className="rounded-full px-4 py-2 font-semibold text-white shadow" style={{ background: x.color }}>{x.emoji} {secTitle(x, lang)}</Link>
         ))}
       </div>
       <Book />

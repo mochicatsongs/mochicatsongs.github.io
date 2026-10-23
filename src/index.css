@@ -159,3 +159,6 @@ body { font-family: var(--font-body); background: #0b0718; color: #fff; -webkit-
 @keyframes kidBop { 0%,100% { transform: translateY(0) rotate(-2deg) } 50% { transform: translateY(-8px) rotate(2deg) } }
 .kid-bop { animation: kidBop .9s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .kid-bop { animation: none } }
+/* kids zone in Korean: friendly Hangul font for headings and body */
+.kids-ko { font-family: 'Jua', 'Fredoka', system-ui, sans-serif; }
+.kids-ko .font-heading { font-family: 'Jua', 'Fredoka', sans-serif; }

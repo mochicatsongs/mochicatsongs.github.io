@@ -24,9 +24,9 @@ const T = {
     heroHi: 'Hi! I’m Mochi 🐾 Pick your page, play my song and color with me!',
     whichPart: '🎵 Which part of the book are you coloring?', radioAll: '📻 Mochi Radio — all songs',
     watch: '🎬 Watch Mochi get colored!', watchSub: 'Press play, sing along — then color your own page!',
-    free: '🖨️ Free pages to print', print: 'Print ⬇',
+    free: '🖨️ Free pages to print', print: 'Print ↓',
     tapStart: '🎵 Tap to start the music!', radio: 'Mochi Radio 📻',
-    repAll: '🔁 Repeat all', repOne: '🔂 Repeat one', repOff: '➡️ No repeat', shufOn: '🔀 Shuffle on', shufOff: 'Shuffle off',
+    repAll: 'Repeat all', repOne: 'Repeat one', repOff: 'No repeat', shufOn: 'Shuffle on', shufOff: 'Shuffle off',
     keepPlaying: 'Songs keep playing while you color 🎨',
     back: '← All pages', pressPlay: '🎵 Press play and color!', move: '★ Don’t forget your Mochi move on the page! ★', more: 'More from the book',
     bookTitle: 'Mochi Cat Coloring Book', bookDesc: '44 bold & easy pages, fun moves, Korean words and activities · ages 4–8',
@@ -40,9 +40,9 @@ const T = {
     heroHi: '안녕! 나는 모치야 🐾 페이지를 고르고, 노래를 틀고, 나랑 같이 색칠하자!',
     whichPart: '🎵 책의 어느 부분을 색칠하고 있어?', radioAll: '📻 모치 라디오 — 모든 노래',
     watch: '🎬 모치가 색칠되는 걸 봐요!', watchSub: '재생을 누르고 같이 노래해요 — 그다음 내 그림도 색칠해요!',
-    free: '🖨️ 무료 색칠 도안', print: '프린트 ⬇',
+    free: '🖨️ 무료 색칠 도안', print: '프린트 ↓',
     tapStart: '🎵 눌러서 노래 듣기!', radio: '모치 라디오 📻',
-    repAll: '🔁 전체 반복', repOne: '🔂 한 곡 반복', repOff: '➡️ 반복 안 함', shufOn: '🔀 랜덤 재생', shufOff: '순서대로 재생',
+    repAll: '전체 반복', repOne: '한 곡 반복', repOff: '반복 안 함', shufOn: '랜덤 재생', shufOff: '순서대로 재생',
     keepPlaying: '색칠하는 동안 노래가 계속 나와요 🎨',
     back: '← 전체 페이지', pressPlay: '🎵 노래 틀고 색칠해요!', move: '★ 페이지에 있는 모치 동작도 꼭 따라 해요! ★', more: '책 속 다른 페이지',
     bookTitle: '모치 캣 색칠공부 책', bookDesc: '굵은 선의 쉬운 그림 44장, 신나는 동작과 놀이, 영어·한국어 단어 · 4–8세',
@@ -92,6 +92,19 @@ function useKidsPage(title: string) {
   }, [title])
 }
 
+// drawn icons: iPhones turn ▶ ⏮ 🔁 into blue emoji boxes, so the buttons use simple shapes instead
+const Ico = ({ d, className = 'h-7 w-7' }: { d: string; className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true"><path d={d} /></svg>
+)
+const I = {
+  play: 'M8 5.5v13a1 1 0 0 0 1.5.87l10.4-6.5a1 1 0 0 0 0-1.74L9.5 4.63A1 1 0 0 0 8 5.5z',
+  pause: 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z',
+  prev: 'M6 5h2.5v14H6zM20 6.2v11.6a.9.9 0 0 1-1.4.75L10 12.75a.9.9 0 0 1 0-1.5l8.6-5.8A.9.9 0 0 1 20 6.2z',
+  next: 'M15.5 5H18v14h-2.5zM4 6.2v11.6a.9.9 0 0 0 1.4.75L14 12.75a.9.9 0 0 0 0-1.5L5.4 5.45A.9.9 0 0 0 4 6.2z',
+  repeat: 'M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z',
+  shuffle: 'M10.59 9.17 5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z',
+  stop: 'M5 11h10.2l-3.6-3.6L13 6l6 6-6 6-1.4-1.4 3.6-3.6H5z',
+}
 type Rep = 'all' | 'one' | 'off'
 // one shared <audio> for the whole kids zone: once a phone has "unlocked" it with a tap,
 // every later section can start its own music by itself
@@ -174,12 +187,12 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
             <div className="truncate text-2xl font-bold">{songs[cur][1]}</div>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-[#2b2f6b]/10"><div className="h-full rounded-full transition-[width]" style={{ width: d ? `${(t / d) * 100}%` : '0%', background: color }} /></div>
             <div className="mt-1 text-xs opacity-70">{fmt(t)} / {d ? fmt(d) : '–:––'}</div>
-            <div className="mt-3 flex items-center justify-center gap-3">
-              <button onClick={() => setRep(rep === 'all' ? 'one' : rep === 'one' ? 'off' : 'all')} aria-label={repLabel} title={repLabel} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: rep === 'off' ? '#9aa0b8' : color }}>{rep === 'one' ? '🔂' : rep === 'all' ? '🔁' : '➡️'}</button>
-              <button onClick={() => go((cur - 1 + songs.length) % songs.length)} aria-label="Previous song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏮</button>
-              <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-20 w-20 place-items-center rounded-full text-4xl text-white shadow-lg active:scale-95" style={{ background: color }}>{playing ? '❚❚' : '▶'}</button>
-              <button onClick={next} aria-label="Next song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏭</button>
-              <button onClick={() => setShuffle(!shuffle)} aria-label={shuffle ? 'Shuffle on' : 'Shuffle off'} aria-pressed={shuffle} title={shuffle ? 'Shuffle on' : 'Shuffle off'} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: shuffle ? color : '#9aa0b8' }}>🔀</button>
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <button onClick={() => setRep(rep === 'all' ? 'one' : rep === 'one' ? 'off' : 'all')} aria-label={repLabel} title={repLabel} className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: rep === 'off' ? '#9aa0b8' : color }}>{rep === 'off' ? <Ico d={I.stop} /> : <span className="relative"><Ico d={I.repeat} />{rep === 'one' && <span className="absolute -right-2 -top-2 grid h-5 w-5 place-items-center rounded-full bg-white text-xs font-bold" style={{ color }}>1</span>}</span>}</button>
+              <button onClick={() => go((cur - 1 + songs.length) % songs.length)} aria-label="Previous song" className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">{<Ico d={I.prev} />}</button>
+              <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-16 w-16 shrink-0 place-items-center rounded-full text-4xl text-white shadow-lg active:scale-95" style={{ background: color }}>{playing ? <Ico d={I.pause} className="h-10 w-10" /> : <Ico d={I.play} className="h-10 w-10" />}</button>
+              <button onClick={next} aria-label="Next song" className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">{<Ico d={I.next} />}</button>
+              <button onClick={() => setShuffle(!shuffle)} aria-label={shuffle ? 'Shuffle on' : 'Shuffle off'} aria-pressed={shuffle} title={shuffle ? 'Shuffle on' : 'Shuffle off'} className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: shuffle ? color : '#9aa0b8' }}><Ico d={I.shuffle} /></button>
             </div>
             <div className="mt-1 text-center text-xs font-semibold opacity-70">{repLabel} · {shuffle ? tx.shufOn : tx.shufOff}</div>
           </div>
@@ -224,7 +237,7 @@ function Video({ slug }: { slug: string }) {
         <source src={`${B}kids/videos/${slug}.mp4`} type="video/mp4" />
       </video>
       {!playing && (
-        <button onClick={toggle} aria-label="Play video" className="absolute left-1/2 top-1/2 grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#e0567a] pl-1 text-4xl text-white shadow-xl ring-4 ring-white active:scale-95">▶</button>
+        <button onClick={toggle} aria-label="Play video" className="absolute left-1/2 top-1/2 grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#e0567a] pl-1 text-4xl text-white shadow-xl ring-4 ring-white active:scale-95"><Ico d={I.play} className="h-10 w-10" /></button>
       )}
       <div onClick={seek} className="absolute inset-x-4 bottom-3 h-3 cursor-pointer overflow-hidden rounded-full bg-[#2b2f6b]/15" role="progressbar" aria-valuenow={Math.round(p * 100)}>
         <div className="h-full rounded-full bg-[#e0567a]" style={{ width: `${p * 100}%` }} />

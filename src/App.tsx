@@ -13,6 +13,7 @@ import NotFound from './pages/NotFound'
 import CatchTheDot from './games/CatchTheDot'
 import { KidsHome, KidsSection } from './pages/Kids'
 const Arcade = lazy(() => import('./games/arcade/ArcadeGame'))
+const Privacy = lazy(() => import('./pages/Privacy'))
 
 /** Remembers where you were on every page: Back returns to the same spot, new pages start at the top. */
 const KEY = (k: string) => `mochi-scroll:${k}`
@@ -62,6 +63,7 @@ export default function App() {
         <Route path="/games/:slug" element={<Suspense fallback={<div className="min-h-screen" />}><Arcade /></Suspense>} />
         <Route path="/stickers" element={<Stickers />} />
         <Route path="/about" element={<About />} />
+        <Route path="/privacy" element={<Suspense fallback={<div className="min-h-screen" />}><Privacy /></Suspense>} />
         <Route path="/k" element={<KidsHome />} />
         <Route path="/k/:slug" element={<KidsSection />} />
         <Route path="*" element={<NotFound />} />

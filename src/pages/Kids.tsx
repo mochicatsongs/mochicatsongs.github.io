@@ -32,7 +32,7 @@ const T = {
     bookTitle: 'Mochi Cat Coloring Book', bookDesc: '44 bold & easy pages, fun moves, Korean words and activities · ages 4–8',
     buy: 'For grown-ups: get the book on Amazon', soon: 'Coming soon on Amazon',
     gTitle: 'For grown-ups:', gText: 'this kids page has no ads, no sign-up and no tracking. Songs play right here — no YouTube needed.',
-    gAdult: 'There is also a cozy coloring book for adults, Cozy Cat, on the main site.',
+    gAdult: 'There is also a cozy coloring book for adults, Cozy Cat, on the main site.', privacy: 'Privacy',
     switchTo: '한국어',
   },
   ko: {
@@ -48,7 +48,7 @@ const T = {
     bookTitle: '모치 캣 색칠공부 책', bookDesc: '굵은 선의 쉬운 그림 44장, 신나는 동작과 놀이, 영어·한국어 단어 · 4–8세',
     buy: '보호자용: 아마존에서 책 보기', soon: '아마존 출시 예정',
     gTitle: '보호자분께:', gText: '이 어린이 페이지에는 광고, 회원가입, 추적이 없어요. 노래는 여기서 바로 재생돼요 — 유튜브가 필요 없어요.',
-    gAdult: '어른을 위한 컬러링북 Cozy Cat도 메인 사이트에 있어요.',
+    gAdult: '어른을 위한 컬러링북 Cozy Cat도 메인 사이트에 있어요.', privacy: '개인정보 처리방침',
     switchTo: 'English',
   },
 } as const
@@ -282,7 +282,7 @@ function Grownups() {
   return (
     <p className="mt-10 rounded-2xl bg-white/70 p-4 text-sm">
       <b>{t.gTitle}</b> {t.gText}
-      <br />{t.gAdult}
+      <br />{t.gAdult} · <Link to="/privacy" className="underline">{t.privacy}</Link>
     </p>
   )
 }

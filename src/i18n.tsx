@@ -5,7 +5,7 @@ export type Lang = 'en' | 'ko'
 /** Korean translations, keyed by the English text. Anything missing falls back to English. */
 const KO: Record<string, string> = {
   // nav / common
-  'Music': '음악', 'Videos': '뮤직비디오', 'Games': '게임', 'Stickers': '스티커', 'Subscribe': '구독하기', 'Back': '뒤로',
+  'Music': '음악', 'Videos': '뮤직비디오', 'Games': '게임', 'Stickers': '스티커', 'Privacy': '개인정보 처리방침', 'Subscribe': '구독하기', 'Back': '뒤로',
   '▶ Subscribe': '▶ 구독하기', '▶ Subscribe on YouTube': '▶ 유튜브 구독하기', 'Subscribe on YouTube': '유튜브 구독하기',
   'Coming soon': '곧 공개', 'All songs →': '전체 노래 →', 'All games →': '전체 게임 →', 'Play': '재생', 'Pause': '일시정지',
   'Play all': '전체 재생', 'Playing': '재생 중', 'Copied! 💖': '복사됨! 💖',

@@ -36,15 +36,31 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
   const [cur, setCur] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [rep, setRep] = useState<Rep>('all')
+  const [shuffle, setShuffle] = useState(true)
+  const played = useRef<Set<number>>(new Set())
   const [t, setT] = useState(0); const [d, setD] = useState(0)
+  // shuffle is on by default: start from a random song (after mount, so prerendered HTML stays stable)
+  useEffect(() => { setCur(Math.floor(Math.random() * songs.length)) }, [songs.length])
+  const rnd = () => {
+    if (songs.length < 2) return cur
+    let left = songs.map((_, i) => i).filter(i => i !== cur && !played.current.has(i))
+    if (!left.length) { played.current.clear(); left = songs.map((_, i) => i).filter(i => i !== cur) }
+    return left[Math.floor(Math.random() * left.length)]
+  }
   const go = (i: number, play = true) => {
     const a = ref.current; if (!a) return
+    played.current.add(i)
     setCur(i); a.src = `${B}audio/${songs[i][0]}.mp3`; a.currentTime = 0
     if (play) void a.play()
   }
+  const next = () => go(shuffle ? rnd() : (cur + 1) % songs.length)
   const toggle = () => { const a = ref.current; if (!a) return; if (!a.src) go(cur); else if (a.paused) void a.play(); else a.pause() }
   const ended = () => {
     if (rep === 'one') return go(cur)
+    if (shuffle) {
+      if (rep === 'off' && songs.every((_, i) => played.current.has(i))) { played.current.clear(); return setPlaying(false) }
+      return go(rnd())
+    }
     if (cur + 1 < songs.length) return go(cur + 1)
     if (rep === 'all') return go(0)
     setPlaying(false)
@@ -64,10 +80,11 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
             <div className="mt-3 flex items-center justify-center gap-3 sm:justify-start">
               <button onClick={() => go((cur - 1 + songs.length) % songs.length)} aria-label="Previous song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏮</button>
               <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-20 w-20 place-items-center rounded-full text-4xl text-white shadow-lg active:scale-95" style={{ background: color }}>{playing ? '❚❚' : '▶'}</button>
-              <button onClick={() => go((cur + 1) % songs.length)} aria-label="Next song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏭</button>
+              <button onClick={next} aria-label="Next song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏭</button>
               <button onClick={() => setRep(rep === 'all' ? 'one' : rep === 'one' ? 'off' : 'all')} aria-label={repLabel} title={repLabel} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: rep === 'off' ? '#9aa0b8' : color }}>{rep === 'one' ? '🔂' : rep === 'all' ? '🔁' : '➡️'}</button>
+              <button onClick={() => setShuffle(!shuffle)} aria-label={shuffle ? 'Shuffle on' : 'Shuffle off'} aria-pressed={shuffle} title={shuffle ? 'Shuffle on' : 'Shuffle off'} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: shuffle ? color : '#9aa0b8' }}>🔀</button>
             </div>
-            <div className="mt-1 text-xs font-semibold opacity-70">{repLabel}</div>
+            <div className="mt-1 text-xs font-semibold opacity-70">{repLabel} · {shuffle ? '🔀 Shuffle on' : 'Shuffle off'}</div>
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -86,11 +103,31 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
   )
 }
 
+// own simple controls: no dark native overlay on phones, one big friendly button, tap anywhere to play/pause
 function Video({ slug }: { slug: string }) {
+  const ref = useRef<HTMLVideoElement>(null)
+  const [playing, setPlaying] = useState(false)
+  const [p, setP] = useState(0)
+  const toggle = () => { const v = ref.current; if (!v) return; if (v.paused) { if (v.ended) v.currentTime = 0; void v.play() } else v.pause() }
+  const seek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const v = ref.current; if (!v || !v.duration) return
+    const r = e.currentTarget.getBoundingClientRect(); v.currentTime = ((e.clientX - r.left) / r.width) * v.duration
+  }
   return (
-    <video controls playsInline preload="none" poster={`${B}kids/videos/${slug}.jpg`} className="mx-auto w-full max-w-[320px] rounded-3xl bg-white shadow-xl">
-      <source src={`${B}kids/videos/${slug}.mp4`} type="video/mp4" />
-    </video>
+    <div className="relative mx-auto w-full max-w-[320px] overflow-hidden rounded-3xl bg-white shadow-xl">
+      <video ref={ref} playsInline preload="none" poster={`${B}kids/videos/${slug}.jpg`} onClick={toggle}
+        onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
+        onTimeUpdate={e => setP(e.currentTarget.duration ? e.currentTarget.currentTime / e.currentTarget.duration : 0)}
+        className="block w-full cursor-pointer">
+        <source src={`${B}kids/videos/${slug}.mp4`} type="video/mp4" />
+      </video>
+      {!playing && (
+        <button onClick={toggle} aria-label="Play video" className="absolute left-1/2 top-1/2 grid h-20 w-20 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#e0567a] pl-1 text-4xl text-white shadow-xl ring-4 ring-white active:scale-95">▶</button>
+      )}
+      <div onClick={seek} className="absolute inset-x-4 bottom-3 h-3 cursor-pointer overflow-hidden rounded-full bg-[#2b2f6b]/15" role="progressbar" aria-valuenow={Math.round(p * 100)}>
+        <div className="h-full rounded-full bg-[#e0567a]" style={{ width: `${p * 100}%` }} />
+      </div>
+    </div>
   )
 }
 

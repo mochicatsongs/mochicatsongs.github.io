@@ -24,6 +24,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+      if (/^\/k(\/|$)/.test(location.pathname)) window['ga-disable-G-687F6BFBKC'] = true;
       gtag('config', 'G-687F6BFBKC');
     </script>
   </head>

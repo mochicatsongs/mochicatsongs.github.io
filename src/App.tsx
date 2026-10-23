@@ -11,6 +11,7 @@ import Stickers from './pages/Stickers'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
 import CatchTheDot from './games/CatchTheDot'
+import { KidsHome, KidsSection } from './pages/Kids'
 const Arcade = lazy(() => import('./games/arcade/ArcadeGame'))
 
 /** Remembers where you were on every page: Back returns to the same spot, new pages start at the top. */
@@ -46,10 +47,11 @@ function ScrollMemory() {
 }
 
 export default function App() {
+  const kids = useLocation().pathname.replace(import.meta.env.BASE_URL, '/').startsWith('/k')
   return (
     <>
       <ScrollMemory />
-      <Navbar />
+      {!kids && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/music" element={<Music />} />
@@ -60,9 +62,11 @@ export default function App() {
         <Route path="/games/:slug" element={<Suspense fallback={<div className="min-h-screen" />}><Arcade /></Suspense>} />
         <Route path="/stickers" element={<Stickers />} />
         <Route path="/about" element={<About />} />
+        <Route path="/k" element={<KidsHome />} />
+        <Route path="/k/:slug" element={<KidsSection />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <MiniPlayer />
+      {!kids && <MiniPlayer />}
     </>
   )
 }

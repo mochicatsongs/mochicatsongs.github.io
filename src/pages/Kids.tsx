@@ -293,7 +293,7 @@ export function KidsHome() {
   return (
     <Shell>
       <div className="flex flex-col items-center gap-4 rounded-[2rem] bg-white/80 p-6 text-center shadow-xl sm:flex-row sm:text-left">
-        <img src={`${B}kids/mochi.png`} alt="Mochi the cat" className="w-40 sm:w-48" />
+        <img src={`${B}kids/mochi-color.png`} alt="Mochi the cat" className="w-40 drop-shadow-lg sm:w-48" />
         <div>
           <h1 className="font-heading text-5xl text-[#ff6b8b] sm:text-6xl">{t.heroTitle}</h1>
           <p className="mt-2 text-lg">{t.heroHi}</p>

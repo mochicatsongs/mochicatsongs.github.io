@@ -21,7 +21,12 @@ function useKidsPage(title: string) {
     const prev = document.title
     document.title = title
     document.body.classList.add('kids-zone')
-    return () => { document.title = prev; document.body.classList.remove('kids-zone') }
+    // only one sound at a time: starting a video pauses the player and vice versa
+    const solo = (e: Event) => {
+      document.querySelectorAll<HTMLMediaElement>('audio,video').forEach(m => { if (m !== e.target && !m.paused) m.pause() })
+    }
+    document.addEventListener('play', solo, true)
+    return () => { document.title = prev; document.body.classList.remove('kids-zone'); document.removeEventListener('play', solo, true) }
   }, [title])
 }
 

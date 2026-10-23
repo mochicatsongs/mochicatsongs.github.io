@@ -22,24 +22,13 @@ function useKidsPage(title: string) {
     document.title = title
     document.body.classList.add('kids-zone')
     // only one sound at a time: starting a video pauses the player and vice versa
-    // music that a video interrupted comes back when the video is paused or finished — no silence
-    const waiting = new Set<HTMLMediaElement>()
     const solo = (e: Event) => {
-      document.querySelectorAll<HTMLMediaElement>('audio,video').forEach(m => {
-        if (m !== e.target && !m.paused) { if (m.tagName === 'AUDIO' && (e.target as HTMLElement).tagName === 'VIDEO') waiting.add(m); m.pause() }
-      })
-      if ((e.target as HTMLElement).tagName === 'AUDIO') waiting.clear()
-    }
-    const back = (e: Event) => {
-      if ((e.target as HTMLElement).tagName !== 'VIDEO') return
-      waiting.forEach(m => { if (m.paused && m.src) void m.play().catch(() => {}) }); waiting.clear()
+      document.querySelectorAll<HTMLMediaElement>('audio,video').forEach(m => { if (m !== e.target && !m.paused) m.pause() })
     }
     document.addEventListener('play', solo, true)
-    document.addEventListener('pause', back, true)
-    document.addEventListener('ended', back, true)
     return () => {
       document.title = prev; document.body.classList.remove('kids-zone')
-      document.removeEventListener('play', solo, true); document.removeEventListener('pause', back, true); document.removeEventListener('ended', back, true)
+      document.removeEventListener('play', solo, true)
     }
   }, [title])
 }
@@ -52,6 +41,9 @@ const sharedAudio = () => {
   if (!SHARED) { SHARED = document.createElement('audio'); SHARED.preload = 'auto'; SHARED.setAttribute('playsinline', ''); document.body.appendChild(SHARED) }
   return SHARED
 }
+// music paused by a video comes back from the same moment when the video is paused or finished
+let RESUME = false
+const resumeMusic = () => { if (RESUME && SHARED && SHARED.paused && SHARED.src) void SHARED.play().catch(() => {}); RESUME = false }
 function Playlist({ songs, color }: { songs: [string, string][]; color: string }) {
   const ref = useRef<HTMLAudioElement | null>(null)
   const [cur, setCur] = useState(0)
@@ -72,6 +64,7 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
   const start = (a: HTMLAudioElement) => a.play().then(() => setNeedTap(false)).catch((e: DOMException) => { if (e?.name === 'NotAllowedError') setNeedTap(true) })
   const go = (i: number, play = true) => {
     const a = ref.current; if (!a) return
+    RESUME = false
     played.current.add(i); curRef.current = i
     setCur(i); setT(0); setD(0); a.src = `${B}audio/${songs[i][0]}.mp3`; a.currentTime = 0
     if (play) void start(a)
@@ -151,7 +144,13 @@ function Video({ slug }: { slug: string }) {
   const [playing, setPlaying] = useState(false)
   const [p, setP] = useState(0)
   useEffect(() => { const v = ref.current; return () => { v?.pause() } }, [])
-  const toggle = () => { const v = ref.current; if (!v) return; if (v.paused) { if (v.ended) v.currentTime = 0; void v.play() } else v.pause() }
+  const toggle = () => {
+    const v = ref.current; if (!v) return
+    if (v.paused) {
+      if (SHARED && !SHARED.paused) { RESUME = true; SHARED.pause() }
+      if (v.ended) v.currentTime = 0; void v.play()
+    } else { v.pause(); resumeMusic() }
+  }
   const seek = (e: React.MouseEvent<HTMLDivElement>) => {
     const v = ref.current; if (!v || !v.duration) return
     const r = e.currentTarget.getBoundingClientRect(); v.currentTime = ((e.clientX - r.left) / r.width) * v.duration
@@ -159,7 +158,7 @@ function Video({ slug }: { slug: string }) {
   return (
     <div data-player className="relative mx-auto w-full max-w-[320px] overflow-hidden rounded-3xl bg-white shadow-xl">
       <video ref={ref} playsInline preload="none" poster={`${B}kids/videos/${slug}.jpg`} onClick={toggle}
-        onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
+        onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => { setPlaying(false); resumeMusic() }}
         onTimeUpdate={e => setP(e.currentTarget.duration ? e.currentTarget.currentTime / e.currentTarget.duration : 0)}
         className="block w-full cursor-pointer">
         <source src={`${B}kids/videos/${slug}.mp4`} type="video/mp4" />

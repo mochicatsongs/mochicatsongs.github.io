@@ -31,46 +31,75 @@ function useKidsPage(title: string) {
 }
 
 type Rep = 'all' | 'one' | 'off'
+// one shared <audio> for the whole kids zone: once a phone has "unlocked" it with a tap,
+// every later section can start its own music by itself
+let SHARED: HTMLAudioElement | null = null
+const sharedAudio = () => {
+  if (!SHARED) { SHARED = document.createElement('audio'); SHARED.preload = 'auto'; SHARED.setAttribute('playsinline', ''); document.body.appendChild(SHARED) }
+  return SHARED
+}
 function Playlist({ songs, color }: { songs: [string, string][]; color: string }) {
-  const ref = useRef<HTMLAudioElement>(null)
+  const ref = useRef<HTMLAudioElement | null>(null)
   const [cur, setCur] = useState(0)
   const [playing, setPlaying] = useState(false)
+  const [needTap, setNeedTap] = useState(false)
   const [rep, setRep] = useState<Rep>('all')
   const [shuffle, setShuffle] = useState(true)
   const played = useRef<Set<number>>(new Set())
   const [t, setT] = useState(0); const [d, setD] = useState(0)
-  // shuffle is on by default: start from a random song (after mount, so prerendered HTML stays stable)
-  useEffect(() => { setCur(Math.floor(Math.random() * songs.length)) }, [songs.length])
-  useEffect(() => { const a = ref.current; return () => { a?.pause() } }, [])
+  const curRef = useRef(0)
   const rnd = () => {
-    if (songs.length < 2) return cur
-    let left = songs.map((_, i) => i).filter(i => i !== cur && !played.current.has(i))
-    if (!left.length) { played.current.clear(); left = songs.map((_, i) => i).filter(i => i !== cur) }
+    const c = curRef.current
+    if (songs.length < 2) return c
+    let left = songs.map((_, i) => i).filter(i => i !== c && !played.current.has(i))
+    if (!left.length) { played.current.clear(); left = songs.map((_, i) => i).filter(i => i !== c) }
     return left[Math.floor(Math.random() * left.length)]
   }
+  const start = (a: HTMLAudioElement) => a.play().then(() => setNeedTap(false)).catch((e: DOMException) => { if (e?.name === 'NotAllowedError') setNeedTap(true) })
   const go = (i: number, play = true) => {
     const a = ref.current; if (!a) return
-    played.current.add(i)
-    setCur(i); a.src = `${B}audio/${songs[i][0]}.mp3`; a.currentTime = 0
-    if (play) void a.play()
+    played.current.add(i); curRef.current = i
+    setCur(i); setT(0); setD(0); a.src = `${B}audio/${songs[i][0]}.mp3`; a.currentTime = 0
+    if (play) void start(a)
   }
   const next = () => go(shuffle ? rnd() : (cur + 1) % songs.length)
-  const toggle = () => { const a = ref.current; if (!a) return; if (!a.src) go(cur); else if (a.paused) void a.play(); else a.pause() }
+  const toggle = () => { const a = ref.current; if (!a) return; if (!a.src) go(cur); else if (a.paused) void start(a); else a.pause() }
   const ended = () => {
-    if (rep === 'one') return go(cur)
+    const c = curRef.current
+    if (rep === 'one') return go(c)
     if (shuffle) {
       if (rep === 'off' && songs.every((_, i) => played.current.has(i))) { played.current.clear(); return setPlaying(false) }
       return go(rnd())
     }
-    if (cur + 1 < songs.length) return go(cur + 1)
+    if (c + 1 < songs.length) return go(c + 1)
     if (rep === 'all') return go(0)
     setPlaying(false)
   }
+  const endedRef = useRef(ended); endedRef.current = ended
+  // on entering a page: this page's music starts right away (random song, shuffle is on by default).
+  // Browsers block sound before the first tap — then the first tap anywhere starts it.
+  useEffect(() => {
+    const a = sharedAudio(); ref.current = a
+    const on = { play: () => setPlaying(true), pause: () => setPlaying(false), ended: () => endedRef.current(),
+      timeupdate: () => setT(a.currentTime), loadedmetadata: () => setD(a.duration) } as Record<string, () => void>
+    Object.entries(on).forEach(([k, f]) => a.addEventListener(k, f))
+    go(Math.floor(Math.random() * songs.length))
+    const kick = (e: Event) => {
+      if ((e.target as HTMLElement)?.closest?.('video, [data-player]')) return // player/video buttons handle themselves
+      if (a.paused && a.src) void start(a)
+    }
+    document.addEventListener('pointerdown', kick, { once: true })
+    return () => { Object.entries(on).forEach(([k, f]) => a.removeEventListener(k, f)); document.removeEventListener('pointerdown', kick); a.pause() }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const repLabel = rep === 'all' ? '🔁 Repeat all' : rep === 'one' ? '🔂 Repeat one' : '➡️ No repeat'
   const fmt = (x: number) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`
   return (
-    <div className="rounded-[2rem] p-4 shadow-xl" style={{ background: `linear-gradient(160deg, ${color}, ${color}cc 55%, #ffffff)` }}>
+    <div data-player className="rounded-[2rem] p-4 shadow-xl" style={{ background: `linear-gradient(160deg, ${color}, ${color}cc 55%, #ffffff)` }}>
       <div className="rounded-[1.6rem] bg-white/95 p-4">
+        {needTap && !playing && (
+          <button onClick={toggle} className="mb-3 w-full animate-pulse rounded-2xl py-3 text-lg font-bold text-white shadow" style={{ background: color }}>🎵 Tap to start the music! · 눌러서 노래 듣기</button>
+        )}
         <div className="flex flex-col items-center gap-3 sm:flex-row">
           <img src={`${B}covers/${songs[cur][0]}.jpg`} alt="" className={`h-44 w-44 rounded-[1.4rem] object-cover shadow-lg ${playing ? 'kid-bop' : ''}`} />
           <div className="w-full min-w-0 flex-1 text-center sm:text-left">
@@ -78,14 +107,14 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
             <div className="truncate text-2xl font-bold">{songs[cur][1]}</div>
             <div className="mt-3 h-3 overflow-hidden rounded-full bg-[#2b2f6b]/10"><div className="h-full rounded-full transition-[width]" style={{ width: d ? `${(t / d) * 100}%` : '0%', background: color }} /></div>
             <div className="mt-1 text-xs opacity-70">{fmt(t)} / {d ? fmt(d) : '–:––'}</div>
-            <div className="mt-3 flex items-center justify-center gap-3 sm:justify-start">
+            <div className="mt-3 flex items-center justify-center gap-3">
+              <button onClick={() => setRep(rep === 'all' ? 'one' : rep === 'one' ? 'off' : 'all')} aria-label={repLabel} title={repLabel} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: rep === 'off' ? '#9aa0b8' : color }}>{rep === 'one' ? '🔂' : rep === 'all' ? '🔁' : '➡️'}</button>
               <button onClick={() => go((cur - 1 + songs.length) % songs.length)} aria-label="Previous song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏮</button>
               <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-20 w-20 place-items-center rounded-full text-4xl text-white shadow-lg active:scale-95" style={{ background: color }}>{playing ? '❚❚' : '▶'}</button>
               <button onClick={next} aria-label="Next song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏭</button>
-              <button onClick={() => setRep(rep === 'all' ? 'one' : rep === 'one' ? 'off' : 'all')} aria-label={repLabel} title={repLabel} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: rep === 'off' ? '#9aa0b8' : color }}>{rep === 'one' ? '🔂' : rep === 'all' ? '🔁' : '➡️'}</button>
               <button onClick={() => setShuffle(!shuffle)} aria-label={shuffle ? 'Shuffle on' : 'Shuffle off'} aria-pressed={shuffle} title={shuffle ? 'Shuffle on' : 'Shuffle off'} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: shuffle ? color : '#9aa0b8' }}>🔀</button>
             </div>
-            <div className="mt-1 text-xs font-semibold opacity-70">{repLabel} · {shuffle ? '🔀 Shuffle on' : 'Shuffle off'}</div>
+            <div className="mt-1 text-center text-xs font-semibold opacity-70">{repLabel} · {shuffle ? '🔀 Shuffle on' : 'Shuffle off'}</div>
           </div>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -96,8 +125,6 @@ function Playlist({ songs, color }: { songs: [string, string][]; color: string }
             </button>
           ))}
         </div>
-        <audio ref={ref} preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={ended}
-          onTimeUpdate={e => setT(e.currentTarget.currentTime)} onLoadedMetadata={e => setD(e.currentTarget.duration)} />
         <p className="mt-3 text-center text-sm opacity-70">Songs keep playing while you color 🎨 · 색칠하는 동안 노래가 계속 나와요</p>
       </div>
     </div>
@@ -116,7 +143,7 @@ function Video({ slug }: { slug: string }) {
     const r = e.currentTarget.getBoundingClientRect(); v.currentTime = ((e.clientX - r.left) / r.width) * v.duration
   }
   return (
-    <div className="relative mx-auto w-full max-w-[320px] overflow-hidden rounded-3xl bg-white shadow-xl">
+    <div data-player className="relative mx-auto w-full max-w-[320px] overflow-hidden rounded-3xl bg-white shadow-xl">
       <video ref={ref} playsInline preload="none" poster={`${B}kids/videos/${slug}.jpg`} onClick={toggle}
         onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
         onTimeUpdate={e => setP(e.currentTarget.duration ? e.currentTarget.currentTime / e.currentTarget.duration : 0)}

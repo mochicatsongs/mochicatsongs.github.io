@@ -22,11 +22,25 @@ function useKidsPage(title: string) {
     document.title = title
     document.body.classList.add('kids-zone')
     // only one sound at a time: starting a video pauses the player and vice versa
+    // music that a video interrupted comes back when the video is paused or finished — no silence
+    const waiting = new Set<HTMLMediaElement>()
     const solo = (e: Event) => {
-      document.querySelectorAll<HTMLMediaElement>('audio,video').forEach(m => { if (m !== e.target && !m.paused) m.pause() })
+      document.querySelectorAll<HTMLMediaElement>('audio,video').forEach(m => {
+        if (m !== e.target && !m.paused) { if (m.tagName === 'AUDIO' && (e.target as HTMLElement).tagName === 'VIDEO') waiting.add(m); m.pause() }
+      })
+      if ((e.target as HTMLElement).tagName === 'AUDIO') waiting.clear()
+    }
+    const back = (e: Event) => {
+      if ((e.target as HTMLElement).tagName !== 'VIDEO') return
+      waiting.forEach(m => { if (m.paused && m.src) void m.play().catch(() => {}) }); waiting.clear()
     }
     document.addEventListener('play', solo, true)
-    return () => { document.title = prev; document.body.classList.remove('kids-zone'); document.removeEventListener('play', solo, true) }
+    document.addEventListener('pause', back, true)
+    document.addEventListener('ended', back, true)
+    return () => {
+      document.title = prev; document.body.classList.remove('kids-zone')
+      document.removeEventListener('play', solo, true); document.removeEventListener('pause', back, true); document.removeEventListener('ended', back, true)
+    }
   }, [title])
 }
 

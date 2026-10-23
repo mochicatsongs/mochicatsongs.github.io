@@ -6,12 +6,14 @@ import { Link, useParams } from 'react-router-dom'
 const B = import.meta.env.BASE_URL
 type Sec = { slug: string; emoji: string; title: string; ko: string; color: string; songs: [string, string][] }
 export const KID_SECTIONS: Sec[] = [
-  { slug: 'food', emoji: '🍕', title: 'Food & Sport', ko: '음식과 운동', color: '#ff8a5c', songs: [['the-chubby-super-cat', 'The Chubby Super Cat'], ['nom-nom-nom', 'Nom Nom Nom']] },
-  { slug: 'music', emoji: '🎤', title: 'Music Star', ko: '뮤직 스타', color: '#ff5fa2', songs: [['shine-like-mochi', 'Shine Like Mochi'], ['mochi-dance', 'Mochi Dance']] },
-  { slug: 'home', emoji: '🏠', title: 'Cozy Home', ko: '아늑한 집', color: '#7c6cff', songs: [['mochi-heart', 'Mochi Heart'], ['milkshake-shake', 'Milkshake Shake']] },
-  { slug: 'travel', emoji: '✈️', title: 'Travel', ko: '여행', color: '#25b4e8', songs: [['meow-in-every-language', 'Meow in Every Language'], ['mochi-fiesta', 'Mochi Fiesta']] },
-  { slug: 'dreams', emoji: '🚀', title: 'Dream Jobs', ko: '꿈의 직업', color: '#2ec27e', songs: [['catch-the-dot', 'Catch the Dot'], ['super-paw-rock', 'Super Paw Rock']] },
+  { slug: 'food', emoji: '🍕', title: 'Food & Sport', ko: '음식과 운동', color: '#ff8a5c', songs: [['the-chubby-super-cat', 'The Chubby Super Cat'], ['nom-nom-nom', 'Nom Nom Nom'], ['chonky-gym-cat', 'Chonky Gym Cat'], ['belly-bounce', 'Belly Bounce']] },
+  { slug: 'music', emoji: '🎤', title: 'Music Star', ko: '뮤직 스타', color: '#ff5fa2', songs: [['shine-like-mochi', 'Shine Like Mochi'], ['mochi-dance', 'Mochi Dance'], ['meow-meow-mochi-cat', 'Meow Meow (Mochi Cat)'], ['super-paw-rock', 'Super Paw Rock']] },
+  { slug: 'home', emoji: '🏠', title: 'Cozy Home', ko: '아늑한 집', color: '#7c6cff', songs: [['mochi-heart', 'Mochi Heart'], ['mochi-mode', 'Mochi Mode'], ['milkshake-shake', 'Milkshake Shake'], ['mochi-mochi-challenge', 'Mochi Mochi Challenge']] },
+  { slug: 'travel', emoji: '✈️', title: 'Travel', ko: '여행', color: '#25b4e8', songs: [['meow-in-every-language', 'Meow in Every Language'], ['mochi-fiesta', 'Mochi Fiesta'], ['mochi-farm', 'Mochi Farm'], ['mochi-dance', 'Mochi Dance']] },
+  { slug: 'dreams', emoji: '🚀', title: 'Dream Jobs', ko: '꿈의 직업', color: '#2ec27e', songs: [['catch-the-dot', 'Catch the Dot'], ['mochi-obby', 'Mochi Obby'], ['the-chubby-super-cat', 'The Chubby Super Cat'], ['shine-like-mochi', 'Shine Like Mochi']] },
 ]
+const VIDEOS: Record<string, string> = { food: 'food', music: 'music', home: 'home', travel: 'travel', dreams: 'dreams' }
+const ALL_SONGS: [string, string][] = [...new Map(KID_SECTIONS.flatMap(x => x.songs).map(x => [x[0], x] as const)).values()]
 const BOOK_URL = '' // Amazon link goes here when the book is live
 
 function useKidsPage(title: string) {
@@ -23,23 +25,67 @@ function useKidsPage(title: string) {
   }, [title])
 }
 
-function Song({ slug, title, color }: { slug: string; title: string; color: string }) {
+type Rep = 'all' | 'one' | 'off'
+function Playlist({ songs, color }: { songs: [string, string][]; color: string }) {
   const ref = useRef<HTMLAudioElement>(null)
+  const [cur, setCur] = useState(0)
   const [playing, setPlaying] = useState(false)
-  const toggle = () => {
+  const [rep, setRep] = useState<Rep>('all')
+  const [t, setT] = useState(0); const [d, setD] = useState(0)
+  const go = (i: number, play = true) => {
     const a = ref.current; if (!a) return
-    document.querySelectorAll('audio').forEach(x => { if (x !== a) x.pause() })
-    if (a.paused) { void a.play() } else a.pause()
+    setCur(i); a.src = `${B}audio/${songs[i][0]}.mp3`; a.currentTime = 0
+    if (play) void a.play()
   }
+  const toggle = () => { const a = ref.current; if (!a) return; if (!a.src) go(cur); else if (a.paused) void a.play(); else a.pause() }
+  const ended = () => {
+    if (rep === 'one') return go(cur)
+    if (cur + 1 < songs.length) return go(cur + 1)
+    if (rep === 'all') return go(0)
+    setPlaying(false)
+  }
+  const repLabel = rep === 'all' ? '🔁 Repeat all' : rep === 'one' ? '🔂 Repeat one' : '➡️ No repeat'
+  const fmt = (x: number) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`
   return (
-    <div className="flex items-center gap-4 rounded-3xl bg-white p-4 shadow-lg">
-      <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-16 w-16 shrink-0 place-items-center rounded-full text-3xl text-white transition active:scale-95" style={{ background: color }}>{playing ? '❚❚' : '▶'}</button>
-      <div className="min-w-0 flex-1">
-        <div className="text-xl font-semibold text-[#2b2f6b]">{title}</div>
-        <div className="text-sm text-[#2b2f6b]/70">Sing along with Mochi! ♫</div>
+    <div className="rounded-[2rem] p-4 shadow-xl" style={{ background: `linear-gradient(160deg, ${color}, ${color}cc 55%, #ffffff)` }}>
+      <div className="rounded-[1.6rem] bg-white/95 p-4">
+        <div className="flex flex-col items-center gap-3 sm:flex-row">
+          <img src={`${B}covers/${songs[cur][0]}.jpg`} alt="" className={`h-44 w-44 rounded-[1.4rem] object-cover shadow-lg ${playing ? 'kid-bop' : ''}`} />
+          <div className="w-full min-w-0 flex-1 text-center sm:text-left">
+            <div className="text-sm font-semibold uppercase tracking-wider opacity-60">Mochi Radio 📻</div>
+            <div className="truncate text-2xl font-bold">{songs[cur][1]}</div>
+            <div className="mt-3 h-3 overflow-hidden rounded-full bg-[#2b2f6b]/10"><div className="h-full rounded-full transition-[width]" style={{ width: d ? `${(t / d) * 100}%` : '0%', background: color }} /></div>
+            <div className="mt-1 text-xs opacity-70">{fmt(t)} / {d ? fmt(d) : '–:––'}</div>
+            <div className="mt-3 flex items-center justify-center gap-3 sm:justify-start">
+              <button onClick={() => go((cur - 1 + songs.length) % songs.length)} aria-label="Previous song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏮</button>
+              <button onClick={toggle} aria-label={playing ? 'Pause' : 'Play'} className="grid h-20 w-20 place-items-center rounded-full text-4xl text-white shadow-lg active:scale-95" style={{ background: color }}>{playing ? '❚❚' : '▶'}</button>
+              <button onClick={() => go((cur + 1) % songs.length)} aria-label="Next song" className="grid h-14 w-14 place-items-center rounded-full bg-[#2b2f6b]/10 text-2xl active:scale-95">⏭</button>
+              <button onClick={() => setRep(rep === 'all' ? 'one' : rep === 'one' ? 'off' : 'all')} aria-label={repLabel} title={repLabel} className="grid h-14 w-14 place-items-center rounded-full text-2xl text-white active:scale-95" style={{ background: rep === 'off' ? '#9aa0b8' : color }}>{rep === 'one' ? '🔂' : rep === 'all' ? '🔁' : '➡️'}</button>
+            </div>
+            <div className="mt-1 text-xs font-semibold opacity-70">{repLabel}</div>
+          </div>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {songs.map(([sl, title], i) => (
+            <button key={sl + i} onClick={() => go(i)} className={`overflow-hidden rounded-2xl bg-white text-left shadow transition active:scale-95 ${i === cur ? 'ring-4' : ''}`} style={i === cur ? { ['--tw-ring-color' as string]: color } : undefined}>
+              <img src={`${B}covers/${sl}.jpg`} alt="" className="aspect-square w-full object-cover" />
+              <div className="truncate px-2 py-1 text-sm font-semibold">{i === cur && playing ? '🎵 ' : ''}{title}</div>
+            </button>
+          ))}
+        </div>
+        <audio ref={ref} preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={ended}
+          onTimeUpdate={e => setT(e.currentTarget.currentTime)} onLoadedMetadata={e => setD(e.currentTarget.duration)} />
+        <p className="mt-3 text-center text-sm opacity-70">Songs keep playing while you color 🎨 · 색칠하는 동안 노래가 계속 나와요</p>
       </div>
-      <audio ref={ref} src={`${B}audio/${slug}.mp3`} preload="none" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} />
     </div>
+  )
+}
+
+function Video({ slug }: { slug: string }) {
+  return (
+    <video controls playsInline preload="none" poster={`${B}kids/videos/${slug}.jpg`} className="mx-auto w-full max-w-[320px] rounded-3xl bg-white shadow-xl">
+      <source src={`${B}kids/videos/${slug}.mp4`} type="video/mp4" />
+    </video>
   )
 }
 
@@ -96,6 +142,15 @@ export function KidsHome() {
           </Link>
         ))}
       </div>
+      <h2 className="mt-10 text-2xl font-bold">📻 Mochi Radio — all songs</h2>
+      <div className="mt-4"><Playlist songs={ALL_SONGS} color="#ff6b8b" /></div>
+      <h2 className="mt-10 text-2xl font-bold">🎬 Watch Mochi get colored!</h2>
+      <p className="opacity-80">Press play, sing along — then color your own page!</p>
+      <div className="mt-4 flex snap-x gap-4 overflow-x-auto pb-3">
+        {KID_SECTIONS.filter(s => VIDEOS[s.slug]).map(s => (
+          <div key={s.slug} className="w-56 shrink-0 snap-start"><Video slug={VIDEOS[s.slug]} /><div className="mt-2 text-center font-semibold">{s.emoji} {s.title}</div></div>
+        ))}
+      </div>
       <h2 className="mt-10 text-2xl font-bold">🖨️ Free pages to print</h2>
       <div className="mt-4 grid grid-cols-3 gap-3">
         {[1, 2, 3].map(i => (
@@ -127,10 +182,12 @@ export function KidsSection() {
         </div>
         <img src={`${B}kids/${s.slug}.png`} alt="" className="mx-auto w-64" />
       </div>
+      {VIDEOS[s.slug] && (<>
+        <h2 className="mt-8 text-2xl font-bold">🎬 Watch Mochi get colored!</h2>
+        <div className="mt-4"><Video slug={VIDEOS[s.slug]} /></div>
+      </>)}
       <h2 className="mt-8 text-2xl font-bold">🎵 Press play and color!</h2>
-      <div className="mt-4 grid gap-3">
-        {s.songs.map(([sl, t]) => <Song key={sl} slug={sl} title={t} color={s.color} />)}
-      </div>
+      <div className="mt-4"><Playlist songs={s.songs} color={s.color} /></div>
       <p className="mt-4 text-center text-lg">★ Don’t forget your Mochi move on the page! ★</p>
       <h2 className="mt-10 text-xl font-bold">More from the book</h2>
       <div className="mt-3 flex flex-wrap gap-2">

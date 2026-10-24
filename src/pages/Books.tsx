@@ -6,7 +6,7 @@ import { asset } from '../data/songs'
 import { useLang, useT } from '../i18n'
 
 /** Coloring books: printable PDFs (Gumroad worldwide, Naver Smart Store in Korea); paperbacks coming soon. */
-const NAVER_LIVE = false // Naver links hidden until the public (channel) product numbers are confirmed
+const NAVER_LIVE = true // Naver Smart Store product pages confirmed public 24.10
 type Book = { id: 'adult' | 'kids'; title: string; titleKo: string; sub: string; points: string[]; gumroad: string; naver: string }
 const BOOKS: Book[] = [
   {

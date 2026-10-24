@@ -14,7 +14,7 @@ export const KID_SECTIONS: Sec[] = [
 ]
 const VIDEOS: Record<string, string> = { food: 'food', music: 'music', home: 'home', travel: 'travel', dreams: 'dreams' }
 const ALL_SONGS: [string, string][] = [...new Map(KID_SECTIONS.flatMap(x => x.songs).map(x => [x[0], x] as const)).values()]
-const BOOK_URL: Record<'en' | 'ko', string> = { en: 'https://mochicatsongs.gumroad.com/l/ggaofw', ko: '' /* Naver link hidden until the public product number is confirmed */ } // printable PDF; paperback link later
+const BOOK_URL: Record<'en' | 'ko', string> = { en: 'https://mochicatsongs.gumroad.com/l/ggaofw', ko: 'https://smartstore.naver.com/mochicatsongs/products/13829264388' } // printable PDF; paperback link later
 
 /* ---- Language: Korean or English, picked from the phone/computer language, switchable, remembered ---- */
 type Lang = 'en' | 'ko'

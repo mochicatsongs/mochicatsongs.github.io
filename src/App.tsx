@@ -9,6 +9,7 @@ import Videos from './pages/Videos'
 import Games from './pages/Games'
 import Stickers from './pages/Stickers'
 import Books from './pages/Books'
+import FreePages from './pages/FreePages'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
 import CatchTheDot from './games/CatchTheDot'
@@ -64,6 +65,7 @@ export default function App() {
         <Route path="/games/:slug" element={<Suspense fallback={<div className="min-h-screen" />}><Arcade /></Suspense>} />
         <Route path="/stickers" element={<Stickers />} />
         <Route path="/books" element={<Books />} />
+        <Route path="/free-coloring-pages" element={<FreePages />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Suspense fallback={<div className="min-h-screen" />}><Privacy /></Suspense>} />
         <Route path="/k" element={<KidsHome />} />

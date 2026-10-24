@@ -50,7 +50,7 @@ export const SONGS: Song[] = [
     blurb: 'Paris, Rome, Tokyo and back home again — how do cats say meow where you live?' },
   { slug: 'the-chubby-super-cat', title: 'The Chubby Super Cat', genre: 'Pop', released: '2026-10-08', youtube: 'Xdu18THnkYE', lyrics: true,
     blurb: 'Mochi loves snacks — but he chooses sport. The song that started it all.' },
-  { slug: 'mochi-dance', title: 'Mochi Dance', genre: 'Pop · Dance', released: '2026-10-10', lyrics: true, blurb: 'The official Mochi dance. Learn it, film it, tag #MochiCat.' },
+  { slug: 'mochi-dance', title: 'Mochi Dance', genre: 'Pop · Dance', released: '2026-10-10', youtube: '3IA0YawSuU0', premiere: '2026-11-13', lyrics: true, blurb: 'The official Mochi dance. Learn it, film it, tag #MochiCat.' },
   { slug: 'meow-meow-mochi-cat', title: 'Meow Meow (Mochi Cat)', genre: 'Dance · Pop', released: '2026-10-10', lyrics: true, blurb: 'Two words, one beat, endless meows.' },
   { slug: 'mochi-mochi-challenge', title: 'Mochi Mochi Challenge', genre: 'Country · Hip Hop', released: '2026-10-10', lyrics: true, blurb: 'A line-dance challenge with a chubby twist.' },
   { slug: 'milkshake-shake', title: 'Milkshake Shake', genre: 'Pop · R&B', released: '2026-10-10', lyrics: true, blurb: 'Shake it like a milkshake — but drink water after.' },

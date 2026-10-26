@@ -29,7 +29,7 @@ const KO: Record<string, string> = {
   'Print your favorite pages again and again': '좋아하는 페이지를 몇 번이든 다시 인쇄',
   '🖨️ PDF in Korean · Naver': '🖨️ 한국어 PDF · 스마트스토어', 'English PDF': '영어판 PDF',
   '🖨️ Printable PDF · $4.99': '🖨️ 인쇄용 PDF · $4.99', 'Korean edition': '한국어판',
-  '📖 Paperback: coming soon': '📖 종이책: 곧 출간', '📖 Korean PDF & paperback: coming soon': '📖 한국어 PDF · 종이책: 곧 출시',
+  '📖 Paperback: coming soon': '📖 종이책: 곧 출간', '📖 Paperback on Amazon ↗': '📖 아마존 종이책 (영문판) ↗', '📖 Korean PDF & paperback: coming soon': '📖 한국어 PDF · 종이책: 곧 출시',
   'Pictures were made with AI tools and edited for coloring. For personal and home use.': '그림은 AI 도구로 만든 뒤 색칠하기 좋게 다듬었습니다. 개인·가정용으로 사용해 주세요.',
   // hero
   'Hey there, meet': '안녕! 나는', 'the chubbiest pop star on the internet': '인터넷에서 제일 통통한 팝스타',

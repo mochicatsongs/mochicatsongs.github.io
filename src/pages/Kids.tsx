@@ -30,7 +30,7 @@ const T = {
     keepPlaying: 'Songs keep playing while you color 🎨',
     back: '← All pages', pressPlay: '🎵 Press play and color!', move: '★ Don’t forget your Mochi move on the page! ★', more: 'More from the book',
     bookTitle: 'Mochi Cat Coloring Book', bookDesc: '44 bold & easy pages, fun moves, Korean words and activities · ages 4–8',
-    buy: 'For grown-ups: printable PDF ↗', soon: 'Paperback: coming soon on Amazon',
+    buy: 'For grown-ups: printable PDF ↗', soon: 'Paperback on Amazon ↗',
     gTitle: 'For grown-ups:', gText: 'this kids page has no ads, no sign-up and no tracking. Songs play right here — no YouTube needed.',
     gAdult: 'There is also a cozy coloring book for adults, Cozy Cat, on the main site.', privacy: 'Privacy',
     switchTo: '한국어',
@@ -46,7 +46,7 @@ const T = {
     keepPlaying: '색칠하는 동안 노래가 계속 나와요 🎨',
     back: '← 전체 페이지', pressPlay: '🎵 노래 틀고 색칠해요!', move: '★ 페이지에 있는 모치 동작도 꼭 따라 해요! ★', more: '책 속 다른 페이지',
     bookTitle: '모치 캣 색칠공부 책', bookDesc: '굵은 선의 쉬운 그림 44장, 신나는 동작과 놀이, 영어·한국어 단어 · 4–8세',
-    buy: '보호자용: 인쇄용 PDF ↗', soon: '종이책: 곧 출간',
+    buy: '보호자용: 인쇄용 PDF ↗', soon: '아마존 종이책 (영문판) ↗',
     gTitle: '보호자분께:', gText: '이 어린이 페이지에는 광고, 회원가입, 추적이 없어요. 노래는 여기서 바로 재생돼요 — 유튜브가 필요 없어요.',
     gAdult: '어른을 위한 컬러링북 Cozy Cat도 메인 사이트에 있어요.', privacy: '개인정보 처리방침',
     switchTo: 'English',
@@ -270,7 +270,7 @@ function Book() {
         <div className="text-2xl font-bold">{t.bookTitle}</div>
         <p className="mt-1">{t.bookDesc}</p>
         {BOOK_URL[lang] && <a href={BOOK_URL[lang]} target="_blank" rel="noopener" className="mt-3 inline-block rounded-full bg-[#ff6b8b] px-6 py-2 font-semibold text-white">{t.buy}</a>}
-        <div className="mt-2 text-sm opacity-70">{t.soon}</div>
+        <a href="https://www.amazon.com/dp/B0HP7S7S9X" target="_blank" rel="noopener" className="mt-2 block text-sm underline opacity-70">{t.soon}</a>
       </div>
     </div>
   )

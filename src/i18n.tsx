@@ -15,7 +15,7 @@ const KO: Record<string, string> = {
   'Cozy Korea · for grown-ups': '힐링 한국 여행 · 어른용', 'Bold & easy · for kids 4–8': '굵고 쉬운 그림 · 4–8세',
   '40 more pages · Cozy Cat PDF $4.99': '40장 전체 · 어른 컬러링 PDF $4.99', '44 more pages + activities · Kids PDF $4.99': '44장 + 놀이 · 어린이 PDF $4.99',
   'Free for personal and classroom use. Please share a link to this page instead of the files.': '개인·교실에서 무료로 사용할 수 있어요. 파일 대신 이 페이지 링크를 공유해 주세요.', 'All coloring books': '컬러링북 전체 보기',
-  'Books': '컬러링북', 'Rooms': '모치의 방', '🎧 Rooms': '🎧 모치의 방', '🎨 Coloring': '🎨 컬러링북', 'Coloring Books': '컬러링북',
+  'Books': '컬러링북', '📖 Paperback · Amazon': '📖 종이책 · Amazon', 'Color with Mochi! Get the paperback on Amazon, or an instant printable PDF you can print again and again.': '모치와 함께 색칠해요! 아마존 종이책, 또는 바로 받아서 몇 번이고 출력할 수 있는 PDF로 만나요.', 'Rooms': '모치의 방', '🎧 Rooms': '🎧 모치의 방', '🎨 Coloring': '🎨 컬러링북', 'Coloring Books': '컬러링북',
   'Color with Mochi! Instant printable PDFs — download right after checkout and print your favorite pages as many times as you like.': '모치랑 색칠해요! 결제 후 바로 받는 인쇄용 PDF — 마음에 드는 페이지를 몇 번이든 다시 인쇄할 수 있어요.',
   'A cozy coloring book for grown-ups': '어른을 위한 힐링 컬러링북',
   '40 calm scenes of everyday Korea — street food, rainy bus stops, hanok villages, Jeju': '편의점 라면, 비 오는 버스 정류장, 한옥마을, 제주까지 한국의 일상 40장면',

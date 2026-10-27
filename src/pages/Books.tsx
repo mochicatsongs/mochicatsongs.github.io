@@ -34,7 +34,7 @@ export default function Books() {
   return (
     <Page>
       <H1 color="t3d-pink">{t('Coloring Books')}</H1>
-      <p className="-mt-4 mb-10 max-w-2xl text-lg text-white/80">{t('Color with Mochi! Instant printable PDFs — download right after checkout and print your favorite pages as many times as you like.')}</p>
+      <p className="-mt-4 mb-10 max-w-2xl text-lg text-white/80">{t('Color with Mochi! Get the paperback on Amazon, or an instant printable PDF you can print again and again.')}</p>
       <div className="mb-10"><Link to="/free-coloring-pages" className="btn3d btn-lime text-[17px]">{t('🎁 Try free pages first')}</Link></div>
       <div className="grid gap-8 md:grid-cols-2">
         {BOOKS.map((b, i) => (
@@ -45,15 +45,15 @@ export default function Books() {
               <div className="mb-3 mt-1 font-semibold text-cyan-200">{t(b.sub)}</div>
               <ul className="mb-6 space-y-1.5 text-white/85">{b.points.map(p => <li key={p}>✓ {t(p)}</li>)}</ul>
               <div className="mt-auto flex flex-wrap gap-3">
+                <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">{t('📖 Paperback · Amazon')}</a>
                 {lang === 'ko' && NAVER_LIVE
                   ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-lime text-[17px]">{t('🖨️ PDF in Korean · Naver')}</a>
                   : null}
-                <a href={b.gumroad} target="_blank" rel="noopener" className={`btn3d ${lang === 'ko' && NAVER_LIVE ? 'btn-white text-[15px]' : 'btn-pink text-[17px]'}`}>{lang === 'ko' ? t('English PDF') + ' · $4.99' : t('🖨️ Printable PDF · $4.99')}</a>
+                <a href={b.gumroad} target="_blank" rel="noopener" className={`btn3d ${lang === 'ko' && NAVER_LIVE ? 'btn-white text-[15px]' : 'btn-pink text-[16px]'}`}>{lang === 'ko' ? t('English PDF') + ' · $4.99' : t('🖨️ Printable PDF · $4.99')}</a>
                 {lang !== 'ko' && NAVER_LIVE
                   ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('Korean edition')}</a>
                   : null}
               </div>
-              <a href={b.amazon} target="_blank" rel="noopener" className="mt-4 text-sm font-semibold text-cyan-200 underline underline-offset-4">{t('📖 Paperback on Amazon ↗')}</a>
             </article>
           </Reveal>
         ))}

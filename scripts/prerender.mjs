@@ -20,6 +20,7 @@ const base = ['Mochi Cat 🐾', 'Feel-good dance-pop songs by a chubby grey cat.
 for (const [r, t] of [['/music', 'Music'], ['/videos', 'Music videos'], ['/games', 'Games'], ['/games/catch-the-dot', 'Catch the Dot — game'], ['/stickers', 'Stickers'], ['/about', 'About Mochi'], ['/privacy', 'Privacy — 개인정보 처리방침']])
   page(r, `${t} — ${base[0]}`, base[1], base[2])
 page('/books', 'Coloring Books — Mochi Cat 🐾 printable PDFs', 'Cozy Mochi Cat coloring books: a Korea-themed book for adults and bold, easy pages for kids 4–8. Instant printable PDF.', '/books/adult-en.jpg')
+page('/rooms', 'Mochi’s Rooms 🐾 Study · Work · Café · Sleep music', 'Long lofi mixes with Mochi Cat: 3-hour study with Pomodoro, 3-hour work music, 2-hour café & coloring, 8-hour sleep piano. Pick a room and stay a while.', '/rooms/study.jpg')
 page('/free-coloring-pages', 'Free Cat Coloring Pages — printable PDF | Mochi Cat', 'Free printable cat coloring pages with Mochi, the chubby grey cat: cozy Korea scenes for adults and bold, easy pages for kids. Download the PDF and print.', '/free/adult-29.jpg')
 page('/k', 'Color with Mochi! 🐾 Kids zone', 'Songs and free coloring pages from the Mochi Cat kids coloring book.', '/kids/book-cover.jpg')
 for (const k of ['food','music','home','travel','dreams']) page(`/k/${k}`, 'Color with Mochi! 🐾 Kids zone', 'Songs and free coloring pages from the Mochi Cat kids coloring book.', '/kids/book-cover.jpg')
@@ -29,7 +30,7 @@ for (const g of games) if (g.slug !== 'catch-the-dot') {
   const song = songs.find(s => s.slug === g.slug)
   page(`/games/${g.slug}`, `${g.name} — free Mochi Cat game${song ? ` with “${song.title}”` : ''}`, `${g.desc} Play free in your browser — on phone or computer.`, `/covers/${g.slug}.jpg`)
 }
-const urls = ['/', '/music', '/videos', '/games', '/stickers', '/books', '/free-coloring-pages', '/about', '/privacy', ...songs.map(s => `/music/${s.slug}`), ...games.map(g => `/games/${g.slug}`)]
+const urls = ['/', '/music', '/videos', '/games', '/stickers', '/books', '/free-coloring-pages', '/rooms', '/about', '/privacy', ...songs.map(s => `/music/${s.slug}`), ...games.map(g => `/games/${g.slug}`)]
 fs.writeFileSync('dist/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${SITE}${u}</loc></url>`).join('\n')}\n</urlset>\n`)
 fs.writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`)
 console.log(`prerendered ${urls.length} routes`)

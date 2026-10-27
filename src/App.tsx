@@ -11,6 +11,7 @@ import Stickers from './pages/Stickers'
 import Books from './pages/Books'
 import FreePages from './pages/FreePages'
 import About from './pages/About'
+import Rooms from './pages/Rooms'
 import NotFound from './pages/NotFound'
 import CatchTheDot from './games/CatchTheDot'
 import { KidsHome, KidsSection } from './pages/Kids'
@@ -66,6 +67,7 @@ export default function App() {
         <Route path="/stickers" element={<Stickers />} />
         <Route path="/books" element={<Books />} />
         <Route path="/free-coloring-pages" element={<FreePages />} />
+        <Route path="/rooms" element={<Rooms />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy" element={<Suspense fallback={<div className="min-h-screen" />}><Privacy /></Suspense>} />
         <Route path="/k" element={<KidsHome />} />

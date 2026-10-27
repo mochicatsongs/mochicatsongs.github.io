@@ -79,7 +79,7 @@ export default function Rooms() {
             <p className="mt-2 max-w-xl text-white/80">{t.text}</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            {cur.id === 'color' && <a href="https://www.amazon.com/dp/B0HP8DF9ST" target="_blank" rel="noopener" className="btn3d btn-yellow text-[15px]">{ko ? '📖 모치 컬러링북 · Amazon' : '📖 Mochi coloring book · Amazon'}</a>}
+            {cur.id === 'color' && <a href="https://www.amazon.com/author/mochicatsongs" target="_blank" rel="noopener" className="btn3d btn-yellow text-[15px]">{ko ? '📖 모치 컬러링북 · Amazon' : '📖 Mochi coloring books · Amazon'}</a>}
             <a href={`https://youtu.be/${cur.yt}`} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{ko ? 'YouTube에서 보기 ↗' : 'Open on YouTube ↗'}</a>
           </div>
         </div>

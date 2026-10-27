@@ -23,6 +23,13 @@ export interface Api {
   sfx(kind: 'hit' | 'miss' | 'big', freq?: number): void
   tone(freq: number, dur?: number, type?: OscillatorType): void
   tr(s: string): string
+  /** levels mode: current level (1-based) */
+  level: number
+  /** levels mode: report progress towards the level goal (shown in the HUD) */
+  goal(cur: number, of: number, icon?: string): void
+  /** levels mode: the level is complete */
+  win(): void
+  gl?: { cur: number; of: number; icon: string }
 }
 
 export interface GameDef<S = any> { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -31,7 +38,9 @@ export interface GameDef<S = any> { // eslint-disable-line @typescript-eslint/no
   emoji: string
   desc: string
   how: string
-  mode: 'time' | 'lives'
+  mode: 'time' | 'lives' | 'levels'
+  /** levels mode: one entry per level (name shown on the level map) */
+  levels?: { en: string; ko: string }[]
   seconds?: number
   lives?: number
   bg: [string, string]

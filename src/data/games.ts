@@ -2,7 +2,6 @@ import { SONGS } from './songs'
 
 /** Lightweight game catalogue (no game code) — used by lists, song pages and the prerender. One game per song. */
 export const GAME_INFO: Record<string, { name: string; emoji: string; desc: string }> = {
-  'seoul-is-my-home': { name: 'Seoul Ride', emoji: '🛵', desc: 'Ride across Seoul on the mint scooter and learn Korean words on the way. 10 levels!' },
   'catch-the-dot': { name: 'Catch the Dot', emoji: '🔴', desc: 'Tap the red dot before it escapes. It gets faster!' },
   'shine-like-mochi': { name: 'Star Catcher', emoji: '⭐', desc: 'Catch the falling stars and light up the night.' },
   'neon-jump': { name: 'Neon Jump', emoji: '🎃', desc: 'Bounce up the neon rooftops. How high can Mochi go?' },

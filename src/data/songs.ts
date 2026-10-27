@@ -40,6 +40,10 @@ export const SOCIALS: [string, string][] = [
 
 // Order = order on the site (newest / featured first).
 export const SONGS: Song[] = [
+  { slug: 'hwaiting', title: 'Hwaiting!', genre: 'K-Pop · Pop', released: '2026-10-26', lyrics: true, blurb: 'Exam tomorrow, coffee number three — a cheer for everyone studying late tonight. 화이팅!' },
+  { slug: 'seoul-is-my-home', title: 'Seoul Is My Home', genre: 'K-Pop · City Pop', released: '2026-10-26', lyrics: true, blurb: 'Came with a suitcase and a dream — and found a home. A thank-you song to Seoul.' },
+  { slug: 'saranghae', title: 'Saranghae', genre: 'K-Pop · Pop', released: '2026-10-26', lyrics: true, blurb: 'One word, one heart: 사랑해 in every language.' },
+  { slug: 'good-morning-seoul', title: 'Good Morning Seoul', genre: 'K-Pop · Pop', released: '2026-10-26', lyrics: true, blurb: 'Alarm, warm coffee, the Han River shining from the bus — 좋은 아침!' },
   { slug: 'shine-like-mochi', title: 'Shine Like Mochi', genre: 'Pop · Dance', released: '2026-10-10', youtube: 'HIEfLLw4duE', premiere: '2026-11-06', lyrics: true,
     blurb: 'When the night gets dark, Mochi lights it up. Little paws, giant heart — fall down, get up, try again.' },
   { slug: 'neon-jump', title: 'Neon Jump', genre: 'Electronic · Dance', released: '2026-10-10', youtube: 'fKfovXeoBaY', premiere: '2026-10-30', lyrics: true,

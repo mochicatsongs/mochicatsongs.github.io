@@ -9,7 +9,7 @@ import { Page, Pill } from '../components/Section'
 import NotFound from './NotFound'
 
 type Word = { w: string; t: number; e?: number }
-type Line = { t?: number; text: string; tag?: boolean; gap?: boolean; words?: Word[] }
+type Line = { t?: number; text: string; tr?: string; tag?: boolean; gap?: boolean; words?: Word[] }
 
 /** One karaoke line: every word fills left-to-right exactly while it is sung (per-frame, no React re-render). */
 function KaraokeLine({ words, end, getTime }: { words: Word[]; end: number; getTime: () => number }) {
@@ -118,6 +118,7 @@ export default function SongPage() {
                   className={`py-1 text-[clamp(18px,2.4vw,24px)] leading-snug transition-all duration-300 ${synced ? 'cursor-pointer' : ''} ${
                     idx === -1 ? 'text-white/85' : k === idx ? 'scale-[1.04] origin-left font-semibold' : k < idx ? 'text-white/35' : 'text-white/55'}`}>
                   {k === idx && l.words?.length ? <KaraokeLine words={l.words} end={lines.slice(k + 1).find(n => n.t !== undefined)?.t ?? l.words[l.words.length - 1].t + 2} getTime={p.getTime} /> : l.text}
+                  {l.tr && <span className="mt-0.5 block text-[clamp(13px,1.5vw,16px)] font-normal text-white/45">{l.tr}</span>}
                 </p>
               ))}
             </div>

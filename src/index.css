@@ -98,6 +98,7 @@ body { font-family: var(--font-body); background: #0b0718; color: #fff; -webkit-
   .btn-lime   { --c1: #b6f05a; --c2: #7ccc1f; --edge: #3f7a07; --glow: rgba(132, 204, 22, .55); color: #183100; text-shadow: 0 1px 0 rgba(255, 255, 255, .45); }
   .btn-purple { --c1: #b38bff; --c2: #7c4dff; --edge: #4a22b3; --glow: rgba(124, 77, 255, .6); }
   .btn-orange { --c1: #ffa05c; --c2: #ff6b2c; --edge: #b33d0a; --glow: rgba(255, 107, 44, .55); }
+  .btn-muted  { --c1: #4b4466; --c2: #3a3453; --edge: #221d35; --glow: rgba(160, 140, 220, .25); color: #ebe7f7; text-shadow: none; }
   .btn-white  { --c1: #ffffff; --c2: #e9e4f5; --edge: #9a91b5; --glow: rgba(255, 255, 255, .5); color: #1d1033; text-shadow: none; }
 
   /* 3D card */

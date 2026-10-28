@@ -29,6 +29,8 @@ const BOOKS: Book[] = [
   },
 ]
 
+const PDF_BTN = 'rounded-xl border border-white/30 bg-white/5 px-4 py-2 text-[15px] font-semibold text-white/90 transition hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white'
+
 export default function Books() {
   const t = useT()
   const { lang } = useLang()
@@ -46,23 +48,29 @@ export default function Books() {
               <h2 className="font-heading text-[clamp(24px,3vw,32px)] leading-tight tracking-wide text-yellow-200">{lang === 'ko' ? b.titleKo : b.title}</h2>
               <div className="mb-3 mt-1 font-semibold text-cyan-200">{t(b.sub)}</div>
               <ul className="mb-6 space-y-1.5 text-white/85">{b.points.map(p => <li key={p}>✓ {t(p)}</li>)}</ul>
-              <div className="mt-auto flex flex-wrap gap-3">
-                {lang === 'ko'
-                  ? <>
-                      <a href={b.bookk} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">📖 한국어 종이책 · 부크크</a>
-                      <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('📖 Paperback · Amazon')}</a>
-                    </>
-                  : <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">{t('📖 Paperback · Amazon')}</a>}
-                {lang === 'ko' && NAVER_LIVE
-                  ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-lime text-[17px]">{t('🖨️ PDF in Korean · Naver')}</a>
-                  : null}
-                <a href={b.gumroad} target="_blank" rel="noopener" className={`btn3d ${lang === 'ko' && NAVER_LIVE ? 'btn-white text-[15px]' : 'btn-pink text-[16px]'}`}>{lang === 'ko' ? t('English PDF') + ' · $4.99' : t('🖨️ Printable PDF · $4.99')}</a>
-                {lang !== 'ko' && NAVER_LIVE
-                  ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('Korean edition')}</a>
-                  : null}
-                {lang !== 'ko'
-                  ? <a href={b.bookk} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">Korean paperback · Bookk</a>
-                  : null}
+              <div className="mt-auto flex flex-col gap-4">
+                <div className="flex flex-wrap gap-3">
+                  {lang === 'ko'
+                    ? <>
+                        <a href={b.bookk} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">📖 한국어 종이책 · 부크크</a>
+                        <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-pink text-[16px]">📖 영문판 종이책 · Amazon</a>
+                      </>
+                    : <>
+                        <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">📖 Paperback · Amazon</a>
+                        <a href={b.bookk} target="_blank" rel="noopener" className="btn3d btn-pink text-[16px]">📖 Korean paperback · Bookk</a>
+                      </>}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {lang === 'ko'
+                    ? <>
+                        {NAVER_LIVE && <a href={b.naver} target="_blank" rel="noopener" className={PDF_BTN}>🖨️ 한국어 PDF · 스마트스토어</a>}
+                        <a href={b.gumroad} target="_blank" rel="noopener" className={PDF_BTN}>🖨️ 영문판 PDF · $4.99</a>
+                      </>
+                    : <>
+                        <a href={b.gumroad} target="_blank" rel="noopener" className={PDF_BTN}>🖨️ Printable PDF · $4.99</a>
+                        {NAVER_LIVE && <a href={b.naver} target="_blank" rel="noopener" className={PDF_BTN}>🖨️ Korean PDF</a>}
+                      </>}
+                </div>
               </div>
             </article>
           </Reveal>

@@ -5,9 +5,9 @@ import Reveal from '../components/Reveal'
 import { asset } from '../data/songs'
 import { useLang, useT } from '../i18n'
 
-/** Coloring books: printable PDFs (Gumroad worldwide, Naver Smart Store in Korea); paperbacks live on Amazon 26.10. */
+/** Coloring books: printable PDFs (Gumroad worldwide, Naver Smart Store in Korea); paperbacks live on Amazon 26.10, Korean paperbacks on Bookk 28.10. */
 const NAVER_LIVE = true // Naver Smart Store product pages confirmed public 24.10
-type Book = { id: 'adult' | 'kids'; title: string; titleKo: string; sub: string; points: string[]; gumroad: string; naver: string; amazon: string }
+type Book = { id: 'adult' | 'kids'; title: string; titleKo: string; sub: string; points: string[]; gumroad: string; naver: string; amazon: string; bookk: string }
 const BOOKS: Book[] = [
   {
     id: 'adult', title: 'Cozy Cat: Mochi After Work in Korea', titleKo: '퇴근 후, 모치와 한국 여행',
@@ -16,6 +16,7 @@ const BOOKS: Book[] = [
     gumroad: 'https://mochicatsongs.gumroad.com/l/yuwhhq',
     naver: 'https://smartstore.naver.com/mochicatsongs/products/13829250208',
     amazon: 'https://www.amazon.com/dp/B0HP8DF9ST',
+    bookk: 'https://bookk.co.kr/bookStore/6adf2a7810737740c801cbbc',
   },
   {
     id: 'kids', title: 'Mochi Cat Coloring Book for Kids', titleKo: '모치랑 색칠하고 영어 놀이!',
@@ -24,6 +25,7 @@ const BOOKS: Book[] = [
     gumroad: 'https://mochicatsongs.gumroad.com/l/ggaofw',
     naver: 'https://smartstore.naver.com/mochicatsongs/products/13829264388',
     amazon: 'https://www.amazon.com/dp/B0HP7S7S9X',
+    bookk: 'https://bookk.co.kr/bookStore/6adf333c1092657e8a42f2c7',
   },
 ]
 
@@ -45,13 +47,21 @@ export default function Books() {
               <div className="mb-3 mt-1 font-semibold text-cyan-200">{t(b.sub)}</div>
               <ul className="mb-6 space-y-1.5 text-white/85">{b.points.map(p => <li key={p}>✓ {t(p)}</li>)}</ul>
               <div className="mt-auto flex flex-wrap gap-3">
-                <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">{t('📖 Paperback · Amazon')}</a>
+                {lang === 'ko'
+                  ? <>
+                      <a href={b.bookk} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">📖 한국어 종이책 · 부크크</a>
+                      <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('📖 Paperback · Amazon')}</a>
+                    </>
+                  : <a href={b.amazon} target="_blank" rel="noopener" className="btn3d btn-yellow text-[17px]">{t('📖 Paperback · Amazon')}</a>}
                 {lang === 'ko' && NAVER_LIVE
                   ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-lime text-[17px]">{t('🖨️ PDF in Korean · Naver')}</a>
                   : null}
                 <a href={b.gumroad} target="_blank" rel="noopener" className={`btn3d ${lang === 'ko' && NAVER_LIVE ? 'btn-white text-[15px]' : 'btn-pink text-[16px]'}`}>{lang === 'ko' ? t('English PDF') + ' · $4.99' : t('🖨️ Printable PDF · $4.99')}</a>
                 {lang !== 'ko' && NAVER_LIVE
                   ? <a href={b.naver} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">{t('Korean edition')}</a>
+                  : null}
+                {lang !== 'ko'
+                  ? <a href={b.bookk} target="_blank" rel="noopener" className="btn3d btn-white text-[15px]">Korean paperback · Bookk</a>
                   : null}
               </div>
             </article>

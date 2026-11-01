@@ -2,6 +2,7 @@ import { useLang, useT } from '../i18n'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { ARTIST } from '../data/songs'
+import { FeedbackLink } from './Feedback'
 
 const LINKS: [string, string][] = [['Music', '/music'], ['Videos', '/videos'], ['Games', '/games'], ['Stickers', '/stickers'], ['Books', '/books'], ['Rooms', '/rooms']]
 
@@ -43,6 +44,7 @@ export default function Navbar() {
         className={`fixed inset-0 z-20 flex flex-col items-start justify-center gap-8 bg-black/90 px-8 backdrop-blur-md transition-opacity duration-300 md:hidden ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
         {LINKS.map(([lbl, to]) => <Link key={to} to={to} className="t3d text-[48px]">{t(lbl)}</Link>)}
         <a href={ARTIST.subscribe} target="_blank" rel="noopener" className="btn3d btn-pink text-[24px]">{t('▶ Subscribe')}</a>
+        <FeedbackLink className="text-[18px] text-white/75 underline underline-offset-4" />
       </div>
     </>
   )

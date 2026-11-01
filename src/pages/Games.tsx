@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { H1, Page } from '../components/Section'
 import { cover } from '../data/songs'
 import { GAME_LIST } from '../data/games'
+import { FeedbackCard } from '../components/Feedback'
 
 const BEST = (slug: string) => { try { return Number(localStorage.getItem(slug === 'catch-the-dot' ? 'ctd-best' : `game-best:${slug}`) || 0) } catch { return 0 } }
 const GRAD = ['from-pink-500 to-violet-600', 'from-cyan-400 to-blue-600', 'from-lime-400 to-emerald-600', 'from-amber-400 to-orange-600', 'from-fuchsia-500 to-rose-600', 'from-violet-500 to-indigo-700']
@@ -33,6 +34,7 @@ export default function Games() {
           )
         })}
       </div>
+      <FeedbackCard text="Played a game? Tell us about bugs or ideas — we read every message." />
     </Page>
   )
 }

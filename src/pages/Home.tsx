@@ -7,6 +7,7 @@ import { Everywhere, GameBanner, LatestVideo, Premieres, SongsRail, StickerParad
 import { CopyIcon } from '../components/Icons'
 import { ARTIST } from '../data/songs'
 import { useTypewriter } from '../hooks/useTypewriter'
+import { FeedbackLink } from '../components/Feedback'
 
 const TEXT = 'Glad you stopped by. I love snacks, but I always choose the dance floor. So — what are we doing today?'
 
@@ -54,7 +55,7 @@ export default function Home() {
           <footer className="border-t border-white/10 pt-6 text-[13px] leading-relaxed text-white/50">
             {t('💃 Dance with Mochi and tag')} <b>#MochiCat</b> {t('— your video might get featured!')}<br />
             {t('Music and visuals are made with AI tools; characters, stories, lyrics and editing by the Mochi Cat team.')}<br />
-            © 2026 Mochi Cat · 모치캣 · <Link to="/privacy" className="underline hover:text-white">{t('Privacy')}</Link>
+            © 2026 Mochi Cat · 모치캣 · <Link to="/privacy" className="underline hover:text-white">{t('Privacy')}</Link> · <FeedbackLink className="whitespace-nowrap underline hover:text-white" />
           </footer>
         </div>
       </div>

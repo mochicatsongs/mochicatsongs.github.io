@@ -5,6 +5,8 @@ export type Lang = 'en' | 'ko'
 /** Korean translations, keyed by the English text. Anything missing falls back to English. */
 const KO: Record<string, string> = {
   // nav / common
+  'Feedback & ideas': '의견 · 제안 보내기', 'Found a bug or have an idea for Mochi?': '버그를 찾았거나 모치에게 아이디어가 있나요?', 'Send feedback': '의견 보내기',
+  'Played a game? Tell us about bugs or ideas — we read every message.': '게임 해 보셨어요? 버그나 아이디어를 알려 주세요. 모두 꼼꼼히 읽어요!',
   'Music': '음악', 'Videos': '뮤직비디오', 'Games': '게임', 'Stickers': '스티커', 'Privacy': '개인정보 처리방침', 'Subscribe': '구독하기', 'Back': '뒤로',
   '▶ Subscribe': '▶ 구독하기', '▶ Subscribe on YouTube': '▶ 유튜브 구독하기', 'Subscribe on YouTube': '유튜브 구독하기',
   'Coming soon': '곧 공개', 'All songs →': '전체 노래 →', 'All games →': '전체 게임 →', 'Play': '재생', 'Pause': '일시정지',

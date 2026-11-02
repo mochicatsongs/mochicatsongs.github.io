@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 
 export type Lang = 'en' | 'ko'
@@ -121,6 +122,7 @@ const Ctx = createContext<{ lang: Lang; setLang: (l: Lang) => void }>({ lang: 'e
 
 function initial(): Lang {
   try {
+    if (/^\/ko(\/|$)/.test(location.pathname)) return 'ko'
     const q = new URLSearchParams(location.search).get('lang')
     if (q === 'ko' || q === 'en') return q
     const s = localStorage.getItem('mochi-lang')
@@ -131,7 +133,13 @@ function initial(): Lang {
 
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(initial)
-  const setLang = useCallback((l: Lang) => { setLangState(l); try { localStorage.setItem('mochi-lang', l) } catch { /* ignore */ } }, [])
+  const nav = useNavigate()
+  const setLang = useCallback((l: Lang) => {
+    setLangState(l); try { localStorage.setItem('mochi-lang', l) } catch { /* ignore */ }
+    // on a /ko/... page, switching to English goes to the English address of the same page
+    const p = location.pathname
+    if (l === 'en' && /^\/ko(\/|$)/.test(p)) nav((p.slice(3) || '/') + location.search + location.hash, { replace: true })
+  }, [nav])
   useEffect(() => { document.documentElement.lang = lang }, [lang])
   return <Ctx.Provider value={{ lang, setLang }}>{children}</Ctx.Provider>
 }

@@ -51,12 +51,16 @@ function ScrollMemory() {
 }
 
 export default function App() {
-  const kids = useLocation().pathname.replace(import.meta.env.BASE_URL, '/').startsWith('/k')
+  const loc = useLocation()
+  const ko = /^\/ko(\/|$)/.test(loc.pathname)
+  const inner = ko ? { ...loc, pathname: loc.pathname.slice(3) || '/' } : loc
+  const kids = /^\/k(\/|$)/.test(inner.pathname.replace(import.meta.env.BASE_URL, '/'))
   return (
     <>
       <ScrollMemory />
       {!kids && <Navbar />}
-      <Routes>
+      {/* Korean pages live under /ko/... (own addresses for Naver/Daum/Google) and show the same screens in Korean */}
+      <Routes location={inner}>
         <Route path="/" element={<Home />} />
         <Route path="/music" element={<Music />} />
         <Route path="/music/:slug" element={<SongPage />} />

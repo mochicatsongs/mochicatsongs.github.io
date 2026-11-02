@@ -1,4 +1,5 @@
-import { useT } from '../i18n'
+import { useLang, useT } from '../i18n'
+import { SONG_KO } from '../data/songs_ko'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ARTIST, SONGS, cover, fmtDate, isLive, songBySlug, asset } from '../data/songs'
@@ -44,6 +45,8 @@ export default function SongPage() {
   const song = songBySlug(slug)
   const p = usePlayer()
   const t = useT()
+  const { lang } = useLang()
+  const ko = lang === 'ko' ? SONG_KO[slug ?? ''] : undefined
   const [lines, setLines] = useState<Line[] | null>(null)
   const [synced, setSynced] = useState(false)
   const box = useRef<HTMLDivElement>(null)
@@ -52,9 +55,9 @@ export default function SongPage() {
     setLines(null)
     if (!song) return
     fetch(asset(`lyrics/${song.slug}.json`)).then(r => r.json()).then(d => { setLines(d.lines); setSynced(d.synced) }).catch(() => {})
-    document.title = `${song.title} — Mochi Cat`
-    return () => { document.title = 'Mochi Cat 🐾 — the chubbiest pop star' }
-  }, [song])
+    document.title = lang === 'ko' ? `${song.title} 가사 · 뜻 — 모치캣 (Mochi Cat)` : `${song.title} — Mochi Cat (lyrics & song)`
+    return () => { document.title = 'Mochi Cat (모치캣) — cozy songs about life in Seoul' }
+  }, [song, lang])
 
   const active = p.current?.slug === song?.slug
   const idx = useMemo(() => {
@@ -81,7 +84,8 @@ export default function SongPage() {
           <img src={cover(song)} alt={song.title} className="card3d w-full" />
           <h1 className="t3d mt-7 text-[clamp(36px,6vw,58px)]">{song.title}</h1>
           <div className="mt-2 text-white/55">Mochi Cat · {song.genre}</div>
-          <p className="mt-4 text-[17px] leading-relaxed text-white/85">{song.blurb}</p>
+          <p className="mt-4 text-[17px] leading-relaxed text-white/85">{ko ? ko.blurb : song.blurb}</p>
+          {ko && <div className="mt-5 rounded-2xl bg-white/[0.05] p-4"><h2 className="mb-1 text-lg font-medium text-yellow-200">🎵 곡 이야기 · 가사 뜻</h2><p className="text-[16px] leading-relaxed text-white/80">{ko.story}</p></div>}
           <div className="mt-7 flex flex-wrap items-center gap-3"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? t('Pause') : t('Play')} size="text-[22px]" />
             {GAME_INFO[song.slug] && <Link to={`/games/${song.slug}`} className="btn3d btn-yellow text-[18px]">🎮 {t('Play the game')}: {GAME_INFO[song.slug].name}</Link>}</div>
           <div className="mt-5 flex flex-wrap gap-2">
@@ -107,7 +111,7 @@ export default function SongPage() {
               )}
             </div>
           )}
-          <h2 className="mb-4 text-2xl font-medium">{t('Lyrics')} {synced && <span className="ml-2 align-middle text-xs font-normal text-white/45">{t('♪ follows the music')}</span>}</h2>
+          <h2 className="mb-4 text-2xl font-medium">{ko ? `${song.title} 가사 · 한국어 번역` : t('Lyrics')} {synced && <span className="ml-2 align-middle text-xs font-normal text-white/45">{t('♪ follows the music')}</span>}</h2>
           {lines ? (
             <div ref={box} className="max-h-[60vh] overflow-y-auto rounded-2xl bg-white/[0.04] p-6 [scrollbar-width:thin]">
               {lines.map((l, k) => l.gap ? <div key={k} className="h-4" /> : l.tag ? (

@@ -16,7 +16,7 @@ const page = (route, title, desc, img) => {
   fs.mkdirSync(`dist${route}`, { recursive: true })
   fs.writeFileSync(`dist${route}/index.html`, h)
 }
-const base = ['Mochi Cat 🐾', 'Feel-good dance-pop songs by a chubby grey cat. New music video every Friday!', '/media/mochi_hero_poster.jpg']
+const base = ['Mochi Cat 🐾', 'Mochi Cat — a grey cat in Seoul singing about after-work life. 퇴근길에 듣는 위로 노래, 힐링 컬러링북, 무료 웹게임. Cozy songs, coloring books & free web games.', '/media/mochi_hero_poster.jpg']
 for (const [r, t] of [['/music', 'Music'], ['/videos', 'Music videos'], ['/games', 'Games'], ['/games/catch-the-dot', 'Catch the Dot — game'], ['/stickers', 'Stickers'], ['/about', 'About Mochi'], ['/privacy', 'Privacy — 개인정보 처리방침']])
   page(r, `${t} — ${base[0]}`, base[1], base[2])
 page('/books', 'Coloring Books — Mochi Cat 🐾 printable PDFs', 'Cozy Mochi Cat coloring books: a Korea-themed book for adults and bold, easy pages for kids 4–8. Instant printable PDF.', '/books/adult-en.jpg')

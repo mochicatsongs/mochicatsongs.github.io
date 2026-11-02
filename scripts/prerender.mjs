@@ -65,5 +65,5 @@ fs.writeFileSync('dist/rss.xml', `<?xml version="1.0" encoding="UTF-8"?>
 ${feed.map(s => `<item><title>${x(s.title)} — Mochi Cat</title><link>${canon(`/music/${s.slug}`)}</link><guid>${canon(`/music/${s.slug}`)}</guid><pubDate>${new Date(s.released + 'T09:00:00+09:00').toUTCString()}</pubDate><description>${x(s.blurb)}</description></item>`).join('\n')}
 </channel></rss>
 `)
-fs.writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n`)
+fs.writeFileSync('dist/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}/sitemap.xml\n\n#DaumWebMasterTool:5c035982f523bfb0311e35eba09bac76816aa32892679dd3916693283a4060ae:y9pY72z5HH+w9gPPOcRKdg==\n`)
 console.log(`prerendered ${urls.length} routes`)

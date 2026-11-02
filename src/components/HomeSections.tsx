@@ -59,22 +59,28 @@ function TiltCard({ children, className = '' }: { children: React.ReactNode; cla
 
 export function Premieres() {
   const t = useT()
+  const { lang } = useLang()
+  // only what is already scheduled and not out yet; the layout grows with the number of clips
   const up = SONGS.filter(s => s.premiere && !isLive(s.premiere)).sort((a, b) => a.premiere!.localeCompare(b.premiere!))
   if (!up.length) return null
+  const n = up.length
+  const grid = n === 1 ? 'mx-auto max-w-3xl grid-cols-1' : n === 2 ? 'grid-cols-1 sm:grid-cols-2' : n === 3 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+  const day = (iso: string) => lang === 'ko'
+    ? new Date(iso + 'T12:00:00+09:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })
+    : fmtDate(iso)
   return (
-    <section className="relative z-10 mx-auto max-w-6xl px-5 py-24 sm:px-8">
-      <Reveal><h2 className="t3d t3d-yellow mb-3 text-center text-[clamp(40px,7vw,84px)]">{t('Coming soon')}</h2>
-        <p className="mb-12 text-center text-[clamp(16px,2.2vw,20px)] font-medium text-white/75">{t('A new Mochi video every Friday · 09:00 KST')}</p></Reveal>
-      <div className="grid gap-6 sm:grid-cols-2">
+    <section className="relative z-10 mx-auto max-w-6xl px-5 py-20 sm:px-8">
+      <div className="mb-10"><SectionHead icon="📺" label="YouTube" title={t('Coming soon')} color="t3d-yellow" sub={t('A new Mochi video every Friday · 09:00 KST')} /></div>
+      <div className={`grid gap-6 ${grid}`}>
         {up.map((s, i) => (
           <Reveal key={s.slug} delay={i * 100}>
             <TiltCard>
               <Link to={`/music/${s.slug}`} className="card3d group relative block aspect-video overflow-hidden bg-black hover:transform-none">
                 {LOOP[s.slug] ? <LoopVideo name={LOOP[s.slug]} className="transition-transform duration-700 group-hover:scale-110" /> : <img src={cover(s)} alt="" className="h-full w-full object-cover" />}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-                <div className={`btn3d ${BTN[i % BTN.length]} absolute left-4 top-4 !py-1.5 text-[14px]`}>{fmtDate(s.premiere!)}</div>
+                <div className={`btn3d ${BTN[i % BTN.length]} absolute left-4 top-4 !py-1.5 text-[14px]`}>{day(s.premiere!)}</div>
                 <div className="absolute bottom-4 left-5 right-5">
-                  <div className="t3d-sm text-[clamp(26px,3.4vw,40px)] leading-none">{s.title}</div>
+                  <div className="t3d-sm text-[clamp(24px,3vw,40px)] leading-none">{s.title}</div>
                   <div className="mt-2 text-sm font-medium text-white/75">{s.genre} · {t('Premiere on YouTube')}</div>
                 </div>
               </Link>
@@ -95,7 +101,7 @@ export function SongsRail() {
   return (
     <section className="relative z-10 py-20">
       <div className="mb-8 flex items-end justify-between gap-4 px-5 sm:px-10">
-        <Reveal><h2 className="t3d text-[clamp(44px,8vw,100px)]">{t('Songs')}</h2></Reveal>
+        <Reveal><div className="mb-2 text-[clamp(14px,2.2vw,20px)] font-semibold uppercase tracking-[.3em] text-white/80">🎵 {t('Music')}</div><h2 className="t3d text-[clamp(40px,7vw,84px)] leading-[1.05]">{t('Songs')}</h2></Reveal>
         <div className="mb-3 flex items-center gap-3">
           <button aria-label="Previous" onClick={() => go(-1)} className="btn3d btn-white hidden h-12 w-12 !p-0 text-xl md:inline-flex">‹</button>
           <button aria-label="Next" onClick={() => go(1)} className="btn3d btn-white hidden h-12 w-12 !p-0 text-xl md:inline-flex">›</button>
@@ -128,14 +134,24 @@ export function SongsRail() {
   )
 }
 
+/** one look for every section title on the home page: small label, big 3D title, optional line under it */
+function SectionHead({ icon, label, title, color, sub, align = 'center' }: { icon: string; label: string; title: string; color: string; sub?: string; align?: 'center' | 'left' }) {
+  const c = align === 'center' ? 'text-center' : 'text-left'
+  return (
+    <Reveal>
+      <div className={`mb-2 ${c} text-[clamp(14px,2.2vw,20px)] font-semibold uppercase tracking-[.3em] text-white/80`}>{icon} {label}</div>
+      <h2 className={`t3d ${color} ${c} text-[clamp(40px,7vw,84px)] leading-[1.05]`}>{title}</h2>
+      {sub && <p className={`mt-3 ${c} text-[clamp(15px,2.2vw,20px)] font-medium text-white/75`}>{sub}</p>}
+    </Reveal>
+  )
+}
+
 /* 4a ─ section title between the latest video and the game banner */
 export function GameTitle() {
   const t = useT()
   return (
-    <section className="relative z-10 mx-auto max-w-6xl px-5 pb-6 pt-28 sm:px-8">
-      <Reveal><div className="mb-2 text-center text-[clamp(16px,2.4vw,22px)] font-semibold uppercase tracking-[.3em] text-cyan-200">🎮 {t('Games')}</div>
-        <h2 className="t3d t3d-cyan text-center text-[clamp(40px,7vw,84px)]">{t('New game')}</h2>
-        <p className="mt-3 text-center text-[clamp(16px,2.2vw,20px)] font-medium text-white/75">{t('Our first big Mochi game is almost here')}</p></Reveal>
+    <section className="relative z-10 mx-auto max-w-6xl px-5 pb-6 pt-24 sm:px-8">
+      <SectionHead icon="🎮" label={t('Games')} title={t('New game')} color="t3d-cyan" sub={t('Our first big Mochi game is almost here')} />
     </section>
   )
 }

@@ -128,24 +128,77 @@ export function SongsRail() {
   )
 }
 
-/* 4 ─ Game: full-screen neon video with parallax + zooming title */
+/* 4 ─ Game: our new game Mochi's Pocha — coming soon. Living banner: crossfading art with slow zoom, falling snow,
+   warm bokeh lights, floating food/coin icons, a phone that flips through real gameplay, shimmering badge and a bouncing title */
+const PC_BG = ['images/pocha_banner.webp', 'images/pocha_banner2.webp']
+const PC_SHOTS = ['main', 'kitchen', 'market', 'busking', 'train', 'ride']
+const PC_ICONS = ['coin', 'm_ramen2', 'ui_heart2', 'star', 'm_tteok3', 'm_egg3', 'coin', 'star']
+const rnd = (i: number, k: number) => { const x = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return x - Math.floor(x) }
+const PC_SNOW = Array.from({ length: 36 }, (_, i) => ({ x: rnd(i, 1) * 100, d: 6 + rnd(i, 2) * 8, delay: -rnd(i, 3) * 14, s: 3 + rnd(i, 4) * 6, drift: (rnd(i, 5) - 0.5) * 60 }))
+const PC_BOKEH = Array.from({ length: 12 }, (_, i) => ({ x: rnd(i, 6) * 100, y: 8 + rnd(i, 7) * 50, s: 30 + rnd(i, 8) * 70, c: ['#ffd27a', '#ff9a5a', '#ff6f91', '#ffe9a8'][i % 4], delay: -rnd(i, 9) * 4 }))
 export function GameBanner() {
   const t = useT()
   const ref = useRef<HTMLElement>(null)
   const p = useScrollProgress(ref)
   const z = seg(p, 0.1, 0.5)
+  const title = t("Mochi's Pocha")
   return (
-    <section ref={ref} className="relative z-10 h-[200vh]">
-      <div className="sticky top-0 h-[100svh] overflow-hidden">
-        <div className="absolute inset-0" style={{ transform: `scale(${1.25 - p * 0.25})` }}><LoopVideo name="ctd" /></div>
-        <div className="absolute inset-0 bg-[radial-gradient(closest-side,rgba(0,0,0,.25),rgba(11,7,24,.9))]" />
-        <div className="relative flex h-full flex-col items-center justify-center px-6 text-center" style={{ opacity: z, transform: `scale(${0.6 + z * 0.4})` }}>
-          <div className="mb-3 text-[clamp(16px,2.4vw,22px)] font-semibold uppercase tracking-[.3em] text-cyan-200">{t('New game')}</div>
-          <div className="t3d t3d-cyan text-[clamp(56px,12vw,170px)]">Catch the Dot</div>
-          <p className="mt-5 max-w-lg text-[clamp(16px,2.4vw,22px)] font-medium text-white/85">{t('Tap the red dot before it escapes. 30 seconds. It gets faster. Beat your friends!')}</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link to="/games/catch-the-dot" className="btn3d btn-yellow text-[clamp(20px,2.6vw,28px)]">{t('🎮 Play now')}</Link>
-            <Link to="/games" className="btn3d btn-white text-[clamp(16px,2vw,20px)]">{t('More games')}</Link>
+    <section ref={ref} id="pocha-soon" className="relative z-10 h-[200vh]">
+      <style>{`
+@keyframes pcKen{0%{transform:scale(1.08) translate(0,0)}100%{transform:scale(1.22) translate(-2%,-3%)}}
+@keyframes pcFade{0%,45%{opacity:1}50%,95%{opacity:0}100%{opacity:1}}
+@keyframes pcSnow{from{transform:translate(0,-10vh)}to{transform:translate(var(--dx),110vh)}}
+@keyframes pcGlow{0%,100%{opacity:.25;transform:scale(.85)}50%{opacity:.75;transform:scale(1.1)}}
+@keyframes pcFloat{0%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-18px) rotate(8deg)}100%{transform:translateY(0) rotate(-8deg)}}
+@keyframes pcShine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(260%) skewX(-20deg)}}
+@keyframes pcWave{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-.12em)}}
+@keyframes pcShot{0%{opacity:0;transform:scale(1.04)}4%,16.6%{opacity:1;transform:scale(1)}20.6%,100%{opacity:0}}
+@keyframes pcBob{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(-3deg) translateY(-10px)}}
+@keyframes pcSteam{0%{transform:translate(-50%,0) scale(.6);opacity:0}20%{opacity:.55}100%{transform:translate(-50%,-90px) scale(1.6);opacity:0}}
+.pc-letter{display:inline-block;animation:pcWave 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.pc-anim,.pc-anim *{animation:none!important}}
+`}</style>
+      <div className="sticky top-0 h-[100svh] overflow-hidden pc-anim">
+        {/* art: two pictures crossfading, each slowly zooming */}
+        <div className="absolute inset-0" style={{ transform: `scale(${1.15 - p * 0.15})` }}>
+          {PC_BG.map((b, i) => (
+            <img key={b} src={asset(b)} alt="" className="absolute inset-0 h-full w-full object-cover object-[50%_40%]"
+              style={{ animation: `pcKen 14s ease-in-out ${-i * 7}s infinite alternate, pcFade 14s linear ${-i * 7}s infinite` }} />
+          ))}
+        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(closest-side,rgba(0,0,0,.1),rgba(11,7,24,.85))]" />
+        {/* warm bokeh lights */}
+        {PC_BOKEH.map((b, i) => <span key={i} className="pointer-events-none absolute rounded-full" style={{ left: `${b.x}%`, top: `${b.y}%`, width: b.s, height: b.s, background: `radial-gradient(circle, ${b.c}, transparent 70%)`, filter: 'blur(6px)', animation: `pcGlow ${3 + (i % 3)}s ease-in-out ${b.delay}s infinite`, mixBlendMode: 'screen' }} />)}
+        {/* floating dishes, coins, hearts — they drift with the scroll */}
+        {PC_ICONS.map((n, i) => (
+          <div key={i} className="pointer-events-none absolute" style={{ left: `${[6, 84, 12, 78, 4, 90, 26, 68][i]}%`, top: `${[18, 22, 70, 72, 46, 50, 86, 88][i]}%`, width: `clamp(34px, ${5 + (i % 3) * 1.5}vw, 84px)`, transform: `translateY(${(0.5 - p) * (60 + i * 25)}px)`, opacity: 0.35 + z * 0.65 }}>
+            <img src={asset(`images/pocha_ic_${n}.webp`)} alt="" className="w-full drop-shadow-[0_8px_10px_rgba(0,0,0,.45)]" style={{ animation: `pcFloat ${3 + (i % 3)}s ease-in-out ${-i * 0.4}s infinite` }} />
+          </div>
+        ))}
+        {/* falling snow */}
+        {PC_SNOW.map((f, i) => <span key={i} className="pointer-events-none absolute top-0 rounded-full bg-white" style={{ left: `${f.x}%`, width: f.s, height: f.s, opacity: 0.8, boxShadow: '0 0 6px #fff', ['--dx' as string]: `${f.drift}px`, animation: `pcSnow ${f.d}s linear ${f.delay}s infinite` }} />)}
+        <div className="relative flex h-full flex-col items-center justify-center gap-4 px-6 text-center md:flex-row md:gap-16" style={{ opacity: z, transform: `scale(${0.6 + z * 0.4})` }}>
+          {/* a phone that flips through real gameplay */}
+          <div className="relative order-1 shrink-0 md:order-2" style={{ animation: 'pcBob 4s ease-in-out infinite' }}>
+            <div className="relative overflow-hidden rounded-[28px] border-[6px] border-white/90 bg-black shadow-[0_24px_60px_rgba(0,0,0,.6),0_0_40px_rgba(255,140,90,.45)]" style={{ width: 'clamp(118px, 18vw, 250px)', aspectRatio: '1 / 2.05' }}>
+              {PC_SHOTS.map((n, i) => <img key={n} src={asset(`images/pocha_shot_${n}.webp`)} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity: 0, animation: `pcShot 15s linear ${i * 2.5}s infinite` }} />)}
+            </div>
+            <span className="pointer-events-none absolute left-1/2 top-[18%] h-10 w-10 rounded-full bg-white/60 blur-md" style={{ animation: 'pcSteam 2.6s ease-out infinite' }} />
+            <span className="pointer-events-none absolute left-[40%] top-[18%] h-8 w-8 rounded-full bg-white/50 blur-md" style={{ animation: 'pcSteam 2.6s ease-out 1.3s infinite' }} />
+          </div>
+          <div className="order-2 flex flex-col items-center md:order-1">
+            <div className="relative mb-3 overflow-hidden rounded-full border-2 border-white/80 bg-gradient-to-r from-pink-500 to-orange-400 px-6 py-2 text-[clamp(14px,2.2vw,22px)] font-bold uppercase tracking-[.25em] text-white shadow-[0_0_24px_rgba(255,120,80,.7)]">
+              {t('Coming soon')}
+              <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent" style={{ animation: 'pcShine 2.8s ease-in-out infinite' }} />
+            </div>
+            <div className="t3d t3d-yellow text-[clamp(44px,10vw,150px)] leading-[1.05]" aria-label={title}>
+              {[...title].map((ch, i) => <span key={i} className="pc-letter" style={{ animationDelay: `${i * 0.08}s` }}>{ch === ' ' ? ' ' : ch}</span>)}
+            </div>
+            <p className="mt-4 max-w-xl text-[clamp(15px,2.2vw,22px)] font-medium text-white/90 [text-shadow:0_2px_8px_rgba(0,0,0,.6)]">{t('Merge food, serve the neighbours and decorate a cozy Seoul street-food tent — plus 8 mini-games with Mochi’s songs.')}</p>
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
+              <span className="btn3d btn-yellow cursor-default text-[clamp(18px,2.6vw,28px)]">{t('🏮 Coming soon')}</span>
+              <Link to="/games" className="btn3d btn-white text-[clamp(15px,2vw,20px)]">{t('More games')}</Link>
+            </div>
           </div>
         </div>
       </div>

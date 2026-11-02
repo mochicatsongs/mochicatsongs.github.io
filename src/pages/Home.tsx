@@ -44,9 +44,9 @@ export default function Home() {
 
       <div className="bg-party relative z-10">
         <LatestVideo />
-        <Premieres />
-        <SongsRail />
         <GameBanner />
+        <SongsRail />
+        <Premieres />
         <StickerParade />
         <Everywhere />
         <div className="mx-auto max-w-5xl px-5 pb-40 sm:px-8">

@@ -128,6 +128,18 @@ export function SongsRail() {
   )
 }
 
+/* 4a ─ section title between the latest video and the game banner */
+export function GameTitle() {
+  const t = useT()
+  return (
+    <section className="relative z-10 mx-auto max-w-6xl px-5 pb-6 pt-28 sm:px-8">
+      <Reveal><div className="mb-2 text-center text-[clamp(16px,2.4vw,22px)] font-semibold uppercase tracking-[.3em] text-cyan-200">🎮 {t('Games')}</div>
+        <h2 className="t3d t3d-cyan text-center text-[clamp(40px,7vw,84px)]">{t('New game')}</h2>
+        <p className="mt-3 text-center text-[clamp(16px,2.2vw,20px)] font-medium text-white/75">{t('Our first big Mochi game is almost here')}</p></Reveal>
+    </section>
+  )
+}
+
 /* 4 ─ Game: our new game Mochi's Pocha — coming soon. Living banner: crossfading art with slow zoom, falling snow,
    warm bokeh lights, floating food/coin icons, a phone that flips through real gameplay, shimmering badge and a bouncing title */
 const PC_BG = ['images/pocha_banner.webp', 'images/pocha_banner2.webp']

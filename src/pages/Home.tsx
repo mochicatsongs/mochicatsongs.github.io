@@ -2,7 +2,7 @@ import { useT } from '../i18n'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import ScrubVideo from '../components/ScrubVideo'
-import { Everywhere, GameBanner, LatestVideo, Premieres, SongsRail, StickerParade } from '../components/HomeSections'
+import { Everywhere, GameBanner, GameTitle, LatestVideo, Premieres, SongsRail, StickerParade } from '../components/HomeSections'
 import { CopyIcon } from '../components/Icons'
 import { ARTIST } from '../data/songs'
 import { useTypewriter } from '../hooks/useTypewriter'
@@ -44,6 +44,7 @@ export default function Home() {
 
       <div className="bg-party relative z-10">
         <LatestVideo />
+        <GameTitle />
         <GameBanner />
         <SongsRail />
         <Premieres />

@@ -1,6 +1,6 @@
 // 모치네 포차 service worker: pages always fresh from the network (falls back to cache offline),
 // hashed scripts and pictures cached for fast loading. Music (/audio/) is never cached here.
-const C = 'pocha-v1'
+const C = 'pocha-2611051350'
 self.addEventListener('install', e => self.skipWaiting())
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())))
 self.addEventListener('fetch', e => {
@@ -12,6 +12,9 @@ self.addEventListener('fetch', e => {
     return
   }
   if (/\/assets\/|\/games\/pocha\/|\.png$|\.webp$/.test(u.pathname)) {
-    e.respondWith(caches.match(e.request).then(m => m || fetch(e.request).then(r => { if (r.ok) { const cp = r.clone(); caches.open(C).then(c => c.put(e.request, cp)) } return r })))
+    // hashed scripts never change: cache first. Pictures can be replaced under the same name: show the cached one, refresh it in the background
+    const net = () => fetch(e.request).then(r => { if (r.ok) { const cp = r.clone(); caches.open(C).then(c => c.put(e.request, cp)) } return r })
+    if (u.pathname.includes('/assets/')) { e.respondWith(caches.match(e.request).then(m => m || net())); return }
+    e.respondWith(caches.match(e.request).then(m => { const f = net().catch(() => m); return m || f }))
   }
 })

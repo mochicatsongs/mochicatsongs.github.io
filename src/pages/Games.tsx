@@ -14,6 +14,15 @@ export default function Games() {
     <Page>
       <H1 color="t3d-lime">{t('Games')}</H1>
       <p className="-mt-4 mb-8 text-white/70">{t('One game for every Mochi song — with the song playing. Beat your best score!')}</p>
+      <a href="/pocha/" className="card3d group relative mb-6 flex flex-col items-center gap-4 overflow-hidden bg-gradient-to-br from-orange-500 via-pink-500 to-violet-700 p-4 sm:flex-row sm:p-6">
+        <img src="/images/pocha_banner.webp" alt="" loading="lazy" className="aspect-video w-full rounded-2xl object-cover shadow-lg transition group-hover:scale-[1.02] sm:w-1/2" />
+        <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
+          <span className="mb-2 rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-widest text-pink-600">{t('New game')}</span>
+          <div className="t3d text-[34px] leading-tight sm:text-[44px]">{t("Mochi's Pocha")}</div>
+          <p className="mt-2 text-sm text-white/90 sm:text-base">{t('Merge food, serve the neighbours and decorate a cozy Seoul street-food tent — plus 8 mini-games with Mochi’s songs.')}</p>
+          <span className="btn3d btn-yellow mt-4 text-[18px]">{t('🏮 Play free')}</span>
+        </div>
+      </a>
       <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
         {GAME_LIST.map((g, i) => {
           const best = BEST(g.slug)

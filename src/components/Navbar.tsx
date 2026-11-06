@@ -28,6 +28,7 @@ export default function Navbar() {
               <NavLink to={to} className={({ isActive }) => `rounded-full px-4 py-1.5 font-heading text-[20px] tracking-wide transition-all hover:-translate-y-0.5 hover:bg-white/10 ${isActive ? 'bg-white/15 text-yellow-300' : ''}`}>{t(lbl)}</NavLink>
             </span>
           ))}
+          <a href="/pocha/" className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-4 py-1.5 font-heading text-[20px] tracking-wide shadow-[0_0_14px_rgba(255,120,80,.55)] transition-all hover:-translate-y-0.5">{t('🏮 Pocha')}</a>
         </div>
         <div className="flex items-center gap-3">
           {toggle}
@@ -43,6 +44,7 @@ export default function Navbar() {
       <div onClick={() => setOpen(false)}
         className={`fixed inset-0 z-20 flex flex-col items-start justify-center gap-8 bg-black/90 px-8 backdrop-blur-md transition-opacity duration-300 md:hidden ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
         {LINKS.map(([lbl, to]) => <Link key={to} to={to} className="t3d text-[48px]">{t(lbl)}</Link>)}
+        <a href="/pocha/" className="t3d t3d-yellow text-[48px]">{t('🏮 Pocha')}</a>
         <a href={ARTIST.subscribe} target="_blank" rel="noopener" className="btn3d btn-pink text-[24px]">{t('▶ Subscribe')}</a>
         <FeedbackLink className="text-[18px] text-white/75 underline underline-offset-4" />
       </div>

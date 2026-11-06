@@ -216,7 +216,7 @@ export function GameBanner() {
           </div>
           <div className="order-2 flex flex-col items-center md:order-1">
             <div className="relative mb-3 overflow-hidden rounded-full border-2 border-white/80 bg-gradient-to-r from-pink-500 to-orange-400 px-6 py-2 text-[clamp(14px,2.2vw,22px)] font-bold uppercase tracking-[.25em] text-white shadow-[0_0_24px_rgba(255,120,80,.7)]">
-              {t('Coming soon')}
+              {t('New game')}
               <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent" style={{ animation: 'pcShine 2.8s ease-in-out infinite' }} />
             </div>
             <div className="t3d t3d-yellow text-[clamp(44px,10vw,150px)] leading-[1.05]" aria-label={title}>
@@ -224,7 +224,7 @@ export function GameBanner() {
             </div>
             <p className="mt-4 max-w-xl text-[clamp(15px,2.2vw,22px)] font-medium text-white/90 [text-shadow:0_2px_8px_rgba(0,0,0,.6)]">{t('Merge food, serve the neighbours and decorate a cozy Seoul street-food tent — plus 8 mini-games with Mochi’s songs.')}</p>
             <div className="mt-6 flex flex-wrap justify-center gap-4">
-              <span className="btn3d btn-yellow cursor-default text-[clamp(18px,2.6vw,28px)]">{t('🏮 Coming soon')}</span>
+              <a href="/pocha/" className="btn3d btn-yellow text-[clamp(18px,2.6vw,28px)]">{t('🏮 Play free')}</a>
               <Link to="/games" className="btn3d btn-white text-[clamp(15px,2vw,20px)]">{t('More games')}</Link>
             </div>
           </div>

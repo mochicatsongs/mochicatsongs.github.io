@@ -82,7 +82,7 @@ for (const g of games) if (g.slug !== 'catch-the-dot') {
   const song = songs.find(s => s.slug === g.slug)
   page(`/games/${g.slug}`, `${g.name} — free Mochi Cat game${song ? ` with “${song.title}”` : ''}`, `${g.desc} Play free in your browser — on phone or computer.`, `/covers/${g.slug}.jpg`)
 }
-const urls = ['/', '/music', '/videos', '/games', '/stickers', '/books', '/free-coloring-pages', '/rooms', '/about', '/privacy', ...songs.map(s => `/music/${s.slug}`), ...games.map(g => `/games/${g.slug}`),
+const urls = ['/', '/pocha', '/music', '/videos', '/games', '/stickers', '/books', '/free-coloring-pages', '/rooms', '/about', '/privacy', ...songs.map(s => `/music/${s.slug}`), ...games.map(g => `/games/${g.slug}`),
   '/ko', ...['/music', ...HAS_KO].map(r => `/ko${r}`), ...songs.filter(s => KO[s.slug]).map(s => `/ko/music/${s.slug}`)]
 // the home page itself: full preview-image address, canonical and og:url
 fs.writeFileSync('dist/index.html', html

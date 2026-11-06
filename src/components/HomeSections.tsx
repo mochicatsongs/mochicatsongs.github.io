@@ -151,7 +151,7 @@ export function GameTitle() {
   const t = useT()
   return (
     <section className="relative z-10 mx-auto max-w-6xl px-5 pb-6 pt-24 sm:px-8">
-      <SectionHead icon="🎮" label={t('Games')} title={t('New game')} color="t3d-cyan" sub={t('Our first big Mochi game is almost here')} />
+      <SectionHead icon="🎮" label={t('Games')} title={t('New game')} color="t3d-cyan" sub={t('Our first big Mochi game is here — play free')} />
     </section>
   )
 }

@@ -7,7 +7,8 @@ type Player = {
   playing: boolean
   time: number
   duration: number
-  play: (s: Song) => void
+  /** list = the playlist to continue with (e.g. a mood playlist); without it the whole catalog */
+  play: (s: Song, list?: Song[]) => void
   toggle: () => void
   next: () => void
   prev: () => void
@@ -42,10 +43,12 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
   const [shuffle, setShuffle] = useState<boolean>(() => load('mochi-shuffle', false))
   const [gameLoop, setGameLoop] = useState(false)
   const history = useRef<string[]>([])
+  const queue = useRef<Song[] | null>(null)
 
   if (!el.current && typeof Audio !== 'undefined') el.current = new Audio()
 
-  const play = useCallback((s: Song) => {
+  const play = useCallback((s: Song, list?: Song[]) => {
+    if (list !== undefined) queue.current = list.length ? list : null
     track('play_song', { song: s.slug })
     const a = el.current!
     if (current?.slug !== s.slug) {
@@ -59,19 +62,20 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
 
   const step = useCallback((dir: 1 | -1, auto = false) => {
     const a = el.current!
-    const i = current ? SONGS.findIndex(s => s.slug === current.slug) : -1
+    const Q = queue.current && current && queue.current.some(x => x.slug === current.slug) ? queue.current : SONGS
+    const i = current ? Q.findIndex(s => s.slug === current.slug) : -1
     if (dir < 0 && a.currentTime > 3) { a.currentTime = 0; return }
     if (dir < 0 && shuffle && history.current.length) {
       const prevSlug = history.current.pop()!; const s = SONGS.find(x => x.slug === prevSlug)
       if (s) { const a2 = el.current!; a2.src = audio(s); setCurrent(s); setTime(0); a2.play().catch(() => {}); return }
     }
     if (shuffle && dir > 0) {
-      const others = SONGS.filter(s => s.slug !== current?.slug)
+      const others = Q.filter(s => s.slug !== current?.slug)
       return play(others[Math.floor(Math.random() * others.length)])
     }
     const j = i + dir
-    if (auto && repeat === 'off' && j >= SONGS.length) { a.pause(); a.currentTime = 0; return }
-    play(SONGS[(j + SONGS.length) % SONGS.length])
+    if (auto && repeat === 'off' && j >= Q.length) { a.pause(); a.currentTime = 0; return }
+    play(Q[(j + Q.length) % Q.length])
   }, [current, play, shuffle, repeat])
 
   // Repeat-one, or an open game: the audio element loops by itself.

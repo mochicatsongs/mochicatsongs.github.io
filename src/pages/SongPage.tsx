@@ -87,7 +87,8 @@ export default function SongPage() {
           <p className="mt-4 text-[17px] leading-relaxed text-white/85">{ko ? ko.blurb : song.blurb}</p>
           {ko && <div className="mt-5 rounded-2xl bg-white/[0.05] p-4"><h2 className="mb-1 text-lg font-medium text-yellow-200">🎵 곡 이야기 · 가사 뜻</h2><p className="text-[16px] leading-relaxed text-white/80">{ko.story}</p></div>}
           <div className="mt-7 flex flex-wrap items-center gap-3"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? t('Pause') : t('Play')} size="text-[22px]" />
-            {GAME_INFO[song.slug] && <Link to={`/games/${song.slug}`} className="btn3d btn-yellow text-[18px]">🎮 {t('Play the game')}: {GAME_INFO[song.slug].name}</Link>}</div>
+            {GAME_INFO[song.slug] && <Link to={`/games/${song.slug}`} className="btn3d btn-yellow text-[18px]">🎮 {t('Play the game')}: {GAME_INFO[song.slug].name}</Link>}
+            {!GAME_INFO[song.slug] && <a href="/pocha/" className="btn3d btn-yellow text-[18px]">🏮 {lang === 'ko' ? '모치네 포차 게임 하기' : 'Play Mochi’s Pocha'}</a>}</div>
           <div className="mt-5 flex flex-wrap gap-2">
             <Pill href={ARTIST.spotify}>Spotify</Pill>
             <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>

@@ -132,7 +132,7 @@ export default function CatchTheDot() {
                 <button onClick={share} className="btn3d btn-cyan text-[18px]">{t('📤 Share score')}</button>
               </div>
               <div className="flex flex-wrap justify-center gap-2 text-sm">
-                <Link to="/music/catch-the-dot" className="underline">{t('Lyrics & song')}</Link>·
+                <Link to="/music/catch-the-dot/" className="underline">{t('Lyrics & song')}</Link>·
                 <a href={ARTIST.spotify} target="_blank" rel="noopener" className="underline">Spotify</a>·
                 <a href={ARTIST.subscribe} target="_blank" rel="noopener" className="underline">Subscribe</a>
               </div>

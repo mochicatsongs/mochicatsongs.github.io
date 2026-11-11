@@ -19,7 +19,7 @@ export default function MiniPlayer() {
         const r = e.currentTarget.getBoundingClientRect(); p.seek(((e.clientX - r.left) / r.width) * p.duration)
       }}><div className="h-full bg-mochired" style={{ width: `${pct}%` }} /></div>
       <div className="mx-auto flex max-w-5xl items-center gap-1.5 px-3 py-2.5 sm:gap-3 sm:px-4">
-        <Link to={`/music/${p.current.slug}`} className="mr-1 flex min-w-0 flex-1 items-center gap-3">
+        <Link to={`/music/${p.current.slug}/`} className="mr-1 flex min-w-0 flex-1 items-center gap-3">
           <img src={cover(p.current)} alt="" className={`h-11 w-11 rounded-lg ${p.playing ? 'animate-[spin_12s_linear_infinite] rounded-full' : ''}`} />
           <div className="min-w-0">
             <div className="flex items-center gap-2 truncate font-heading text-[16px] tracking-wide">{p.playing && <span className="text-cyan-300"><Eq /></span>}{p.current.title}</div>

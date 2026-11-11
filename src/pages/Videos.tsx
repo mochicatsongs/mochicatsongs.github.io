@@ -19,7 +19,7 @@ export default function Videos() {
               <iframe className="absolute inset-0 h-full w-full" src={`https://www.youtube-nocookie.com/embed/${s.youtube}`} title={s.title} loading="lazy"
                 allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
             </div>
-            <Link to={`/music/${s.slug}`} className="mt-2 block text-lg hover:underline">{s.title}</Link>
+            <Link to={`/music/${s.slug}/`} className="mt-2 block text-lg hover:underline">{s.title}</Link>
           </div>
         ))}
       </div>

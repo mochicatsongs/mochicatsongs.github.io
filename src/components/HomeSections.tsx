@@ -75,7 +75,7 @@ export function Premieres() {
         {up.map((s, i) => (
           <Reveal key={s.slug} delay={i * 100}>
             <TiltCard>
-              <Link to={`/music/${s.slug}`} className="card3d group relative block aspect-video overflow-hidden bg-black hover:transform-none">
+              <Link to={`/music/${s.slug}/`} className="card3d group relative block aspect-video overflow-hidden bg-black hover:transform-none">
                 {LOOP[s.slug] ? <LoopVideo name={LOOP[s.slug]} className="transition-transform duration-700 group-hover:scale-110" /> : <img src={cover(s)} alt="" className="h-full w-full object-cover" />}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
                 <div className={`btn3d ${BTN[i % BTN.length]} absolute left-4 top-4 !py-1.5 text-[14px]`}>{day(s.premiere!)}</div>
@@ -105,7 +105,7 @@ export function SongsRail() {
         <div className="mb-3 flex items-center gap-3">
           <button aria-label="Previous" onClick={() => go(-1)} className="btn3d btn-white hidden h-12 w-12 !p-0 text-xl md:inline-flex">‹</button>
           <button aria-label="Next" onClick={() => go(1)} className="btn3d btn-white hidden h-12 w-12 !p-0 text-xl md:inline-flex">›</button>
-          <Link to="/music" className="btn3d btn-purple text-[16px]">{t('All songs →')}</Link>
+          <Link to="/music/" className="btn3d btn-purple text-[16px]">{t('All songs →')}</Link>
         </div>
       </div>
       <div ref={rail} className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-5 pb-10 pt-4 sm:gap-7 sm:px-10">
@@ -115,18 +115,18 @@ export function SongsRail() {
             <div key={s.slug} className="group w-[62vw] shrink-0 snap-start sm:w-[260px]">
               <TiltCard>
                 <div className="card3d relative overflow-hidden">
-                  <Link to={`/music/${s.slug}`}><img src={cover(s)} alt={s.title} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-110" /></Link>
+                  <Link to={`/music/${s.slug}/`}><img src={cover(s)} alt={s.title} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-110" /></Link>
                   <button aria-label={`Play ${s.title}`} onClick={() => (active ? pl.toggle() : pl.play(s))} className={`btn3d ${BTN[i % BTN.length]} absolute bottom-3 right-3 h-14 w-14 !p-0`}>
                     {active && pl.playing ? <Eq /> : <PlayIcon className="ml-0.5 h-6 w-6" />}
                   </button>
                 </div>
               </TiltCard>
-              <Link to={`/music/${s.slug}`} className="t3d-sm mt-4 block text-[20px] leading-tight">{s.title}</Link>
+              <Link to={`/music/${s.slug}/`} className="t3d-sm mt-4 block text-[20px] leading-tight">{s.title}</Link>
               <div className="mt-1 text-sm font-medium text-white/55">{s.genre}</div>
             </div>
           )
         })}
-        <Link to="/music" className="card3d grid w-[62vw] shrink-0 snap-start place-items-center bg-gradient-to-br from-violet-600 to-fuchsia-600 sm:w-[260px]" style={{ aspectRatio: '1' }}>
+        <Link to="/music/" className="card3d grid w-[62vw] shrink-0 snap-start place-items-center bg-gradient-to-br from-violet-600 to-fuchsia-600 sm:w-[260px]" style={{ aspectRatio: '1' }}>
           <span className="t3d-sm text-center text-[28px]">{t('All songs →')} ({SONGS.length})</span>
         </Link>
       </div>
@@ -225,7 +225,7 @@ export function GameBanner() {
             <p className="mt-4 max-w-xl text-[clamp(15px,2.2vw,22px)] font-medium text-white/90 [text-shadow:0_2px_8px_rgba(0,0,0,.6)]">{t('Merge food, serve the neighbours and decorate a cozy Seoul street-food tent — plus 8 mini-games with Mochi’s songs.')}</p>
             <div className="mt-6 flex flex-wrap justify-center gap-4">
               <a href="/pocha/" className="btn3d btn-yellow text-[clamp(18px,2.6vw,28px)]">{t('🏮 Play free')}</a>
-              <Link to="/games" className="btn3d btn-white text-[clamp(15px,2vw,20px)]">{t('More games')}</Link>
+              <Link to="/games/" className="btn3d btn-white text-[clamp(15px,2vw,20px)]">{t('More games')}</Link>
             </div>
           </div>
         </div>

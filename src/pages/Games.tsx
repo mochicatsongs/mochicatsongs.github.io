@@ -27,7 +27,7 @@ export default function Games() {
         {GAME_LIST.map((g, i) => {
           const best = BEST(g.slug)
           return (
-            <Link key={g.slug} to={`/games/${g.slug}`} className={`card3d group relative flex flex-col overflow-hidden bg-gradient-to-br ${GRAD[i % GRAD.length]} p-3 sm:p-4`}>
+            <Link key={g.slug} to={`/games/${g.slug}/`} className={`card3d group relative flex flex-col overflow-hidden bg-gradient-to-br ${GRAD[i % GRAD.length]} p-3 sm:p-4`}>
               <div className="relative">
                 <img src={cover(g.song)} alt="" loading="lazy" className="aspect-square w-full rounded-2xl object-cover shadow-lg transition group-hover:scale-[1.03]" />
                 <span className="absolute -bottom-3 -right-2 text-[38px] drop-shadow-lg transition group-hover:-translate-y-1 group-hover:rotate-12 sm:text-[46px]">{g.emoji}</span>

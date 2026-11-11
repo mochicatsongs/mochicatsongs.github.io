@@ -281,7 +281,7 @@ function Grownups() {
   return (
     <p className="mt-10 rounded-2xl bg-white/70 p-4 text-sm">
       <b>{t.gTitle}</b> {t.gText}
-      <br />{t.gAdult} · <Link to="/privacy" className="underline">{t.privacy}</Link>
+      <br />{t.gAdult} · <Link to="/privacy/" className="underline">{t.privacy}</Link>
     </p>
   )
 }
@@ -301,7 +301,7 @@ export function KidsHome() {
       <h2 className="mt-8 text-2xl font-bold">{t.whichPart}</h2>
       <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
         {KID_SECTIONS.map(s => (
-          <Link key={s.slug} to={`/k/${s.slug}`} className="overflow-hidden rounded-3xl bg-white shadow-lg transition hover:-translate-y-1">
+          <Link key={s.slug} to={`/k/${s.slug}/`} className="overflow-hidden rounded-3xl bg-white shadow-lg transition hover:-translate-y-1">
             <img src={`${B}kids/${s.slug}.png`} alt="" className="aspect-square w-full object-cover" />
             <div className="p-3 text-center text-lg font-bold text-white" style={{ background: s.color }}>{s.emoji} {secTitle(s, lang)}</div>
           </Link>
@@ -339,7 +339,7 @@ export function KidsSection() {
   if (!s) return <KidsHome />
   return (
     <Shell>
-      <Link to="/k" className="inline-block rounded-full bg-white px-4 py-2 font-semibold shadow">{t.back}</Link>
+      <Link to="/k/" className="inline-block rounded-full bg-white px-4 py-2 font-semibold shadow">{t.back}</Link>
       <div className="mt-4 overflow-hidden rounded-[2rem] bg-white shadow-xl">
         <div className="p-5 text-center text-white" style={{ background: s.color }}>
           <div className="text-5xl">{s.emoji}</div>
@@ -357,7 +357,7 @@ export function KidsSection() {
       <h2 className="mt-10 text-xl font-bold">{t.more}</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         {KID_SECTIONS.filter(x => x.slug !== s.slug).map(x => (
-          <Link key={x.slug} to={`/k/${x.slug}`} className="rounded-full px-4 py-2 font-semibold text-white shadow" style={{ background: x.color }}>{x.emoji} {secTitle(x, lang)}</Link>
+          <Link key={x.slug} to={`/k/${x.slug}/`} className="rounded-full px-4 py-2 font-semibold text-white shadow" style={{ background: x.color }}>{x.emoji} {secTitle(x, lang)}</Link>
         ))}
       </div>
       <Book />

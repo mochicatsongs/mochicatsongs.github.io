@@ -44,8 +44,8 @@ export default function HalloweenBanner() {
               )}
             </div>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link to="/music/neon-jump" className="btn3d btn-pink text-[clamp(17px,2.2vw,22px)]">🎵 {t('Song & lyrics')}</Link>
-              <Link to="/games/neon-jump" className="btn3d btn-yellow text-[clamp(17px,2.2vw,22px)]">🎮 {t('Play Neon Jump')}</Link>
+              <Link to="/music/neon-jump/" className="btn3d btn-pink text-[clamp(17px,2.2vw,22px)]">🎵 {t('Song & lyrics')}</Link>
+              <Link to="/games/neon-jump/" className="btn3d btn-yellow text-[clamp(17px,2.2vw,22px)]">🎮 {t('Play Neon Jump')}</Link>
             </div>
           </div>
         </div>

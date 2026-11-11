@@ -87,7 +87,7 @@ export default function SongPage() {
           <p className="mt-4 text-[17px] leading-relaxed text-white/85">{ko ? ko.blurb : song.blurb}</p>
           {ko && <div className="mt-5 rounded-2xl bg-white/[0.05] p-4"><h2 className="mb-1 text-lg font-medium text-yellow-200">🎵 곡 이야기 · 가사 뜻</h2><p className="text-[16px] leading-relaxed text-white/80">{ko.story}</p></div>}
           <div className="mt-7 flex flex-wrap items-center gap-3"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? t('Pause') : t('Play')} size="text-[22px]" />
-            {GAME_INFO[song.slug] && <Link to={`/games/${song.slug}`} className="btn3d btn-yellow text-[18px]">🎮 {t('Play the game')}: {GAME_INFO[song.slug].name}</Link>}
+            {GAME_INFO[song.slug] && <Link to={`/games/${song.slug}/`} className="btn3d btn-yellow text-[18px]">🎮 {t('Play the game')}: {GAME_INFO[song.slug].name}</Link>}
             {!GAME_INFO[song.slug] && <a href="/pocha/" className="btn3d btn-yellow text-[18px]">🏮 {lang === 'ko' ? '모치네 포차 게임 하기' : 'Play Mochi’s Pocha'}</a>}</div>
           <div className="mt-5 flex flex-wrap gap-2">
             <Pill href={ARTIST.spotify}>Spotify</Pill>
@@ -130,7 +130,7 @@ export default function SongPage() {
           ) : (
             <div className="rounded-2xl bg-white/[0.04] p-6 text-white/55">{t('Lyrics are coming soon. Meanwhile — press play and dance! 💃')}</div>
           )}
-          <Link to={`/music/${next.slug}`} className="mt-10 flex items-center gap-4 rounded-2xl border border-white/10 p-3 hover:bg-white/5">
+          <Link to={`/music/${next.slug}/`} className="mt-10 flex items-center gap-4 rounded-2xl border border-white/10 p-3 hover:bg-white/5">
             <img src={cover(next)} alt="" className="h-14 w-14 rounded-lg" />
             <div><div className="text-xs text-white/50">{t('Next song')}</div><div className="text-lg">{next.title}</div></div>
           </Link>

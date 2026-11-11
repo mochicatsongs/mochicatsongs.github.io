@@ -4,7 +4,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import { ARTIST } from '../data/songs'
 import { FeedbackLink } from './Feedback'
 
-const LINKS: [string, string][] = [['Music', '/music'], ['Videos', '/videos'], ['Games', '/games'], ['Stickers', '/stickers'], ['Books', '/books'], ['Rooms', '/rooms']]
+const LINKS: [string, string][] = [['Music', '/music/'], ['Videos', '/videos/'], ['Games', '/games/'], ['Stickers', '/stickers/'], ['Books', '/books/'], ['Rooms', '/rooms/']]
 
 export default function Navbar() {
   const t = useT()

@@ -31,7 +31,7 @@ export default function Home() {
             {displayed}{!done && <span className="ml-[2px] inline-block h-[1.1em] w-[2px] animate-blink bg-white align-middle" />}
           </p>
           <div className={`flex flex-wrap gap-x-2.5 gap-y-4 transition-all duration-[400ms] ${show ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}`}>
-            {[['🎵 Listen', '/music', 'btn-pink'], ['🎬 Watch', '/videos', 'btn-cyan'], ['🎮 Play', '/games', 'btn-yellow'], ['✨ Stickers', '/stickers', 'btn-lime'], ['🎨 Coloring', '/books', 'btn-orange'], ['🎧 Rooms', '/rooms', 'btn-purple']].map(([lbl, to, c]) => (
+            {[['🎵 Listen', '/music/', 'btn-pink'], ['🎬 Watch', '/videos/', 'btn-cyan'], ['🎮 Play', '/games/', 'btn-yellow'], ['✨ Stickers', '/stickers/', 'btn-lime'], ['🎨 Coloring', '/books/', 'btn-orange'], ['🎧 Rooms', '/rooms/', 'btn-purple']].map(([lbl, to, c]) => (
               <Link key={to} to={to} className={`btn3d ${c} text-[15px] sm:text-[18px]`}>{t(lbl)}</Link>
             ))}
             <button onClick={() => { navigator.clipboard?.writeText(ARTIST.handle); setCopied(true); setTimeout(() => setCopied(false), 1200) }}
@@ -54,7 +54,7 @@ export default function Home() {
           <footer className="border-t border-white/10 pt-6 text-[13px] leading-relaxed text-white/50">
             {t('💃 Dance with Mochi and tag')} <b>#MochiCat</b> {t('— your video might get featured!')}<br />
             {t('Music and visuals are made with AI tools; characters, stories, lyrics and editing by the Mochi Cat team.')}<br />
-            © 2026 Mochi Cat · 모치캣 · <Link to="/privacy" className="underline hover:text-white">{t('Privacy')}</Link> · <FeedbackLink className="whitespace-nowrap underline hover:text-white" />
+            © 2026 Mochi Cat · 모치캣 · <Link to="/privacy/" className="underline hover:text-white">{t('Privacy')}</Link> · <FeedbackLink className="whitespace-nowrap underline hover:text-white" />
           </footer>
         </div>
       </div>

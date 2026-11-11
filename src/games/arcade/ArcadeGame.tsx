@@ -206,8 +206,8 @@ function ArcadeGame({ def }: { def: GameDef }) {
                 <button onClick={share} className="btn3d btn-cyan text-[18px]">{t('📤 Share score')}</button>
               </div>
               <div className="flex flex-wrap justify-center gap-x-2 gap-y-1 text-sm">
-                {song && <><Link to={`/music/${song.slug}`} className="underline">{t('Lyrics & song')}</Link>·</>}
-                <Link to={`/games/${next.slug}`} className="underline">{t('Next game')}: {next.name} →</Link>·
+                {song && <><Link to={`/music/${song.slug}/`} className="underline">{t('Lyrics & song')}</Link>·</>}
+                <Link to={`/games/${next.slug}/`} className="underline">{t('Next game')}: {next.name} →</Link>·
                 <a href={ARTIST.subscribe} target="_blank" rel="noopener" className="underline">{t('Subscribe')}</a>
               </div>
             </>) : (<>

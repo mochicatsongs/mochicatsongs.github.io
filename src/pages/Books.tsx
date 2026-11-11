@@ -39,7 +39,7 @@ export default function Books() {
     <Page>
       <H1 color="t3d-pink">{t('Coloring Books')}</H1>
       <p className="-mt-4 mb-10 max-w-2xl text-lg text-white/80">{t('Color with Mochi! Get the paperback on Amazon, or an instant printable PDF you can print again and again.')}</p>
-      <div className="mb-10"><Link to="/free-coloring-pages" className="btn3d btn-lime text-[17px]">{t('🎁 Try free pages first')}</Link></div>
+      <div className="mb-10"><Link to="/free-coloring-pages/" className="btn3d btn-lime text-[17px]">{t('🎁 Try free pages first')}</Link></div>
       <div className="grid gap-8 md:grid-cols-2">
         {BOOKS.map((b, i) => (
           <Reveal key={b.id} delay={i * 90}>

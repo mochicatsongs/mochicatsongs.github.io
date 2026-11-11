@@ -49,7 +49,7 @@ export default function FreePages() {
       <Grid items={ADULT} cta="40 more pages · Cozy Cat PDF $4.99" href="https://mochicatsongs.gumroad.com/l/yuwhhq" />
       <h2 className="t3d-sm t3d-lime mb-6 mt-16 text-[clamp(28px,4vw,40px)]">{t('Bold & easy · for kids 4–8')}</h2>
       <Grid items={KIDS} cta="44 more pages + activities · Kids PDF $4.99" href="https://mochicatsongs.gumroad.com/l/ggaofw" />
-      <p className="mt-14 text-sm text-white/55">{t('Free for personal and classroom use. Please share a link to this page instead of the files.')} · <Link to="/books" className="underline hover:text-white">{t('All coloring books')}</Link></p>
+      <p className="mt-14 text-sm text-white/55">{t('Free for personal and classroom use. Please share a link to this page instead of the files.')} · <Link to="/books/" className="underline hover:text-white">{t('All coloring books')}</Link></p>
     </Page>
   )
 }

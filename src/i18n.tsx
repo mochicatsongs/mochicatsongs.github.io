@@ -40,7 +40,7 @@ const KO: Record<string, string> = {
     '와줘서 고마워! 나는 간식을 좋아하지만, 언제나 댄스 플로어를 선택해. 자 — 오늘은 뭐 할까?',
   '🎵 Listen': '🎵 듣기', '🎬 Watch': '🎬 보기', '🎮 Play': '🎮 게임', '✨ Stickers': '✨ 스티커',
   // home sections
-  'Latest music video': '최신 뮤직비디오', '▶ Watch the video': '▶ 영상 보기', 'A new Mochi video every Friday · 09:00 KST': '매주 금요일 새 모치 영상 · 오전 9시 KST',
+  'Latest music video': '최신 뮤직비디오', '▶ Watch the video': '▶ 영상 보기', 'A new Mochi video every Friday': '매주 금요일 새 모치 영상',
   'Premiere on YouTube': '유튜브 최초 공개', 'Songs': '노래', 'New game': '새 게임',
   'Tap the red dot before it escapes. 30 seconds. It gets faster. Beat your friends!': '빨간 점이 도망가기 전에 터치! 30초, 점점 빨라져요. 친구들과 대결해 보세요!',
   '🎮 Play now': '🎮 지금 플레이', '🏮 Pocha': '🏮 포차', '🏮 Play free': '🏮 무료로 플레이', 'Our first big Mochi game is here — play free': '모치의 첫 번째 큰 게임이 나왔어요 — 무료로 즐겨요', 'More games': '더 많은 게임', "Mochi's Pocha": '모치네 포차', 'Our first big Mochi game is almost here': '모치의 첫 번째 큰 게임이 곧 찾아와요', '🏮 Coming soon': '🏮 곧 만나요!', 'Merge food, serve the neighbours and decorate a cozy Seoul street-food tent — plus 8 mini-games with Mochi’s songs.': '음식을 합치고, 이웃을 대접하고, 아늑한 서울 포장마차를 꾸며요. 모치 노래와 함께하는 미니게임 8개도 있어요!', 'Mochi for': '모든 기분에', 'every mood': '모치 스티커',
@@ -50,7 +50,7 @@ const KO: Record<string, string> = {
   '— your video might get featured!': '— 여러분의 영상이 소개될 수도 있어요!',
   'Music and visuals are made with AI tools; characters, stories, lyrics and editing by the Mochi Cat team.': '음악과 영상은 AI 도구로 제작되었으며, 캐릭터·스토리·가사·편집은 모치캣 팀이 만들었습니다.',
   // pages
-  'Music videos': '뮤직비디오', 'A new Mochi music video every Friday at 09:00 KST.': '매주 금요일 오전 9시(KST) 새 모치 뮤직비디오가 공개돼요.',
+  'Music videos': '뮤직비디오', 'A new Mochi music video every Friday.': '매주 금요일 새 모치 뮤직비디오가 공개돼요.',
   'Premiere': '최초 공개', 'set a reminder 🔔': '알림 설정 🔔', 'Music video premiere': '뮤직비디오 최초 공개',
   'Lyrics': '가사', '♪ follows the music': '♪ 음악에 맞춰 표시', 'Next song': '다음 노래',
   'Lyrics are coming soon. Meanwhile — press play and dance! 💃': '가사는 곧 공개돼요. 그동안 재생하고 춤춰요! 💃',

@@ -70,7 +70,7 @@ export function Premieres() {
     : fmtDate(iso)
   return (
     <section className="relative z-10 mx-auto max-w-6xl px-5 py-20 sm:px-8">
-      <div className="mb-10"><SectionHead icon="📺" label="YouTube" title={t('Coming soon')} color="t3d-yellow" sub={t('A new Mochi video every Friday · 09:00 KST')} /></div>
+      <div className="mb-10"><SectionHead icon="📺" label="YouTube" title={t('Coming soon')} color="t3d-yellow" sub={t('A new Mochi video every Friday')} /></div>
       <div className={`grid gap-6 ${grid}`}>
         {up.map((s, i) => (
           <Reveal key={s.slug} delay={i * 100}>

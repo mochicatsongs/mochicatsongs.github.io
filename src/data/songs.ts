@@ -58,9 +58,9 @@ export const SONGS: Song[] = [
   { slug: 'payday', title: 'Payday', genre: 'K-Pop · Funk Pop', released: '2026-11-08', lyrics: true, blurb: 'Rich for a minute, then it flies away. Pocket’s empty, the heart’s okay.' },
   { slug: 'mochi-new-year', title: 'Mochi New Year', genre: 'Pop · Party', released: '2026-11-08', lyrics: true, blurb: 'Ten, nine, eight... Happy New Year! Count down and jump into the new year with Mochi.' },
   { slug: 'mochi-christmas', title: 'Mochi Christmas', genre: 'Pop · Christmas', released: '2026-11-08', lyrics: true, blurb: 'Jingle jingle, Mochi mingle! Shake your bell, shake your belly: a Christmas dance party with Mochi.' },
-  { slug: 'hwaiting', title: 'Hwaiting!', genre: 'K-Pop · Pop', released: '2026-10-26', lyrics: true, blurb: 'Exam tomorrow, coffee number three — a cheer for everyone studying late tonight. 화이팅!' },
-  { slug: 'seoul-is-my-home', title: 'Seoul Is My Home', genre: 'K-Pop · City Pop', released: '2026-10-26', lyrics: true, blurb: 'Came with a suitcase and a dream — and found a home. A thank-you song to Seoul.' },
-  { slug: 'saranghae', title: 'Saranghae', genre: 'K-Pop · Pop', released: '2026-10-26', lyrics: true, blurb: 'One word, one heart: 사랑해 in every language.' },
+  { slug: 'hwaiting', title: 'Hwaiting!', genre: 'K-Pop · Pop', released: '2026-10-26', youtube: 'YcqXNyxB4yg', premiere: '2026-11-16', lyrics: true, blurb: 'Exam tomorrow, coffee number three — a cheer for everyone studying late tonight. 화이팅!' },
+  { slug: 'seoul-is-my-home', title: 'Seoul Is My Home', genre: 'K-Pop · City Pop', released: '2026-10-26', youtube: 'NyajtsKYAUo', premiere: '2026-11-20', lyrics: true, blurb: 'Came with a suitcase and a dream — and found a home. A thank-you song to Seoul.' },
+  { slug: 'saranghae', title: 'Saranghae', genre: 'K-Pop · Pop', released: '2026-10-26', youtube: 'R2DVKhwk8aA', premiere: '2026-11-27', lyrics: true, blurb: 'One word, one heart: 사랑해 in every language.' },
   { slug: 'good-morning-seoul', title: 'Good Morning Seoul', genre: 'K-Pop · Pop', released: '2026-10-26', lyrics: true, blurb: 'Alarm, warm coffee, the Han River shining from the bus — 좋은 아침!' },
   { slug: 'shine-like-mochi', title: 'Shine Like Mochi', genre: 'Pop · Dance', released: '2026-10-10', youtube: 'HIEfLLw4duE', premiere: '2026-11-06', lyrics: true,
     blurb: 'When the night gets dark, Mochi lights it up. Little paws, giant heart — fall down, get up, try again.' },
@@ -93,8 +93,8 @@ export const cover = (s: Song) => `${import.meta.env.BASE_URL}covers/${s.slug}.j
 export const audio = (s: Song) => `${import.meta.env.BASE_URL}audio/${s.slug}.mp3`
 export const asset = (p: string) => `${import.meta.env.BASE_URL}${p}`
 
-/** Premieres go live at 09:00 KST (the first two clips premiered at 00:00 KST). */
-export const premiereTime = (iso: string) => (iso < '2026-10-20' ? '00:00' : '09:00')
+/** Premiere time (KST): the first two clips went live at 00:00, clips until 13 Nov 2026 at 09:00, from 14 Nov 2026 at 20:00. */
+export const premiereTime = (iso: string) => (iso < '2026-10-20' ? '00:00' : iso < '2026-11-14' ? '09:00' : '20:00')
 export const isLive = (iso?: string) => !iso || new Date(`${iso}T${premiereTime(iso)}:00+09:00`).getTime() <= Date.now()
 export const fmtDate = (iso: string) =>
   new Date(iso + 'T12:00:00+09:00').toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })

@@ -67,7 +67,7 @@ const KO_HOME = ['모치캣 (Mochi Cat) — 퇴근길에 듣는 위로 노래 ·
 page('/ko', KO_HOME[0], KO_HOME[1], base[2], '', { ko: true, alt: '/', body: `<h1>모치캣 (Mochi Cat)</h1><p>${KO_HOME[1]}</p><h2>모치캣 노래 · 가사</h2>${songList(true)}<p><a href="/ko/games/">무료 웹게임</a> · <a href="/ko/books/">컬러링북</a> · <a href="/ko/stickers/">스티커</a> · <a href="/">English</a></p>` })
 for (const [r, t, d] of [
   ['/music', '모치캣 노래 · 가사 — 모치캣 (Mochi Cat)', '모치캣의 모든 노래와 가사, 한국어 번역. 퇴근길·공부할 때 듣는 힐링 K-팝.'],
-  ['/videos', '모치캣 뮤직비디오 — 모치캣 (Mochi Cat)', '모치캣 뮤직비디오 모음. 매주 금요일 오전 9시 새 영상 공개!'],
+  ['/videos', '모치캣 뮤직비디오 — 모치캣 (Mochi Cat)', '모치캣 뮤직비디오 모음. 매주 금요일 새 영상 공개!'],
   ['/games', '모치캣 무료 웹게임 — 모치캣 (Mochi Cat)', '설치 없이 브라우저에서 바로 하는 모치캣 무료 게임. 노래마다 미니게임이 있어요.'],
   ['/stickers', '모치캣 스티커 · 이모티콘 — 모치캣 (Mochi Cat)', '귀여운 모치캣 3D 스티커와 움짤. 메신저에서 무료로 써 보세요.'],
   ['/books', '모치캣 컬러링북 — 힐링 색칠 PDF', '모치캣 컬러링북: 어른을 위한 한국 감성 힐링 컬러링북과 아이들을 위한 쉬운 색칠 페이지. 바로 인쇄 가능한 PDF.'],

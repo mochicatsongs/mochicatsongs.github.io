@@ -1,6 +1,6 @@
 // 모치네 포차 service worker: pages always fresh from the network (falls back to cache offline),
 // hashed scripts and pictures cached for fast loading. Music (/audio/) is never cached here.
-const C = 'pocha-2611142325'
+const C = 'pocha-2611142355'
 self.addEventListener('install', e => self.skipWaiting())
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())))
 self.addEventListener('fetch', e => {

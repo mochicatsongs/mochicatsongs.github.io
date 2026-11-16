@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useRef } from 'react'
 import { Route, Routes, useLocation, useNavigationType } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import MiniPlayer from './components/MiniPlayer'
+import SiteFooter from './components/SiteFooter'
 import Home from './pages/Home'
 import Music from './pages/Music'
 import SongPage from './pages/SongPage'
@@ -78,6 +79,7 @@ export default function App() {
         <Route path="/k/:slug" element={<KidsSection />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {!kids && inner.pathname !== '/' && <SiteFooter />}
       {!kids && <MiniPlayer />}
     </>
   )

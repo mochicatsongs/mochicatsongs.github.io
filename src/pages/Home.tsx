@@ -1,10 +1,9 @@
 import { useT } from '../i18n'
+import { MadeByLine, KOFI_URL } from '../components/SiteFooter'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import ScrubVideo from '../components/ScrubVideo'
 import { Everywhere, GameBanner, GameTitle, LatestVideo, Premieres, SongsRail, StickerParade } from '../components/HomeSections'
-import { CopyIcon } from '../components/Icons'
-import { ARTIST } from '../data/songs'
 import { useTypewriter } from '../hooks/useTypewriter'
 import { FeedbackLink } from '../components/Feedback'
 
@@ -14,7 +13,6 @@ export default function Home() {
   const t = useT()
   const { displayed, done } = useTypewriter(t(TEXT))
   const [show, setShow] = useState(false)
-  const [copied, setCopied] = useState(false)
   const [sy, setSy] = useState(0)
   useEffect(() => { let r = 0; const f = () => { if (!r) r = requestAnimationFrame(() => { r = 0; setSy(window.scrollY) }) }; window.addEventListener('scroll', f, { passive: true }); return () => { window.removeEventListener('scroll', f); cancelAnimationFrame(r) } }, [])
   const hp = Math.min(1, sy / (typeof window === 'undefined' ? 800 : window.innerHeight))
@@ -34,10 +32,7 @@ export default function Home() {
             {[['🎵 Listen', '/music/', 'btn-pink'], ['🎬 Watch', '/videos/', 'btn-cyan'], ['🎮 Play', '/games/', 'btn-yellow'], ['✨ Stickers', '/stickers/', 'btn-lime'], ['🎨 Coloring', '/books/', 'btn-orange'], ['🎧 Rooms', '/rooms/', 'btn-purple']].map(([lbl, to, c]) => (
               <Link key={to} to={to} className={`btn3d ${c} text-[15px] sm:text-[18px]`}>{t(lbl)}</Link>
             ))}
-            <button onClick={() => { navigator.clipboard?.writeText(ARTIST.handle); setCopied(true); setTimeout(() => setCopied(false), 1200) }}
-              className="btn3d btn-white text-[15px] sm:text-[18px]">
-              <span>{copied ? t('Copied! 💖') : ARTIST.handle}</span><CopyIcon />
-            </button>
+            <a href={KOFI_URL} target="_blank" rel="noopener" className="btn3d btn-white text-[15px] sm:text-[18px]">{t('☕ Support Edward')}</a>
           </div>
         </div>
       </section>
@@ -55,6 +50,7 @@ export default function Home() {
             {t('💃 Dance with Mochi and tag')} <b>#MochiCat</b> {t('— your video might get featured!')}<br />
             {t('Music and visuals are made with AI tools; characters, stories, lyrics and editing by the Mochi Cat team.')}<br />
             © 2026 Mochi Cat · 모치캣 · <Link to="/privacy/" className="underline hover:text-white">{t('Privacy')}</Link> · <FeedbackLink className="whitespace-nowrap underline hover:text-white" />
+            <br /><MadeByLine className="mt-2" />
           </footer>
         </div>
       </div>

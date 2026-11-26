@@ -89,11 +89,11 @@ export default function SongPage() {
           <div className="mt-7 flex flex-wrap items-center gap-3"><PlayButton playing={active && p.playing} onClick={() => (active ? p.toggle() : p.play(song))} label={active && p.playing ? t('Pause') : t('Play')} size="text-[22px]" />
             {GAME_INFO[song.slug] && <Link to={`/games/${song.slug}/`} className="btn3d btn-yellow text-[18px]">🎮 {t('Play the game')}: {GAME_INFO[song.slug].name}</Link>}
             {!GAME_INFO[song.slug] && <a href="/pocha/" className="btn3d btn-yellow text-[18px]">🏮 {lang === 'ko' ? '모치네 포차 게임 하기' : 'Play Mochi’s Pocha'}</a>}</div>
-          <div className="mt-5 flex flex-wrap gap-2">
+          {song.released < '2026-11-01' && <div className="mt-5 flex flex-wrap gap-2">
             <Pill href={ARTIST.spotify}>Spotify</Pill>
             <Pill href={ARTIST.ytMusic} i={1}>YouTube Music</Pill>
             <Pill href={`https://music.apple.com/search?term=${encodeURIComponent('Mochi Cat ' + song.title)}`} i={2}>Apple Music</Pill>
-          </div>
+          </div>}
         </div>
 
         <div className="min-w-0">

@@ -8,10 +8,10 @@ import PlayButton from '../components/PlayButton'
 
 /** mood playlists: the same songs grouped by when you'd listen to them */
 const MOODS: { id: string; ko: string; en: string; slugs: string[] }[] = [
-  { id: 'commute', ko: '🚇 퇴근길', en: '🚇 After work', slugs: ['last-train', 'just-tired', 'friday-mode', 'payday', 'its-okay-to-say-no', 'small-wins', 'rainy-day-smile', 'still-dreaming', 'good-morning-seoul', 'seoul-is-my-home'] },
-  { id: 'comfort', ko: '🫂 위로가 필요할 때', en: '🫂 When you need comfort', slugs: ['not-your-fault', 'breathe', 'just-tired', 'brave-enough', 'never-too-late', 'call-home', 'we-made-it-through', 'all-the-way', 'small-wins', 'hwaiting', 'shine-like-mochi'] },
+  { id: 'commute', ko: '🚇 퇴근길', en: '🚇 After work', slugs: ['monday-again', 'coffee-run', 'elevator', 'just-one-round', 'stuck-in-traffic', 'everythings-up-but-my-pay', 'last-train', 'just-tired', 'friday-mode', 'payday', 'its-okay-to-say-no', 'small-wins', 'rainy-day-smile', 'still-dreaming', 'good-morning-seoul', 'seoul-is-my-home'] },
+  { id: 'comfort', ko: '🫂 위로가 필요할 때', en: '🫂 When you need comfort', slugs: ['its-okay-lets-go', 'pretending-im-fine', 'should-i-quit', 'left-on-read', 'long-time-no-see', 'small-but-mine', 'not-your-fault', 'breathe', 'just-tired', 'brave-enough', 'never-too-late', 'call-home', 'we-made-it-through', 'all-the-way', 'small-wins', 'hwaiting', 'shine-like-mochi'] },
   { id: 'love', ko: '💗 설렘', en: '💗 Love', slugs: ['saranghae', 'first-snow', 'mochi-heart', 'call-home', 'meow-in-every-language'] },
-  { id: 'party', ko: '🎉 신나게', en: '🎉 Party', slugs: ['friday-mode', 'neon-jump', 'mochi-dance', 'mochi-fiesta', 'mochi-mode', 'milkshake-shake', 'super-paw-rock', 'belly-bounce', 'mochi-new-year', 'mochi-christmas'] },
+  { id: 'party', ko: '🎉 신나게', en: '🎉 Party', slugs: ['karaoke-night', 'bottom-of-the-ninth', 'birthday-overtime', 'at-the-summit', 'friday-mode', 'neon-jump', 'mochi-dance', 'mochi-fiesta', 'mochi-mode', 'milkshake-shake', 'super-paw-rock', 'belly-bounce', 'mochi-new-year', 'mochi-christmas'] },
   { id: 'winter', ko: '❄️ 겨울', en: '❄️ Winter', slugs: ['first-snow', 'mochi-christmas', 'mochi-new-year', 'we-made-it-through', 'call-home'] },
   { id: 'cat', ko: '🐱 고양이 송', en: '🐱 Cat songs', slugs: ['the-chubby-super-cat', 'meow-meow-mochi-cat', 'catch-the-dot', 'nom-nom-nom', 'chonky-gym-cat', 'mochi-mochi-challenge', 'mochi-obby', 'mochi-farm'] },
 ]
